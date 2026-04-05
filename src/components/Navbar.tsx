@@ -20,7 +20,7 @@ export function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 md:h-20">
 
-          {/* Brand — Data Synapse always visible */}
+          {/* Brand */}
           <Link href="/" className="flex items-center gap-2 shrink-0">
             <Database className="text-primary w-5 h-5 md:w-7 md:h-7 animate-pulse flex-shrink-0" />
             <div className="flex items-center gap-1 md:gap-2">
@@ -41,23 +41,34 @@ export function Navbar() {
           </div>
 
           {/* Mobile hamburger */}
-          <button onClick={() => setMobileOpen((p) => !p)}
-            className="md:hidden p-2 rounded-md text-gray-400 hover:text-primary hover:bg-white/5 transition-colors" aria-label="Toggle menu">
+          <button
+            onClick={() => setMobileOpen((p) => !p)}
+            className="md:hidden p-2 rounded-md text-gray-400 hover:text-primary hover:bg-white/5 transition-colors"
+            aria-label="Toggle menu">
             {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
         </div>
       </div>
 
-      {/* Mobile dropdown */}
+      {/* Mobile dropdown — fully opaque, page scrolls freely behind it */}
       {mobileOpen && (
-        <div className="md:hidden glass border-t border-white/5 px-4 pb-4 pt-3 flex flex-col gap-1.5">
+        <div className="md:hidden bg-neutral-900 border-t border-white/10 px-4 pb-4 pt-3 flex flex-col gap-1.5 shadow-xl">
           {NAV_LINKS.map((link) => (
-            <Link key={link.href} href={link.href} onClick={() => setMobileOpen(false)}
-              className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors ${pathname === link.href ? "bg-primary/10 text-primary border border-primary/30" : "text-gray-300 hover:text-primary hover:bg-white/5"}`}>
+            <Link
+              key={link.href}
+              href={link.href}
+              onClick={() => setMobileOpen(false)}
+              className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
+                pathname === link.href
+                  ? "bg-primary/10 text-primary border border-primary/30"
+                  : "text-gray-200 hover:text-primary hover:bg-white/5"
+              }`}>
               {link.icon}{link.label}
             </Link>
           ))}
-          <Link href="/contact" onClick={() => setMobileOpen(false)}
+          <Link
+            href="/contact"
+            onClick={() => setMobileOpen(false)}
             className="mt-1 text-center px-4 py-3 rounded-lg bg-primary text-black font-bold text-sm tracking-wide hover:bg-primary/90 transition-colors">
             Get In Touch
           </Link>
@@ -66,4 +77,3 @@ export function Navbar() {
     </nav>
   );
 }
-
