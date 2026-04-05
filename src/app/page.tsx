@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
-import { Database, Server, Cloud, Cpu, Bot, Settings, RefreshCw, ClipboardCheck, Quote, ArrowRight } from "lucide-react";
+import { Database, Server, Cloud, Cpu, Bot, Settings, RefreshCw, ClipboardCheck, Quote, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { BeforeAfterSlider } from "@/components/BeforeAfterSlider";
 import { DataStreamVisual } from "@/components/DataStreamVisual";
 import { AnomalyDetectionVisual } from "@/components/AnomalyDetectionVisual";
@@ -27,37 +27,92 @@ const TESTIMONIALS = [
   { quote: "Working with this team feels like having an elite in-house data unit. The pipeline audit alone saved us 40% on our monthly cloud warehouse computing costs.", name: "David Chen", role: "Head of Analytics, RetailPro" },
 ];
 
+// ── Compact robot animation — thin on mobile, full on desktop ──
 const DataRefineryAnimation = () => (
-  <div className="relative w-full h-[320px] bg-neutral-900/80 rounded-2xl border border-white/10 flex items-center justify-center overflow-hidden shadow-inner">
+  <div className="relative w-full h-[100px] md:h-[320px] bg-neutral-900/80 rounded-xl border border-white/10 flex items-center justify-center overflow-hidden">
     <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]" />
-    <div className="absolute left-6 flex flex-col gap-6">
+    <div className="absolute left-3 md:left-6 flex flex-col gap-2 md:gap-6">
       {[12, -45, 30].map((rotation, i) => (
-        <motion.div key={i} className="w-7 h-7 bg-red-500/80 rounded-md border border-red-400 shadow-[0_0_15px_rgba(239,68,68,0.5)]"
-          initial={{ x: -50, opacity: 0, rotate: rotation }}
-          animate={{ x: 80, opacity: [0, 1, 0], rotate: rotation + 90 }}
-          transition={{ duration: 2.5, repeat: Infinity, delay: i * 0.4, ease: "easeInOut" }}
-        />
+        <motion.div key={i} className="w-4 h-4 md:w-7 md:h-7 bg-red-500/80 rounded-sm border border-red-400"
+          initial={{ x: -30, opacity: 0, rotate: rotation }}
+          animate={{ x: 60, opacity: [0, 1, 0], rotate: rotation + 90 }}
+          transition={{ duration: 2.5, repeat: Infinity, delay: i * 0.4, ease: "easeInOut" }} />
       ))}
     </div>
-    <div className="relative z-10 flex flex-col items-center justify-center p-5 bg-black border-2 border-cyan-500 rounded-xl shadow-[0_0_40px_rgba(34,211,238,0.2)]">
-      <Bot size={44} className="text-cyan-400 mb-3 drop-shadow-[0_0_10px_rgba(34,211,238,0.8)]" />
-      <div className="flex gap-2">
-        <motion.div animate={{ rotate: 360 }} transition={{ duration: 3, repeat: Infinity, ease: "linear" }}><Settings size={20} className="text-gray-400" /></motion.div>
-        <motion.div animate={{ rotate: -360 }} transition={{ duration: 3, repeat: Infinity, ease: "linear" }}><Settings size={20} className="text-cyan-400" /></motion.div>
+    <div className="relative z-10 flex flex-col items-center justify-center p-2 md:p-5 bg-black border-2 border-cyan-500 rounded-lg md:rounded-xl shadow-[0_0_20px_rgba(34,211,238,0.2)]">
+      <Bot size={26} className="text-cyan-400 mb-1 md:mb-3 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]" />
+      <div className="flex gap-1 md:gap-2">
+        <motion.div animate={{ rotate: 360 }} transition={{ duration: 3, repeat: Infinity, ease: "linear" }}><Settings size={11} className="text-gray-400 md:w-5 md:h-5" /></motion.div>
+        <motion.div animate={{ rotate: -360 }} transition={{ duration: 3, repeat: Infinity, ease: "linear" }}><Settings size={11} className="text-cyan-400 md:w-5 md:h-5" /></motion.div>
       </div>
-      <motion.div className="absolute inset-0 border-t-2 border-cyan-400 rounded-xl" animate={{ y: [0, 120, 0] }} transition={{ duration: 2, repeat: Infinity, ease: "linear" }} />
+      <motion.div className="absolute inset-0 border-t-2 border-cyan-400 rounded-lg md:rounded-xl"
+        animate={{ y: [0, "80%", 0] }} transition={{ duration: 2, repeat: Infinity, ease: "linear" }} />
     </div>
-    <div className="absolute right-6 flex flex-col gap-4">
+    <div className="absolute right-3 md:right-6 flex flex-col gap-2 md:gap-4">
       {[0, 1, 2].map((i) => (
-        <motion.div key={i} className="w-10 h-3 bg-cyan-400 rounded-sm shadow-[0_0_15px_rgba(34,211,238,0.6)]"
-          initial={{ x: -80, opacity: 0 }}
-          animate={{ x: 40, opacity: [0, 1, 0] }}
-          transition={{ duration: 2.5, repeat: Infinity, delay: i * 0.3 + 1, ease: "easeOut" }}
-        />
+        <motion.div key={i} className="w-6 h-2 md:w-10 md:h-3 bg-cyan-400 rounded-sm shadow-[0_0_10px_rgba(34,211,238,0.6)]"
+          initial={{ x: -50, opacity: 0 }}
+          animate={{ x: 20, opacity: [0, 1, 0] }}
+          transition={{ duration: 2.5, repeat: Infinity, delay: i * 0.3 + 1, ease: "easeOut" }} />
       ))}
     </div>
   </div>
 );
+
+// ── Testimonials swipe carousel ──
+function TestimonialsCarousel() {
+  const [current, setCurrent] = useState(0);
+  const total = TESTIMONIALS.length;
+  const prev = () => setCurrent((c) => (c - 1 + total) % total);
+  const next = () => setCurrent((c) => (c + 1) % total);
+
+  useEffect(() => {
+    const timer = setInterval(() => setCurrent((c) => (c + 1) % total), 5000);
+    return () => clearInterval(timer);
+  }, [total]);
+
+  return (
+    <div className="w-full">
+      <div className="relative overflow-hidden">
+        <AnimatePresence mode="wait">
+          <motion.div key={current}
+            initial={{ opacity: 0, x: 40 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -40 }}
+            transition={{ duration: 0.35 }}
+            className="relative p-4 rounded-xl bg-neutral-900 border border-neutral-700">
+            <Quote className="absolute top-3 right-3 w-6 h-6 text-cyan-400/10 rotate-180" />
+            <div className="flex gap-1 mb-2">
+              {[...Array(5)].map((_, i) => (
+                <svg key={i} className="w-3 h-3 text-cyan-400" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                </svg>
+              ))}
+            </div>
+            <p className="text-gray-300 text-sm leading-relaxed italic mb-3">&ldquo;{TESTIMONIALS[current].quote}&rdquo;</p>
+            <div className="border-t border-neutral-700 pt-3">
+              <h4 className="text-white font-bold text-sm">{TESTIMONIALS[current].name}</h4>
+              <p className="text-cyan-400 text-xs font-mono mt-0.5">{TESTIMONIALS[current].role}</p>
+            </div>
+          </motion.div>
+        </AnimatePresence>
+      </div>
+      <div className="flex items-center justify-center gap-4 mt-3">
+        <button onClick={prev} className="w-7 h-7 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:text-primary transition-all" aria-label="Previous">
+          <ChevronLeft className="w-4 h-4" />
+        </button>
+        <div className="flex items-center gap-2">
+          {TESTIMONIALS.map((_, i) => (
+            <button key={i} onClick={() => setCurrent(i)}
+              className={`h-2 rounded-full transition-all duration-300 ${i === current ? "w-6 bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.8)]" : "w-2 bg-white/30 hover:bg-white/50"}`}
+              aria-label={`Testimonial ${i + 1}`} />
+          ))}
+        </div>
+        <button onClick={next} className="w-7 h-7 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:text-primary transition-all" aria-label="Next">
+          <ChevronRight className="w-4 h-4" />
+        </button>
+      </div>
+    </div>
+  );
+}
 
 export default function Home() {
   const sliderRef = useRef<HTMLDivElement>(null);
@@ -66,15 +121,13 @@ export default function Home() {
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
-
   const displayProjects = Array(30).fill(PROJECTS).flat();
 
   const getCardWidth = useCallback(() => {
     if (!sliderRef.current) return 0;
     const firstCard = sliderRef.current.firstElementChild as HTMLElement;
     if (!firstCard) return 0;
-    const isMobile = window.innerWidth < 768;
-    return firstCard.offsetWidth + (isMobile ? 0 : 16);
+    return firstCard.offsetWidth + (window.innerWidth < 768 ? 0 : 16);
   }, []);
 
   const scrollToIndex = useCallback((targetDotIndex: number) => {
@@ -115,8 +168,6 @@ export default function Home() {
       {/* 1. HERO */}
       <section className="relative w-full max-w-7xl mx-auto px-4 pt-8 pb-6 md:pt-24 md:pb-16 text-center">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-cyan-600/10 rounded-full blur-[120px] -z-10 animate-pulse" />
-
-        {/* Pipeline steps */}
         <div className="w-full max-w-2xl mx-auto relative mb-6 md:mb-12 pt-2 md:pt-8">
           <div className="absolute left-0 right-0 top-1/2 h-px bg-white/10 -translate-y-1/2 z-0 mt-3">
             <motion.div className="h-full bg-cyan-400" animate={{ x: ["-100%", "200%"] }} transition={{ repeat: Infinity, duration: 3, ease: "linear" }} style={{ width: "30%" }} />
@@ -127,22 +178,19 @@ export default function Home() {
                 <div className="w-10 h-10 md:w-16 md:h-16 rounded-full border-2 border-cyan-400 flex items-center justify-center bg-black">
                   <Server className="text-cyan-400 w-4 h-4 md:w-6 md:h-6" />
                 </div>
-                <span className="text-[10px] md:text-xs font-mono text-cyan-400 tracking-wider">{step}</span>
+                <span className="text-[9px] md:text-xs font-mono text-cyan-400 tracking-wider">{step}</span>
               </div>
             ))}
           </div>
         </div>
-
         <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 }}
           className="text-3xl md:text-7xl font-extrabold mb-4 md:mb-6 tracking-tight">
           Architecting the <span className="text-cyan-400 drop-shadow-[0_0_15px_rgba(34,211,238,0.5)]">Data Ecosystem</span> of Tomorrow.
         </motion.h1>
-
         <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.4 }}
           className="max-w-2xl mx-auto text-sm md:text-xl text-gray-300 mb-6 md:mb-10 leading-relaxed font-light">
           Raw data is only valuable if you can trust it and access it instantly. We act as your dedicated engineering team — eliminating silos, automating pipelines, and building resilient cloud lakehouses.
         </motion.p>
-
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.6 }}>
           <Link href="/contact" className="inline-flex items-center gap-2 px-6 py-3 md:px-8 md:py-4 bg-cyan-400 text-black font-bold rounded-lg hover:scale-105 transition-all shadow-[0_0_20px_rgba(34,211,238,0.3)] text-sm md:text-base">
             Start a Project <ArrowRight size={16} />
@@ -162,18 +210,30 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 3. THE PROCESS */}
+      {/* 3. THE PROCESS — BOTH paragraphs visible on mobile, animation below */}
       <section className="w-full bg-white/[0.02] border-b border-white/5 py-8 md:py-20 overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-16 items-center">
-          <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-400/10 text-cyan-400 text-xs md:text-sm font-mono mb-4">
-              <Cpu size={14} /> THE PROCESS
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="md:grid md:grid-cols-2 md:gap-16 md:items-center">
+            <div>
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-400/10 text-cyan-400 text-xs md:text-sm font-mono mb-3 md:mb-4">
+                <Cpu size={14} /> THE PROCESS
+              </div>
+              <h2 className="text-2xl md:text-4xl font-bold mb-3 md:mb-5">We turn the chaos of raw data into clarity.</h2>
+              {/* Both paragraphs visible on ALL screen sizes */}
+              <p className="text-sm md:text-lg text-gray-400 mb-3 leading-relaxed">
+                Think of your raw data like a disorganized warehouse. It&apos;s all there, but you can&apos;t use it.
+              </p>
+              <p className="text-sm md:text-lg text-gray-400 leading-relaxed">
+                Our pipelines act as the ultimate automated sorting machine — ingesting the mess, applying rigorous cleaning rules, and delivering perfectly structured, analysis-ready data to your team.
+              </p>
             </div>
-            <h2 className="text-2xl md:text-4xl font-bold mb-3 md:mb-6">We turn the chaos of raw data into clarity.</h2>
-            <p className="text-sm md:text-lg text-gray-400 mb-3 md:mb-6 leading-relaxed">Think of your raw data like a disorganized warehouse. It&apos;s all there, but you can&apos;t use it.</p>
-            <p className="text-sm md:text-lg text-gray-400 leading-relaxed">Our pipelines act as the ultimate automated sorting machine — ingesting the mess, applying rigorous cleaning rules, and delivering perfectly structured, analysis-ready data to your team.</p>
+            {/* Desktop: full animation alongside text */}
+            <div className="hidden md:block"><DataRefineryAnimation /></div>
           </div>
-          <div className="hidden lg:block"><DataRefineryAnimation /></div>
+          {/* Mobile: compact thin animation strip below text */}
+          <div className="md:hidden mt-5">
+            <DataRefineryAnimation />
+          </div>
         </div>
       </section>
 
@@ -222,16 +282,17 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 6. TESTIMONIALS */}
+      {/* 6. TESTIMONIALS — carousel on mobile, grid on desktop */}
       <section className="w-full max-w-7xl mx-auto px-4 py-8 pb-12 md:py-20 md:pb-28">
         <div className="text-center mb-6 md:mb-12">
           <h2 className="text-xl md:text-3xl font-bold mb-3 font-mono">CLIENT_ENDORSEMENTS</h2>
           <div className="h-0.5 w-16 bg-cyan-400 mx-auto" />
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+        <div className="md:hidden"><TestimonialsCarousel /></div>
+        <div className="hidden md:grid md:grid-cols-3 gap-6">
           {TESTIMONIALS.map((testimonial, index) => (
-            <motion.div key={index} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ duration: 0.5, delay: index * 0.15 }}
-              className="relative p-4 md:p-6 rounded-xl bg-neutral-900 border border-neutral-700 hover:border-cyan-400/30 transition-colors flex flex-col">
+            <motion.div key={index} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: index * 0.15 }}
+              className="relative p-6 rounded-xl bg-neutral-900 border border-neutral-700 hover:border-cyan-400/30 transition-colors flex flex-col">
               <Quote className="absolute top-4 right-4 w-8 h-8 text-cyan-400/10 rotate-180" />
               <div className="flex gap-1 mb-3">{[...Array(5)].map((_, i) => (<svg key={i} className="w-3 h-3 text-cyan-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>))}</div>
               <p className="text-gray-300 text-sm leading-relaxed italic mb-4 flex-grow">&ldquo;{testimonial.quote}&rdquo;</p>
@@ -265,4 +326,3 @@ function ProjectCard({ title, tags, stat, desc, visual }: { title: string; tags:
     </div>
   );
 }
-

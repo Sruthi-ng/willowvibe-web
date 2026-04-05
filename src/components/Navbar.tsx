@@ -19,15 +19,18 @@ export function Navbar() {
     <nav className="fixed top-0 w-full z-50 glass border-b border-primary/20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 md:h-20">
-          <Link href="/" className="flex items-center gap-2 md:gap-3 shrink-0">
-            <Database className="text-primary w-6 h-6 md:w-7 md:h-7 animate-pulse" />
-            <div className="flex items-center gap-1.5 md:gap-2">
-              <span className="text-base md:text-lg font-extrabold tracking-wider text-white glow-text">WillowVibe</span>
-              <span className="text-white/30 font-light text-base md:text-lg">|</span>
-              <span className="text-sm md:text-base font-semibold tracking-widest text-primary/80 hidden sm:block">Data Synapse</span>
+
+          {/* Brand — Data Synapse always visible */}
+          <Link href="/" className="flex items-center gap-2 shrink-0">
+            <Database className="text-primary w-5 h-5 md:w-7 md:h-7 animate-pulse flex-shrink-0" />
+            <div className="flex items-center gap-1 md:gap-2">
+              <span className="text-sm md:text-lg font-extrabold tracking-wider text-white glow-text">WillowVibe</span>
+              <span className="text-white/30 font-light text-sm md:text-lg">|</span>
+              <span className="text-xs md:text-base font-semibold tracking-wider text-primary/80">Data Synapse</span>
             </div>
           </Link>
 
+          {/* Desktop nav */}
           <div className="hidden md:flex items-center space-x-2">
             {NAV_LINKS.map((link) => (
               <Link key={link.href} href={link.href}
@@ -37,12 +40,15 @@ export function Navbar() {
             ))}
           </div>
 
-          <button onClick={() => setMobileOpen((p) => !p)} className="md:hidden p-2 rounded-md text-gray-400 hover:text-primary hover:bg-white/5 transition-colors" aria-label="Toggle menu">
-            {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          {/* Mobile hamburger */}
+          <button onClick={() => setMobileOpen((p) => !p)}
+            className="md:hidden p-2 rounded-md text-gray-400 hover:text-primary hover:bg-white/5 transition-colors" aria-label="Toggle menu">
+            {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
         </div>
       </div>
 
+      {/* Mobile dropdown */}
       {mobileOpen && (
         <div className="md:hidden glass border-t border-white/5 px-4 pb-4 pt-3 flex flex-col gap-1.5">
           {NAV_LINKS.map((link) => (
