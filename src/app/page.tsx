@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
-import { Database, Server, Activity, Cloud, Cpu, Bot, Settings, RefreshCw, ClipboardCheck, Quote, Terminal, ArrowRight } from "lucide-react";
+import { Database, Server, Activity, Cloud, Cpu, Bot, Settings, RefreshCw, ClipboardCheck, Quote, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { BeforeAfterSlider } from "@/components/BeforeAfterSlider";
@@ -112,7 +112,7 @@ const DataRefineryAnimation = () => {
             <Settings size={24} className="text-cyan-400" />
           </motion.div>
         </div>
-        <motion.div 
+        <motion.div
           className="absolute inset-0 border-t-2 border-cyan-400 rounded-xl shadow-[0_0_10px_cyan]"
           animate={{ y: [0, 140, 0] }}
           transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
@@ -149,34 +149,36 @@ export default function Home() {
 
   const displayProjects = Array(30).fill(PROJECTS).flat();
 
+  // Reads the actual rendered card width from the DOM — works for both mobile and desktop
+  const getCardWidth = useCallback(() => {
+    if (!sliderRef.current) return 0;
+    const firstCard = sliderRef.current.firstElementChild as HTMLElement;
+    if (!firstCard) return 0;
+    const isMobile = window.innerWidth < 768;
+    const gap = isMobile ? 0 : 16;
+    return firstCard.offsetWidth + gap;
+  }, []);
+
   const scrollToIndex = useCallback((targetDotIndex: number) => {
     if (sliderRef.current) {
-      const { scrollLeft, clientWidth } = sliderRef.current;
-      const cardWidthWithGap = (clientWidth * 0.8) + 16;
-      
-      const currentRawIndex = Math.round(scrollLeft / cardWidthWithGap);
+      const cardWidth = getCardWidth();
+      const currentRawIndex = Math.round(sliderRef.current.scrollLeft / cardWidth);
       const currentMod = currentRawIndex % PROJECTS.length;
-
       let steps = targetDotIndex - currentMod;
-      
       if (steps < 0) steps += PROJECTS.length;
-      if (steps === 0) return; 
-
-      const nextRawIndex = currentRawIndex + steps;
-
+      if (steps === 0) return;
       sliderRef.current.scrollTo({
-        left: nextRawIndex * cardWidthWithGap,
+        left: (currentRawIndex + steps) * cardWidth,
         behavior: "smooth",
       });
       setActiveIndex(targetDotIndex);
     }
-  }, []);
+  }, [getCardWidth]);
 
   const handleScroll = () => {
     if (sliderRef.current) {
-      const { scrollLeft, clientWidth } = sliderRef.current;
-      const cardWidthWithGap = (clientWidth * 0.8) + 16;
-      const rawIndex = Math.round(scrollLeft / cardWidthWithGap);
+      const cardWidth = getCardWidth();
+      const rawIndex = Math.round(sliderRef.current.scrollLeft / cardWidth);
       setActiveIndex(rawIndex % PROJECTS.length);
     }
   };
@@ -185,14 +187,11 @@ export default function Home() {
     if (isPaused || isDragging) return;
     const interval = setInterval(() => {
       if (sliderRef.current) {
-        const { clientWidth } = sliderRef.current;
-        const cardWidthWithGap = (clientWidth * 0.8) + 16;
-        sliderRef.current.scrollBy({ left: cardWidthWithGap, behavior: "smooth" });
+        sliderRef.current.scrollBy({ left: getCardWidth(), behavior: "smooth" });
       }
     }, 4000);
-
     return () => clearInterval(interval);
-  }, [isPaused, isDragging]);
+  }, [isPaused, isDragging, getCardWidth]);
 
   const startDragging = (e: React.MouseEvent) => {
     setIsDragging(true);
@@ -209,21 +208,21 @@ export default function Home() {
     if (!isDragging || !sliderRef.current) return;
     e.preventDefault();
     const x = e.pageX - (sliderRef.current.offsetLeft || 0);
-    const walk = (x - startX) * 2; 
+    const walk = (x - startX) * 2;
     sliderRef.current.scrollLeft = scrollLeft - walk;
   };
 
   return (
     <div className="flex flex-col items-center min-h-screen bg-neutral-950 text-white overflow-x-hidden selection:bg-cyan-400/30">
-      
+
       {/* 1. HERO SECTION */}
       <section className="relative w-full max-w-7xl mx-auto px-4 pt-24 pb-20 text-center">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-cyan-600/10 rounded-full blur-[150px] -z-10 animate-pulse"></div>
-        
+
         {/* TOP: THE DATA PIPELINE VISUAL ANIMATION */}
         <div className="w-full max-w-3xl mx-auto relative mb-16 pt-8">
           <div className="absolute left-0 right-0 top-1/2 h-1 bg-white/10 -translate-y-1/2 z-0 mt-4">
-            <motion.div 
+            <motion.div
               className="h-full bg-cyan-400 shadow-[0_0_15px_cyan]"
               animate={{ x: ["-100%", "200%"] }}
               transition={{ repeat: Infinity, duration: 3, ease: "linear" }}
@@ -242,8 +241,8 @@ export default function Home() {
             ))}
           </div>
         </div>
-        
-        <motion.h1 
+
+        <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
@@ -251,8 +250,8 @@ export default function Home() {
         >
           Architecting the <span className="text-cyan-400 drop-shadow-[0_0_15px_rgba(34,211,238,0.5)]">Data Ecosystem</span> of Tomorrow.
         </motion.h1>
-        
-        <motion.p 
+
+        <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
@@ -283,9 +282,9 @@ export default function Home() {
       <section className="w-full bg-white/[0.02] border-b border-white/5 py-24 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div>
-             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-400/10 text-cyan-400 text-sm font-mono mb-6">
-                <Cpu size={16} /> THE PROCESS
-             </div>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-400/10 text-cyan-400 text-sm font-mono mb-6">
+              <Cpu size={16} /> THE PROCESS
+            </div>
             <h2 className="text-3xl md:text-4xl font-bold mb-6">We turn the chaos of raw data into clarity.</h2>
             <p className="text-lg text-gray-400 mb-6 leading-relaxed">
               Think of your raw data like a disorganized warehouse. It's all there, but you can't use it.
@@ -304,10 +303,10 @@ export default function Home() {
           <h2 className="text-3xl font-bold mb-4 font-mono">CORE_CAPABILITIES</h2>
           <div className="h-1 w-20 bg-cyan-400 shadow-[0_0_10px_cyan] mx-auto"></div>
         </div>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {SERVICES.map((service, index) => (
-            <motion.div 
+            <motion.div
               key={index}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -333,19 +332,19 @@ export default function Home() {
         </div>
 
         <div className="relative group">
-          <div 
+          <div
             ref={sliderRef}
             onScroll={handleScroll}
             onMouseDown={startDragging}
             onMouseUp={() => setIsDragging(false)}
-            onMouseLeave={stopInteracting} 
+            onMouseLeave={stopInteracting}
             onMouseMove={move}
             onMouseEnter={() => setIsPaused(true)}
-            className={`flex overflow-x-auto gap-4 snap-x snap-mandatory no-scrollbar px-[10%] py-4 ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
+            className={`flex overflow-x-auto gap-4 snap-x snap-mandatory no-scrollbar py-4 md:px-[10%] ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
             {displayProjects.map((project, idx) => (
-              <div key={`${project.id}-${idx}`} className="min-w-[80%] snap-center shrink-0 pointer-events-none md:pointer-events-auto">
+              <div key={`${project.id}-${idx}`} className="w-[calc(100vw-2rem)] md:w-auto md:min-w-[80%] flex-none snap-start md:snap-center shrink-0 pointer-events-none md:pointer-events-auto">
                 <ProjectCard {...project} />
               </div>
             ))}
@@ -358,11 +357,10 @@ export default function Home() {
             <button
               key={index}
               onClick={() => scrollToIndex(index)}
-              className={`h-2 transition-all duration-300 rounded-full cursor-pointer hover:bg-cyan-300 ${
-                activeIndex === index 
-                  ? "w-8 bg-cyan-400 shadow-[0_0_10px_rgba(34,211,238,0.8)]" 
+              className={`h-2 transition-all duration-300 rounded-full cursor-pointer hover:bg-cyan-300 ${activeIndex === index
+                  ? "w-8 bg-cyan-400 shadow-[0_0_10px_rgba(34,211,238,0.8)]"
                   : "w-2 bg-white/40"
-              }`}
+                }`}
               aria-label={`Go to project ${index + 1}`}
             />
           ))}
@@ -406,25 +404,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 7. MINIMALIST FOOTER (The Clean Finish) */}
-      <footer className="w-full border-t border-white/5 bg-black py-12">
-        <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="flex items-center gap-2 text-cyan-400">
-            <Terminal size={20} />
-            <span className="font-mono font-bold tracking-wider">DATA_CORE</span>
-          </div>
-          
-          <div className="text-gray-500 text-sm">
-            © {new Date().getFullYear()} Data Engineering Services. All rights reserved.
-          </div>
-          
-          <div>
-            <Link href="/contact" className="inline-flex items-center gap-2 px-6 py-2 rounded-full border border-cyan-400/30 text-cyan-400 text-sm font-mono hover:bg-cyan-400 hover:text-black transition-colors duration-300">
-              CONTACT_US <ArrowRight size={14} />
-            </Link>
-          </div>
-        </div>
-      </footer>
+
 
     </div>
   );
@@ -436,7 +416,7 @@ function ProjectCard({ title, tags, stat, desc, visual }: any) {
     <div className="group relative p-8 h-full flex flex-col bg-neutral-700 border border-neutral-500 rounded-xl hover:border-cyan-400 transition-all duration-500 shadow-[0_15px_40px_rgba(0,0,0,0.8)] select-none">
       <h3 className="text-2xl font-bold mb-4 text-white group-hover:text-cyan-400 transition-colors">{title}</h3>
       <p className="text-lg text-gray-200 mb-6 flex-grow leading-relaxed">{desc}</p>
-      
+
       {/* 🖼️ Renders the specific visual component for the project */}
       <div className="mt-4 mb-6">
         {visual === "slider" && <BeforeAfterSlider />}
@@ -455,3 +435,4 @@ function ProjectCard({ title, tags, stat, desc, visual }: any) {
     </div>
   );
 }
+
