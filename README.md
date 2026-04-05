@@ -1,8 +1,10 @@
 # WillowVibe | Data Synapse — Company Website
 
 > Official website for WillowVibe | Data Synapse, a data engineering services company.
-> Live at: [willowvibe.com](https://www.willowvibe.com)
-> Preview: [willowvibe-web.vercel.app](https://willowvibe-web.vercel.app)
+>
+> 🌐 **Live site:** [www.willowvibe.com](https://www.willowvibe.com)
+> 🔧 **Staging (Vercel preview):** [willowvibe-web.vercel.app](https://willowvibe-web.vercel.app)
+> 📦 **Repository:** [github.com/Sruthi-ng/willowvibe-web](https://github.com/Sruthi-ng/willowvibe-web)
 
 ---
 
@@ -117,7 +119,12 @@ Open [http://localhost:3000](http://localhost:3000)
 
 ## Deployment
 
-The site auto-deploys to Vercel whenever you push to the `main` branch.
+The site auto-deploys to Vercel whenever you push to the `main` branch and goes live at **www.willowvibe.com**.
+
+**How it works:**
+- You push code to GitHub → Vercel detects it → builds and deploys automatically
+- The custom domain `www.willowvibe.com` is connected to Vercel via Hostinger DNS
+- The staging URL `willowvibe-web.vercel.app` always reflects the latest push too
 
 ```bash
 git add .
