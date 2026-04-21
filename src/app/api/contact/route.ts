@@ -1,9 +1,15 @@
 import * as nodemailer from "nodemailer";
 import { NextResponse } from "next/server";
 
+// 1. Fully swapped to Hostinger's mail courier (No Gmail)
 const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: { user: process.env.GMAIL_USER, pass: process.env.GMAIL_APP_PASSWORD },
+    host: "smtp.hostinger.com",
+    port: 465,
+    secure: true,
+    auth: { 
+        user: process.env.HOSTINGER_USER, 
+        pass: process.env.HOSTINGER_PASSWORD 
+    },
 });
 
 function buildHtml(name: string, email: string, phone: string, message: string) {
@@ -29,16 +35,21 @@ export async function POST(request: Request) {
     try {
         const body = await request.json();
         const { name, email, phone, message } = body;
+        
         if (!name || !email || !message) return NextResponse.json({ error: "Name, email and message are required." }, { status: 400 });
+        
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) return NextResponse.json({ error: "Please provide a valid email address." }, { status: 400 });
+        
+        // 2. Updated to point to your Hostinger environment variables
         await transporter.sendMail({
-            from: `"WillowVibe Data Synapse" <${process.env.GMAIL_USER}>`,
-            to: process.env.GMAIL_USER,
+            from: `"WillowVibe Website" <${process.env.HOSTINGER_USER}>`, 
+            to: process.env.HOSTINGER_USER, 
             replyTo: email,
             subject: `New Inquiry from ${name} — WillowVibe`,
             html: buildHtml(name, email, phone ?? "", message),
         });
+        
         return NextResponse.json({ success: true });
     } catch (error) {
         console.error("Email error:", error);
