@@ -184,6 +184,7 @@ function CoreCapabilitiesIDE() {
   const [expandedFolders, setExpandedFolders] = useState<Set<string>>(new Set([CAPABILITY_TREE_ADVANCED[0].folder]));
   const [activeFileId, setActiveFileId] = useState(CAPABILITY_TREE_ADVANCED[0].files[0].id);
   const [userHasInteracted, setUserHasInteracted] = useState(false);
+  const [expandedMobileFile, setExpandedMobileFile] = useState<string | null>(null);
   
   // The tab bar and auto-traverse should be scoped to the parent folder of the currently active file.
   const activeFolderObj = CAPABILITY_TREE_ADVANCED.find(f => f.files.some(file => file.id === activeFileId)) || CAPABILITY_TREE_ADVANCED[0];
@@ -241,33 +242,47 @@ function CoreCapabilitiesIDE() {
 
   return (
     <>
-      {/* Mobile Cloud Console Layout (Hidden on Desktop) */}
-      <div className="flex flex-col gap-4 lg:hidden w-full max-w-lg mx-auto">
-        {allMobileFiles.map(file => (
-          <div key={file.id} className="bg-neutral-900/80 border border-white/10 rounded-lg p-5 flex flex-col shadow-lg relative overflow-hidden">
-            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-500/20 to-transparent" />
-            <div className="flex items-start justify-between mb-4">
-               <div className="flex items-center gap-3 pr-4">
-                  <div className="p-2.5 bg-black/40 rounded-lg border border-white/5 shrink-0 text-cyan-400">
-                     {file.icon}
-                  </div>
-                  <h3 className="text-white font-bold text-sm leading-snug">{file.fullTitle}</h3>
-               </div>
-               <div className="flex items-center gap-1.5 shrink-0 mt-1 bg-black/30 px-2 py-1 rounded border border-white/5">
-                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                  <span className="text-emerald-400 font-mono text-[9px] tracking-wider font-bold">ONLINE</span>
-               </div>
+      {/* Mobile Terminal Directory Accordion (Hidden on Desktop) */}
+      <div className="flex flex-col lg:hidden w-full max-w-lg mx-auto bg-[#0d1117] border border-neutral-700 rounded-xl overflow-hidden shadow-lg font-mono">
+        {allMobileFiles.map(file => {
+          const isExpanded = expandedMobileFile === file.id;
+          return (
+            <div key={file.id} className="flex flex-col">
+              <div 
+                className={`flex items-center p-3 border-b border-white/5 cursor-pointer transition-colors select-none ${isExpanded ? 'bg-neutral-800' : 'bg-neutral-900/40 hover:bg-neutral-800/80 active:bg-neutral-800'}`}
+                onClick={() => setExpandedMobileFile(isExpanded ? null : file.id)}
+              >
+                <span className="text-cyan-500 mr-3 text-sm font-bold leading-none select-none">&gt;</span>
+                <div className="flex items-center gap-2 text-gray-300 text-sm truncate">
+                   {file.icon}
+                   <span className="truncate">{file.shortFileName}</span>
+                </div>
+              </div>
+              
+              <AnimatePresence>
+                {isExpanded && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                    className="overflow-hidden"
+                  >
+                    <div className="px-4 pb-4 pt-3 bg-neutral-900/20 border-b border-white/5 flex flex-col">
+                       <h3 className="text-white font-bold text-sm font-sans mb-1.5">{file.fullTitle}</h3>
+                       <p className="text-gray-400 text-xs leading-relaxed font-sans line-clamp-2">
+                          {file.fullDescription}
+                       </p>
+                       <Link href="/services" className="inline-flex items-center w-max mt-4 px-4 py-2 bg-cyan-900/30 border border-cyan-500/50 text-cyan-400 text-xs font-semibold font-sans rounded hover:bg-cyan-800/50 transition-colors">
+                          Explore service &rarr;
+                       </Link>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
-            
-            <div className="text-gray-400 font-mono text-[12px] leading-relaxed bg-black/40 p-4 rounded border border-white/5 whitespace-pre-wrap">
-               {file.fullDescription}
-            </div>
-
-            <Link href="/services" className="mt-5 text-cyan-400 text-sm font-semibold hover:text-cyan-300 flex items-center gap-2 w-max transition-colors">
-               Explore this service <ArrowRight size={14} />
-            </Link>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* Desktop IDE Layout (Hidden on Mobile) */}
