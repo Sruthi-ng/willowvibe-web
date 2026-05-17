@@ -14,28 +14,76 @@ const PROJECTS = [
   { id: 3, title: "Fintech Fraud Detection", tags: ["Snowflake", "dbt", "Airflow"], stat: "< 50ms latency", desc: "Built an end-to-end data pipeline feeding ML models to detect anomalies in real-time.", visual: "anomaly" },
 ];
 
-const CAPABILITY_TREE = [
+const CAPABILITY_TREE_ADVANCED = [
   {
     folder: "enterprise-platforms",
     files: [
-      { id: "plm-architecture.ts", icon: <ServerCog className="w-5 h-5 lg:w-6 lg:h-6 text-blue-400" />, title: "PLM Architecture", desc: "Full-lifecycle tenant deployment for 3DEXPERIENCE and Teamcenter." },
-      { id: "bom-variant-mgmt.tsx", icon: <Component className="w-5 h-5 lg:w-6 lg:h-6 text-emerald-400" />, title: "BOM & Variant Mgmt", desc: "Multi-Level BOM Engineering and complex product variant configurations." },
-      { id: "change-control.yml", icon: <ClipboardCheck className="w-5 h-5 lg:w-6 lg:h-6 text-purple-400" />, title: "Change Control Board", desc: "Structuring operational paths for Issues, CRs, and ECOs." },
-      { id: "cad-product-dev.rs", icon: <Box className="w-5 h-5 lg:w-6 lg:h-6 text-cyan-400" />, title: "CAD & Product Dev", desc: "High-precision 3D parametric modeling and APQP/PPAP packages." },
+      { 
+        id: "plm-architecture.ts", 
+        shortFileName: "plm-architecture.ts",
+        icon: <ServerCog size={14} className="text-blue-400" />, 
+        fullTitle: "Enterprise PLM Platform Architecture & Administration", 
+        fullDescription: "Full-lifecycle tenant deployment, administration, configuration, and People & Organization setup for both 3DEXPERIENCE (SaaS/On-Prem) and Teamcenter environments. We ensure your core engineering platforms are perfectly tuned for global scale and security." 
+      },
+      { 
+        id: "bom-variant-mgmt.tsx", 
+        shortFileName: "bom-variant-mgmt.tsx",
+        icon: <Component size={14} className="text-emerald-400" />, 
+        fullTitle: "Advanced Configuration, BOM & Variant Management", 
+        fullDescription: "Creating, managing, and strictly validating Engineering Bills of Materials (EBOM) to match rigorous corporate Product Development Processes. We configure complex product rules, variant effectivities, and model definitions for high-customization portfolios." 
+      },
+      { 
+        id: "change-control.yml", 
+        shortFileName: "change-control.yml",
+        icon: <ClipboardCheck size={14} className="text-purple-400" />, 
+        fullTitle: "Change Control Board (CCB) Governance & Workflows", 
+        fullDescription: "Structuring operational paths for Issues, Change Requests (CR), Engineering Change Orders (ECO), and Engineering Change Notices (ECN). Designing and mapping corporate approval lifecycles across multinational internal teams." 
+      },
+      { 
+        id: "cad-product-dev.rs", 
+        shortFileName: "cad-product-dev.rs",
+        icon: <Box size={14} className="text-cyan-400" />, 
+        fullTitle: "Production-Ready CAD & New Product Development (NPD)", 
+        fullDescription: "Delivering native, production-compliant component designs and deep structural assembly sets inside CATIA V5 and SolidWorks. Drafting and setting up core APQP and PPAP packages including Control Plans, Process Flows, and FMEA." 
+      },
     ]
   },
   {
     folder: "core-data-engineering",
     files: [
-      { id: "data-pipelines.py", icon: <Network className="w-5 h-5 lg:w-6 lg:h-6 text-cyan-400" />, title: "Data Pipeline Dev", desc: "Scalable ETL/ELT pipelines with guaranteed SLAs and minimal downtime." },
-      { id: "cloud-engineering.tf", icon: <Cloud className="w-5 h-5 lg:w-6 lg:h-6 text-blue-400" />, title: "Cloud Engineering", desc: "High-performance foundations on AWS, Azure, or GCP." },
-      { id: "data-migration.sh", icon: <RefreshCw className="w-5 h-5 lg:w-6 lg:h-6 text-emerald-400" />, title: "Data Migration", desc: "Transition from legacy to cloud-native architectures with zero data loss." },
+      { 
+        id: "data-pipelines.py", 
+        shortFileName: "data-pipelines.py",
+        icon: <Network size={14} className="text-cyan-400" />, 
+        fullTitle: "Data Pipeline Development & Orchestration", 
+        fullDescription: "Design and implement robust, scalable ETL/ELT pipelines with guaranteed SLAs and minimal downtime. We process massive volumes of disparate raw data, transforming it into pristine, analysis-ready assets feeding your entire data ecosystem." 
+      },
+      { 
+        id: "cloud-engineering.tf", 
+        shortFileName: "cloud-engineering.tf",
+        icon: <Cloud size={14} className="text-blue-400" />, 
+        fullTitle: "Cloud Infrastructure Architecture", 
+        fullDescription: "Architect high-performance foundations on AWS, Azure, or GCP. We deploy auto-scaling, resilient computing environments utilizing Infrastructure as Code (IaC) to minimize ongoing operational costs while maximizing query execution speeds." 
+      },
+      { 
+        id: "data-migration.sh", 
+        shortFileName: "data-migration.sh",
+        icon: <RefreshCw size={14} className="text-emerald-400" />, 
+        fullTitle: "Zero-Downtime Data Migration", 
+        fullDescription: "Transition from legacy on-premise systems to modern cloud-native architectures with absolute zero data loss. We utilize automated validation scripts and parallel run methodologies to ensure complete confidence during critical switchovers." 
+      },
     ]
   },
   {
     folder: "data-trust-analytics",
     files: [
-      { id: "data-quality.json", icon: <ShieldCheck className="w-5 h-5 lg:w-6 lg:h-6 text-rose-400" />, title: "Data Quality & Trust", desc: "Automated testing and anomaly detection for reliable data." },
+      { 
+        id: "data-quality.json", 
+        shortFileName: "data-quality.json",
+        icon: <ShieldCheck size={14} className="text-rose-400" />, 
+        fullTitle: "Data Quality, Observability & Trust", 
+        fullDescription: "Deploy automated testing frameworks and AI-driven anomaly detection to ensure 100% data reliability before it ever reaches production environments. Comprehensive monitoring across your ecosystem with proactive alerts and circuit breakers." 
+      },
     ]
   }
 ];
@@ -133,13 +181,45 @@ function TestimonialsCarousel() {
   );
 }
 function CoreCapabilitiesIDE() {
-  const [expandedFolders, setExpandedFolders] = useState<string[]>(["enterprise-platforms", "core-data-engineering", "data-trust-analytics"]);
-  const [selectedCapability, setSelectedCapability] = useState(CAPABILITY_TREE[0].files[0]);
+  const [activeFolderId, setActiveFolderId] = useState(CAPABILITY_TREE_ADVANCED[0].folder);
+  const [activeFileId, setActiveFileId] = useState(CAPABILITY_TREE_ADVANCED[0].files[0].id);
+  const [userHasInteracted, setUserHasInteracted] = useState(false);
+  
+  const activeFolderObj = CAPABILITY_TREE_ADVANCED.find(f => f.folder === activeFolderId) || CAPABILITY_TREE_ADVANCED[0];
+  const activeFileObj = activeFolderObj.files.find(f => f.id === activeFileId) || activeFolderObj.files[0];
 
-  const toggleFolder = (folder: string) => {
-    setExpandedFolders(prev => 
-      prev.includes(folder) ? prev.filter(f => f !== folder) : [...prev, folder]
-    );
+  useEffect(() => {
+    if (userHasInteracted) return;
+    
+    const interval = setInterval(() => {
+      setActiveFileId(currentFileId => {
+        const currentFolder = CAPABILITY_TREE_ADVANCED.find(f => f.folder === activeFolderId) || CAPABILITY_TREE_ADVANCED[0];
+        const currentIndex = currentFolder.files.findIndex(f => f.id === currentFileId);
+        const nextIndex = (currentIndex + 1) % currentFolder.files.length;
+        return currentFolder.files[nextIndex].id;
+      });
+    }, 4500);
+
+    return () => clearInterval(interval);
+  }, [activeFolderId, userHasInteracted]);
+
+  const handleInteraction = () => {
+    if (!userHasInteracted) setUserHasInteracted(true);
+  };
+
+  const handleFolderClick = (folderId: string) => {
+    handleInteraction();
+    setActiveFolderId(folderId);
+    const newFolderObj = CAPABILITY_TREE_ADVANCED.find(f => f.folder === folderId);
+    if (newFolderObj) {
+      setActiveFileId(newFolderObj.files[0].id);
+    }
+  };
+
+  const handleFileClick = (folderId: string, fileId: string) => {
+    handleInteraction();
+    setActiveFolderId(folderId);
+    setActiveFileId(fileId);
   };
 
   return (
@@ -154,46 +234,43 @@ function CoreCapabilitiesIDE() {
         <div className="mx-auto text-xs font-mono text-gray-500 font-medium tracking-wide">willowvibe-workspace — Core_Capabilities</div>
       </div>
 
-      <div className="flex flex-col lg:grid lg:grid-cols-12 flex-grow h-auto lg:h-[450px]">
+      <div className="flex flex-col lg:grid lg:grid-cols-12 flex-grow h-auto lg:h-[550px]">
         {/* Left Side: File Explorer */}
         <div className="lg:col-span-4 bg-[#0d1117] border-r border-neutral-800 flex flex-col font-mono text-sm overflow-y-auto max-h-[300px] lg:max-h-none">
           <div className="px-4 py-3 text-xs font-bold text-gray-400 uppercase tracking-widest border-b border-neutral-800 select-none">
             Explorer
           </div>
           <div className="py-2">
-            {CAPABILITY_TREE.map((cat) => {
-              const isExpanded = expandedFolders.includes(cat.folder);
+            {CAPABILITY_TREE_ADVANCED.map((cat) => {
+              const isFolderActive = activeFolderId === cat.folder;
               return (
                 <div key={cat.folder} className="select-none">
                   <div 
-                    className="flex items-center gap-1.5 px-3 py-1.5 hover:bg-white/5 cursor-pointer text-gray-300 transition-colors"
-                    onClick={() => toggleFolder(cat.folder)}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 cursor-pointer text-gray-300 transition-colors ${isFolderActive ? "bg-white/5" : "hover:bg-white/5"}`}
+                    onClick={() => handleFolderClick(cat.folder)}
                   >
-                    {isExpanded ? <ChevronDown size={14} className="text-gray-400" /> : <ChevronRight size={14} className="text-gray-400" />}
-                    {isExpanded ? <FolderOpen size={14} className="text-cyan-500" /> : <Folder size={14} className="text-cyan-500" />}
-                    <span className="truncate">{cat.folder}</span>
+                    {isFolderActive ? <ChevronDown size={14} className="text-gray-400" /> : <ChevronRight size={14} className="text-gray-400" />}
+                    {isFolderActive ? <FolderOpen size={14} className="text-cyan-500" /> : <Folder size={14} className="text-cyan-500" />}
+                    <span className={`truncate ${isFolderActive ? "text-white font-bold" : "text-gray-300"}`}>{cat.folder}</span>
                   </div>
                   
-                  {isExpanded && (
-                    <div className="flex flex-col mt-0.5 mb-1.5">
+                  {isFolderActive && (
+                    <div className="flex flex-col mt-0.5 mb-1.5 ml-4 pl-3 border-l border-white/10 relative">
                       {cat.files.map((file) => {
-                        const isSelected = selectedCapability.id === file.id;
+                        const isSelected = activeFileId === file.id;
                         return (
                           <div 
                             key={file.id}
-                            onClick={() => setSelectedCapability(file)}
-                            className={`flex items-center gap-2 pl-9 pr-3 py-1.5 cursor-pointer border-l-2 transition-colors ${
+                            onClick={() => handleFileClick(cat.folder, file.id)}
+                            className={`flex items-center gap-2 pl-2 pr-3 py-1.5 cursor-pointer relative transition-colors ${
                               isSelected 
-                                ? "bg-cyan-900/30 text-cyan-400 border-cyan-400" 
-                                : "text-gray-400 border-transparent hover:bg-white/5 hover:text-gray-200"
+                                ? "bg-cyan-900/30 text-cyan-400" 
+                                : "text-gray-400 hover:bg-white/5 hover:text-gray-200"
                             }`}
                           >
-                            {file.id.endsWith('.json') || file.id.endsWith('.yml') ? (
-                               <FileJson size={14} className={isSelected ? "text-cyan-400" : "text-emerald-400"} />
-                            ) : (
-                               <FileCode2 size={14} className={isSelected ? "text-cyan-400" : "text-blue-400"} />
-                            )}
-                            <span className="truncate text-[13px]">{file.id}</span>
+                            <div className="absolute left-[-13px] top-1/2 w-3 border-t border-white/10" />
+                            {file.icon}
+                            <span className="truncate text-[13px]">{file.shortFileName}</span>
                           </div>
                         );
                       })}
@@ -206,67 +283,81 @@ function CoreCapabilitiesIDE() {
         </div>
 
         {/* Right Side: Editor Window */}
-        <div className="lg:col-span-8 bg-[#0a0d12] flex flex-col relative overflow-hidden">
+        <div className="lg:col-span-8 bg-[#0a0d12] flex flex-col relative overflow-hidden font-mono">
             {/* Editor Tabs */}
-            <div className="flex bg-[#0d1117] border-b border-neutral-800 overflow-x-auto custom-scrollbar select-none">
-               <div className="flex items-center gap-2 px-4 py-2.5 bg-[#0a0d12] border-t-2 border-t-cyan-400 border-r border-r-neutral-800 min-w-max">
-                  {selectedCapability.id.endsWith('.json') || selectedCapability.id.endsWith('.yml') ? (
-                     <FileJson size={14} className="text-cyan-400" />
-                  ) : (
-                     <FileCode2 size={14} className="text-cyan-400" />
-                  )}
-                  <span className="text-cyan-400 font-mono text-sm">{selectedCapability.id}</span>
-               </div>
+            <div className="flex bg-[#0d1117] border-b border-neutral-800 overflow-x-auto custom-scrollbar select-none pt-2 px-2 gap-1">
+                {activeFolderObj.files.map((file) => {
+                    const isTabActive = activeFileId === file.id;
+                    return (
+                        <div 
+                            key={file.id}
+                            onClick={() => handleFileClick(activeFolderId, file.id)}
+                            className={`flex items-center gap-2 px-4 py-2 cursor-pointer min-w-max rounded-t-lg border-t-2 border-l border-r transition-colors ${
+                                isTabActive 
+                                    ? "bg-[#0a0d12] border-t-cyan-400 border-l-neutral-800 border-r-neutral-800 text-cyan-400" 
+                                    : "bg-[#161b22] border-transparent text-gray-500 hover:bg-[#1c2128]"
+                            }`}
+                        >
+                            {file.icon}
+                            <span className="text-[13px]">{file.shortFileName}</span>
+                        </div>
+                    );
+                })}
             </div>
 
             <div className="flex-grow flex relative">
                 {/* Line Numbers */}
-                <div className="hidden lg:flex w-12 bg-[#0d1117] border-r border-neutral-800 flex-col items-end py-4 pr-2 font-mono text-xs text-neutral-600 select-none opacity-60">
-                    {[1,2,3,4,5,6,7,8,9,10,11,12].map(n => <span key={n} className="leading-8">{n}</span>)}
+                <div className="w-12 bg-[#0d1117] border-r border-neutral-800 flex flex-col items-end py-4 pr-3 text-xs text-neutral-600 select-none opacity-60">
+                    {[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15].map(n => <span key={n} className="leading-7 lg:leading-8">{n}</span>)}
                 </div>
 
                 {/* Editor Content */}
-                <div className="flex-grow p-4 lg:p-8 relative overflow-y-auto">
-                   <div className="absolute inset-0 bg-gradient-to-br from-cyan-400/5 to-transparent pointer-events-none" />
-                   <AnimatePresence mode="wait">
-                       <motion.div
-                          key={selectedCapability.id}
-                          initial={{ opacity: 0, x: -5 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          exit={{ opacity: 0, x: 5 }}
-                          transition={{ duration: 0.15 }}
-                          className="relative z-10 flex flex-col h-full font-mono"
-                       >
-                           <div className="flex items-start gap-4 lg:gap-6 mb-4 lg:mb-6">
-                               <div className="p-3 rounded-xl bg-[#0d1117] border border-neutral-700 shadow-lg shrink-0 mt-1 lg:mt-0">
-                                   {selectedCapability.icon}
-                               </div>
-                               <div>
-                                   <div className="text-gray-500 text-[11px] lg:text-xs mb-1">export const <span className="text-emerald-400">capability</span> = {"{"}</div>
-                                   <div className="text-base lg:text-xl font-bold text-white mb-2 ml-4 lg:ml-6 leading-tight">
-                                       <span className="text-blue-400">title:</span> <span className="text-amber-300 font-sans">"{selectedCapability.title}"</span>,
-                                   </div>
-                               </div>
-                           </div>
+                <div className="flex-grow p-4 lg:p-6 relative overflow-y-auto custom-scrollbar">
+                    <AnimatePresence mode="wait">
+                        <motion.div
+                            key={activeFileId}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.15 }}
+                            className="relative z-10 flex flex-col h-full"
+                        >
+                            <div className="text-gray-500 text-xs lg:text-sm mb-4 lg:mb-6 leading-7 lg:leading-8 whitespace-nowrap overflow-hidden text-ellipsis">
+                                <span className="text-purple-400 italic">// ==========================================</span><br/>
+                                <span className="text-purple-400 italic">// === </span><span className="text-white font-bold">{activeFileObj.fullTitle}</span><span className="text-purple-400 italic"> ===</span><br/>
+                                <span className="text-purple-400 italic">// ==========================================</span>
+                            </div>
 
-                           <div className="ml-4 lg:ml-8 flex-grow">
-                               <div className="text-gray-500 text-[11px] lg:text-xs mb-1">/**</div>
-                               <div className="text-gray-500 text-[11px] lg:text-xs mb-1 leading-relaxed max-w-xl flex">
-                                   <span className="mr-2">*</span> 
-                                   <p className="text-gray-300 text-xs lg:text-sm font-sans">{selectedCapability.desc}</p>
-                               </div>
-                               <div className="text-gray-500 text-[11px] lg:text-xs mb-4">*/</div>
-                           </div>
-                           
-                           <div className="text-gray-500 text-[11px] lg:text-xs mt-auto">{"};"}</div>
+                            {activeFileId.endsWith('.json') ? (
+                                <div className="text-gray-300 text-xs lg:text-sm leading-7 lg:leading-8 whitespace-pre-wrap">
+                                    <span className="text-amber-300">{"{"}</span><br/>
+                                    <span className="ml-4 text-blue-400">"module"</span>: <span className="text-emerald-400">"{activeFileObj.shortFileName}"</span>,<br/>
+                                    <span className="ml-4 text-blue-400">"config"</span>: <span className="text-amber-300">{"{"}</span><br/>
+                                    <span className="ml-8 text-blue-400">"description"</span>: <span className="text-emerald-400">"{activeFileObj.fullDescription}"</span>,<br/>
+                                    <span className="ml-8 text-blue-400">"status"</span>: <span className="text-emerald-400">"active"</span>,<br/>
+                                    <span className="ml-8 text-blue-400">"deploymentTarget"</span>: <span className="text-emerald-400">"production"</span><br/>
+                                    <span className="ml-4 text-amber-300">{"}"}</span><br/>
+                                    <span className="text-amber-300">{"}"}</span>
+                                </div>
+                            ) : (
+                                <div className="text-gray-300 text-xs lg:text-sm leading-7 lg:leading-8 whitespace-pre-wrap">
+                                    <span className="text-pink-500">export</span> <span className="text-purple-400">const</span> <span className="text-blue-400">initializeModule</span> = <span className="text-amber-300">()</span> <span className="text-pink-500">=&gt;</span> <span className="text-amber-300">{"{"}</span><br/>
+                                    <span className="ml-4 text-gray-500 italic">/**</span><br/>
+                                    <span className="ml-4 text-gray-500 italic block pr-4"> * {activeFileObj.fullDescription}</span><br/>
+                                    <span className="ml-4 text-gray-500 italic"> */</span><br/>
+                                    <br/>
+                                    <span className="ml-4 text-cyan-400">System</span>.<span className="text-emerald-400">deploy</span>(<span className="text-amber-300">"{activeFileObj.shortFileName}"</span>);<br/>
+                                    <span className="text-amber-300">{"}"}</span>;
+                                </div>
+                            )}
 
-                           <div className="mt-6 lg:mt-8 flex font-sans">
-                               <Link href="/services" className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#21262d] hover:bg-[#30363d] text-gray-200 border border-neutral-600 rounded-md text-xs lg:text-sm font-semibold transition-all w-max shadow-sm">
-                                   Explore Module <ArrowRight size={14} />
-                               </Link>
-                           </div>
-                       </motion.div>
-                   </AnimatePresence>
+                            <div className="mt-8 flex font-sans">
+                                <Link href="/services" className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#21262d] hover:bg-[#30363d] text-cyan-400 border border-neutral-600 rounded-md text-xs lg:text-sm font-semibold transition-all w-max shadow-sm">
+                                    Explore Module <ArrowRight size={14} />
+                                </Link>
+                            </div>
+                        </motion.div>
+                    </AnimatePresence>
                 </div>
             </div>
         </div>
