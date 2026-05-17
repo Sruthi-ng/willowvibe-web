@@ -184,6 +184,7 @@ function CoreCapabilitiesIDE() {
   const [expandedFolders, setExpandedFolders] = useState<Set<string>>(new Set([CAPABILITY_TREE_ADVANCED[0].folder]));
   const [activeFileId, setActiveFileId] = useState(CAPABILITY_TREE_ADVANCED[0].files[0].id);
   const [userHasInteracted, setUserHasInteracted] = useState(false);
+  const [mobileView, setMobileView] = useState<'explorer' | 'editor'>('explorer');
   
   // The tab bar and auto-traverse should be scoped to the parent folder of the currently active file.
   const activeFolderObj = CAPABILITY_TREE_ADVANCED.find(f => f.files.some(file => file.id === activeFileId)) || CAPABILITY_TREE_ADVANCED[0];
@@ -224,6 +225,7 @@ function CoreCapabilitiesIDE() {
   const handleFileClick = (fileId: string) => {
     handleInteraction();
     setActiveFileId(fileId);
+    setMobileView('editor');
     
     // Automatically expand the folder of the clicked file if not already expanded
     const parentFolder = CAPABILITY_TREE_ADVANCED.find(f => f.files.some(file => file.id === fileId))?.folder;
@@ -248,10 +250,10 @@ function CoreCapabilitiesIDE() {
         <div className="mx-auto text-xs font-mono text-gray-500 font-medium tracking-wide">willowvibe-workspace — Core_Capabilities</div>
       </div>
 
-      <div className="flex flex-col lg:grid lg:grid-cols-12 flex-grow h-auto lg:h-[550px]">
+      <div className="flex flex-col lg:grid lg:grid-cols-12 flex-grow h-auto lg:h-[550px] relative overflow-hidden">
         {/* Left Side: File Explorer */}
-        <div className="lg:col-span-4 bg-[#0d1117] border-r border-neutral-800 flex flex-col font-mono text-sm overflow-y-auto max-h-[300px] lg:max-h-none">
-          <div className="px-4 py-3 text-xs font-bold text-gray-400 uppercase tracking-widest border-b border-neutral-800 select-none">
+        <div className={`lg:col-span-4 bg-[#0d1117] border-r border-neutral-800 font-mono text-sm overflow-y-auto max-h-[500px] lg:max-h-none ${mobileView === 'explorer' ? 'flex flex-col' : 'hidden lg:flex lg:flex-col'}`}>
+          <div className="px-4 py-3 text-xs font-bold text-gray-400 uppercase tracking-widest border-b border-neutral-800 select-none shrink-0">
             Explorer
           </div>
           <div className="py-2">
@@ -297,9 +299,19 @@ function CoreCapabilitiesIDE() {
         </div>
 
         {/* Right Side: Editor Window */}
-        <div className="lg:col-span-8 bg-[#0a0d12] flex flex-col relative overflow-hidden font-mono">
+        <div className={`lg:col-span-8 bg-[#0a0d12] relative overflow-hidden font-mono ${mobileView === 'editor' ? 'flex flex-col' : 'hidden lg:flex lg:flex-col'} h-[550px] lg:h-auto`}>
+            {/* Mobile Back Button */}
+            <div className="lg:hidden w-full bg-[#0d1117] px-4 py-2 border-b border-neutral-800 flex items-center shrink-0">
+                <button 
+                    onClick={() => setMobileView('explorer')}
+                    className="text-cyan-400 font-mono text-xs hover:text-cyan-300 transition-colors flex items-center gap-2 py-1"
+                >
+                    <ChevronLeft size={14} /> cd .. / Return to Explorer
+                </button>
+            </div>
+
             {/* Editor Tabs */}
-            <div className="flex flex-row overflow-x-auto bg-neutral-900/80 border-b border-white/10 custom-scrollbar select-none pt-2 px-2 gap-1">
+            <div className="flex flex-row overflow-x-auto bg-neutral-900/80 border-b border-white/10 custom-scrollbar select-none pt-2 px-2 gap-1 shrink-0">
                 {activeFolderObj.files.map((file) => {
                     const isTabActive = activeFileId === file.id;
                     return (
