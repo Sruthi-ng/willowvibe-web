@@ -181,11 +181,12 @@ function TestimonialsCarousel() {
   );
 }
 function CoreCapabilitiesIDE() {
-  const [activeFolderId, setActiveFolderId] = useState(CAPABILITY_TREE_ADVANCED[0].folder);
+  const [expandedFolders, setExpandedFolders] = useState<Set<string>>(new Set([CAPABILITY_TREE_ADVANCED[0].folder]));
   const [activeFileId, setActiveFileId] = useState(CAPABILITY_TREE_ADVANCED[0].files[0].id);
   const [userHasInteracted, setUserHasInteracted] = useState(false);
   
-  const activeFolderObj = CAPABILITY_TREE_ADVANCED.find(f => f.folder === activeFolderId) || CAPABILITY_TREE_ADVANCED[0];
+  // The tab bar and auto-traverse should be scoped to the parent folder of the currently active file.
+  const activeFolderObj = CAPABILITY_TREE_ADVANCED.find(f => f.files.some(file => file.id === activeFileId)) || CAPABILITY_TREE_ADVANCED[0];
   const activeFileObj = activeFolderObj.files.find(f => f.id === activeFileId) || activeFolderObj.files[0];
 
   useEffect(() => {
@@ -193,7 +194,7 @@ function CoreCapabilitiesIDE() {
     
     const interval = setInterval(() => {
       setActiveFileId(currentFileId => {
-        const currentFolder = CAPABILITY_TREE_ADVANCED.find(f => f.folder === activeFolderId) || CAPABILITY_TREE_ADVANCED[0];
+        const currentFolder = CAPABILITY_TREE_ADVANCED.find(f => f.files.some(file => file.id === currentFileId)) || CAPABILITY_TREE_ADVANCED[0];
         const currentIndex = currentFolder.files.findIndex(f => f.id === currentFileId);
         const nextIndex = (currentIndex + 1) % currentFolder.files.length;
         return currentFolder.files[nextIndex].id;
@@ -201,7 +202,7 @@ function CoreCapabilitiesIDE() {
     }, 4500);
 
     return () => clearInterval(interval);
-  }, [activeFolderId, userHasInteracted]);
+  }, [userHasInteracted]);
 
   const handleInteraction = () => {
     if (!userHasInteracted) setUserHasInteracted(true);
@@ -209,17 +210,30 @@ function CoreCapabilitiesIDE() {
 
   const handleFolderClick = (folderId: string) => {
     handleInteraction();
-    setActiveFolderId(folderId);
-    const newFolderObj = CAPABILITY_TREE_ADVANCED.find(f => f.folder === folderId);
-    if (newFolderObj) {
-      setActiveFileId(newFolderObj.files[0].id);
-    }
+    setExpandedFolders(prev => {
+      const next = new Set(prev);
+      if (next.has(folderId)) {
+        next.delete(folderId);
+      } else {
+        next.add(folderId);
+      }
+      return next;
+    });
   };
 
-  const handleFileClick = (folderId: string, fileId: string) => {
+  const handleFileClick = (fileId: string) => {
     handleInteraction();
-    setActiveFolderId(folderId);
     setActiveFileId(fileId);
+    
+    // Automatically expand the folder of the clicked file if not already expanded
+    const parentFolder = CAPABILITY_TREE_ADVANCED.find(f => f.files.some(file => file.id === fileId))?.folder;
+    if (parentFolder) {
+      setExpandedFolders(prev => {
+        const next = new Set(prev);
+        next.add(parentFolder);
+        return next;
+      });
+    }
   };
 
   return (
@@ -242,26 +256,26 @@ function CoreCapabilitiesIDE() {
           </div>
           <div className="py-2">
             {CAPABILITY_TREE_ADVANCED.map((cat) => {
-              const isFolderActive = activeFolderId === cat.folder;
+              const isFolderExpanded = expandedFolders.has(cat.folder);
               return (
                 <div key={cat.folder} className="select-none">
                   <div 
-                    className={`flex items-center gap-1.5 px-3 py-1.5 cursor-pointer text-gray-300 transition-colors ${isFolderActive ? "bg-white/5" : "hover:bg-white/5"}`}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 cursor-pointer text-gray-300 transition-colors hover:bg-white/5`}
                     onClick={() => handleFolderClick(cat.folder)}
                   >
-                    {isFolderActive ? <ChevronDown size={14} className="text-gray-400" /> : <ChevronRight size={14} className="text-gray-400" />}
-                    {isFolderActive ? <FolderOpen size={14} className="text-cyan-500" /> : <Folder size={14} className="text-cyan-500" />}
-                    <span className={`truncate ${isFolderActive ? "text-white font-bold" : "text-gray-300"}`}>{cat.folder}</span>
+                    {isFolderExpanded ? <ChevronDown size={14} className="text-gray-400" /> : <ChevronRight size={14} className="text-gray-400" />}
+                    {isFolderExpanded ? <FolderOpen size={14} className="text-cyan-500" /> : <Folder size={14} className="text-cyan-500" />}
+                    <span className={`truncate ${isFolderExpanded ? "text-white font-bold" : "text-gray-300"}`}>{cat.folder}</span>
                   </div>
                   
-                  {isFolderActive && (
+                  {isFolderExpanded && (
                     <div className="flex flex-col mt-0.5 mb-1.5 ml-4 pl-3 border-l border-white/10 relative">
                       {cat.files.map((file) => {
                         const isSelected = activeFileId === file.id;
                         return (
                           <div 
                             key={file.id}
-                            onClick={() => handleFileClick(cat.folder, file.id)}
+                            onClick={() => handleFileClick(file.id)}
                             className={`flex items-center gap-2 pl-2 pr-3 py-1.5 cursor-pointer relative transition-colors ${
                               isSelected 
                                 ? "bg-cyan-900/30 text-cyan-400" 
@@ -291,7 +305,7 @@ function CoreCapabilitiesIDE() {
                     return (
                         <div 
                             key={file.id}
-                            onClick={() => handleFileClick(activeFolderId, file.id)}
+                            onClick={() => handleFileClick(file.id)}
                             className={`flex items-center gap-2 px-4 py-2 cursor-pointer min-w-max rounded-t-lg transition-colors ${
                                 isTabActive 
                                     ? "bg-neutral-800 border-t-2 border-t-cyan-400 text-white" 
