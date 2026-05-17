@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Network, CloudCog, ArrowRightLeft, ShieldCheck, Activity, Eye, BrainCircuit, LineChart, ArrowRight, ServerCog, Component, ClipboardCheck, Box, ChevronDown, ChevronUp } from "lucide-react";
+import { Network, CloudCog, ArrowRightLeft, ShieldCheck, Activity, Eye, BrainCircuit, LineChart, ArrowRight, ServerCog, Component, ClipboardCheck, Box, X } from "lucide-react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -36,10 +36,11 @@ const categories = [
 ];
 
 export default function ServicesPage() {
-    const [expandedId, setExpandedId] = useState<string | null>(null);
+    // any type allows storing the entire service object
+    const [selectedService, setSelectedService] = useState<any | null>(null);
 
     return (
-        <div className="flex flex-col items-center min-h-screen bg-neutral-950 text-white overflow-x-hidden">
+        <div className="flex flex-col items-center min-h-screen bg-neutral-950 text-white overflow-x-hidden relative">
 
             <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-20">
 
@@ -56,7 +57,7 @@ export default function ServicesPage() {
                     </motion.p>
                 </div>
 
-                {/* Categorized Services */}
+                {/* Categorized Services Grid */}
                 <div className="space-y-12 md:space-y-20">
                     {categories.map((cat, catIdx) => (
                         <div key={catIdx}>
@@ -71,71 +72,32 @@ export default function ServicesPage() {
                                 {cat.title}
                             </motion.h2>
                             
-                            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 items-start">
-                                {cat.items.map((svc, idx) => {
-                                    const isExpanded = expandedId === svc.id;
+                            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 items-stretch">
+                                {cat.items.map((svc, idx) => (
+                                    <motion.div 
+                                        key={svc.id} 
+                                        initial={{ opacity: 0, y: 30 }} 
+                                        whileInView={{ opacity: 1, y: 0 }} 
+                                        viewport={{ once: true }}
+                                        transition={{ duration: 0.4, delay: idx * 0.05 }}
+                                        onClick={() => setSelectedService(svc)}
+                                        className="flex flex-col justify-between group relative p-3.5 md:p-6 rounded-2xl border border-white/10 hover:border-cyan-400/50 bg-white/[0.03] transition-all cursor-pointer overflow-hidden h-full shadow-lg hover:shadow-cyan-500/5"
+                                    >
+                                        <div className="absolute inset-0 bg-gradient-to-br from-cyan-400/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+                                        
+                                        <div className="relative z-10 flex flex-col items-start w-full">
+                                            <div className="mb-3 md:mb-4 p-2.5 md:p-3 rounded-xl bg-black/40 inline-flex border border-white/10 group-hover:border-cyan-400/40 transition-all">
+                                                {svc.icon}
+                                            </div>
+                                            <h3 className="text-[13px] sm:text-sm md:text-lg font-bold text-white group-hover:text-cyan-400 transition-colors leading-tight">{svc.title}</h3>
+                                        </div>
 
-                                    return (
-                                        <motion.div 
-                                            layout
-                                            key={svc.id} 
-                                            initial={{ opacity: 0, y: 30 }} 
-                                            whileInView={{ opacity: 1, y: 0 }} 
-                                            viewport={{ once: true }}
-                                            transition={{ duration: 0.4, delay: idx * 0.05 }}
-                                            onClick={() => setExpandedId(isExpanded ? null : svc.id)}
-                                            className="flex flex-col justify-between group relative p-3.5 md:p-6 rounded-2xl border border-white/10 hover:border-cyan-400/50 bg-white/[0.03] transition-all cursor-pointer overflow-hidden h-fit shadow-lg hover:shadow-cyan-500/5"
-                                        >
-                                            <div className="absolute inset-0 bg-gradient-to-br from-cyan-400/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-                                            
-                                            <motion.div layout="position" className="relative z-10 flex flex-col items-start w-full">
-                                                <div className="mb-3 md:mb-4 p-2.5 md:p-3 rounded-xl bg-black/40 inline-flex border border-white/10 group-hover:border-cyan-400/40 transition-all">
-                                                    {svc.icon}
-                                                </div>
-                                                <h3 className="text-[13px] sm:text-sm md:text-lg font-bold text-white group-hover:text-cyan-400 transition-colors leading-tight">{svc.title}</h3>
-                                            </motion.div>
-
-                                            <AnimatePresence>
-                                                {isExpanded && (
-                                                    <motion.div 
-                                                        initial={{ opacity: 0, height: 0 }}
-                                                        animate={{ opacity: 1, height: "auto" }}
-                                                        exit={{ opacity: 0, height: 0 }}
-                                                        transition={{ duration: 0.3 }}
-                                                        className="relative z-10 overflow-hidden w-full"
-                                                    >
-                                                        <div className="pt-3 mt-3 border-t border-white/10 text-gray-300 text-[11px] sm:text-xs md:text-sm leading-relaxed space-y-2 md:space-y-3">
-                                                            {svc.desc.split('\n').map((line, i) => (
-                                                                <p key={i} className="flex items-start gap-1.5 md:gap-2">
-                                                                    {line.startsWith('●') ? (
-                                                                        <>
-                                                                            <span className="text-cyan-500 shrink-0 select-none">●</span>
-                                                                            <span>{line.substring(1).trim()}</span>
-                                                                        </>
-                                                                    ) : (
-                                                                        <span>{line}</span>
-                                                                    )}
-                                                                </p>
-                                                            ))}
-                                                        </div>
-                                                        
-                                                        <div className="mt-4 mb-2">
-                                                            <Link href="/contact" onClick={(e) => e.stopPropagation()} className="inline-flex items-center justify-center gap-2 px-3 py-2 bg-white/5 hover:bg-cyan-500/20 text-cyan-400 hover:text-cyan-300 border border-cyan-500/30 rounded-lg text-xs md:text-sm font-semibold transition-all w-full">
-                                                                Inquire about this <ArrowRight size={14} className="md:w-4 md:h-4" />
-                                                            </Link>
-                                                        </div>
-                                                    </motion.div>
-                                                )}
-                                            </AnimatePresence>
-
-                                            <motion.div layout="position" className="relative z-10 w-full mt-3 pt-2 border-t border-white/5 flex items-center justify-between text-cyan-500/70 group-hover:text-cyan-400 text-[10px] sm:text-xs md:text-sm font-semibold transition-colors">
-                                                <span>{isExpanded ? 'Show Less' : 'Read More'}</span>
-                                                {isExpanded ? <ChevronUp size={14} className="md:w-4 md:h-4" /> : <ChevronDown size={14} className="md:w-4 md:h-4" />}
-                                            </motion.div>
-
-                                        </motion.div>
-                                    );
-                                })}
+                                        <div className="relative z-10 w-full mt-4 flex items-center gap-1.5 text-cyan-500/70 group-hover:text-cyan-400 text-[11px] sm:text-xs md:text-sm font-semibold transition-colors">
+                                            <span>Read More</span>
+                                            <ArrowRight size={14} className="md:w-4 md:h-4 group-hover:translate-x-1 transition-transform" />
+                                        </div>
+                                    </motion.div>
+                                ))}
                             </div>
                         </div>
                     ))}
@@ -155,6 +117,70 @@ export default function ServicesPage() {
                     </Link>
                 </div>
             </section>
+
+            {/* Modal Overlay */}
+            <AnimatePresence>
+                {selectedService && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center px-4 sm:px-6">
+                        {/* Backdrop */}
+                        <motion.div 
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            onClick={() => setSelectedService(null)}
+                            className="absolute inset-0 bg-black/80 backdrop-blur-md"
+                        />
+                        
+                        {/* Modal Content */}
+                        <motion.div 
+                            initial={{ scale: 0.95, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.95, opacity: 0 }}
+                            transition={{ type: "spring", bounce: 0, duration: 0.4 }}
+                            className="relative w-full max-w-2xl bg-neutral-900 border border-white/10 rounded-2xl shadow-2xl p-6 md:p-8 overflow-hidden z-10"
+                        >
+                            {/* Close Button */}
+                            <button 
+                                onClick={() => setSelectedService(null)}
+                                className="absolute top-4 right-4 md:top-6 md:right-6 p-2 rounded-full bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white transition-colors z-20"
+                            >
+                                <X size={20} />
+                            </button>
+
+                            <div className="absolute inset-0 bg-gradient-to-br from-cyan-400/5 to-transparent pointer-events-none" />
+
+                            <div className="relative z-10">
+                                <div className="mb-4 md:mb-5 p-3 md:p-4 rounded-xl bg-black/40 inline-flex border border-white/10">
+                                    {selectedService.icon}
+                                </div>
+                                
+                                <h2 className="text-xl md:text-3xl font-bold text-white mb-4 md:mb-6 leading-tight pr-8">{selectedService.title}</h2>
+                                
+                                <div className="py-4 md:py-6 border-y border-white/10 text-gray-300 text-sm md:text-base leading-relaxed space-y-3 md:space-y-4 max-h-[50vh] overflow-y-auto">
+                                    {selectedService.desc.split('\n').map((line: string, i: number) => (
+                                        <p key={i} className="flex items-start gap-2 md:gap-3">
+                                            {line.startsWith('●') ? (
+                                                <>
+                                                    <span className="text-cyan-500 shrink-0 select-none mt-1">●</span>
+                                                    <span>{line.substring(1).trim()}</span>
+                                                </>
+                                            ) : (
+                                                <span>{line}</span>
+                                            )}
+                                        </p>
+                                    ))}
+                                </div>
+
+                                <div className="mt-6 md:mt-8 flex justify-end">
+                                    <Link href="/contact" onClick={() => setSelectedService(null)} className="inline-flex items-center justify-center gap-2 px-5 py-2.5 md:px-6 md:py-3 bg-cyan-400 text-black hover:bg-cyan-300 rounded-lg text-sm md:text-base font-bold transition-all shadow-[0_0_15px_rgba(34,211,238,0.2)] hover:shadow-[0_0_25px_rgba(34,211,238,0.4)] w-full sm:w-auto">
+                                        Inquire about this <ArrowRight size={16} />
+                                    </Link>
+                                </div>
+                            </div>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
 
         </div>
     );
