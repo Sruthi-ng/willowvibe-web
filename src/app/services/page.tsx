@@ -9,7 +9,7 @@ const categories = [
     {
         title: "Enterprise Platforms & Architecture",
         items: [
-            { id: "plm-1", icon: <ServerCog className="w-5 h-5 md:w-6 md:h-6 text-blue-500" />, title: "Enterprise PLM Platform Architecture & Administration", desc: "● Platform Cloud Setup & Configuration: Full-lifecycle tenant deployment, administration, configuration, and P&O (People & Organization) setup for both 3DEXPERIENCE (SaaS/On-Prem) and Teamcenter environments.\n● Cross-Enterprise PLM-ERP Integration: Technical project management and architecture to seamlessly bridge engineering realities with production operations, specializing in connecting 3DEXPERIENCE with Microsoft Dynamics 365, SAP, and MuleSoft ecosystems.\n● Environment Management & Test Automation: Enforcing robust multi-stage deployment methodologies (Sandbox, Test, Prod) powered by automated UI validation routines (e.g., UiPath) to ensure complete system stability post-upgrade." },
+            { id: "plm-1", icon: <ServerCog className="w-5 h-5 md:w-6 md:h-6 text-blue-500" />, title: "Enterprise PLM and CAD Services", desc: "● Platform Cloud Setup & Configuration: Full-lifecycle tenant deployment, administration, configuration, and P&O (People & Organization) setup for both 3DEXPERIENCE (SaaS/On-Prem) and Teamcenter environments.\n● Cross-Enterprise PLM-ERP Integration: Technical project management and architecture to seamlessly bridge engineering realities with production operations, specializing in connecting 3DEXPERIENCE with Microsoft Dynamics 365, SAP, and MuleSoft ecosystems.\n● Environment Management & Test Automation: Enforcing robust multi-stage deployment methodologies (Sandbox, Test, Prod) powered by automated UI validation routines (e.g., UiPath) to ensure complete system stability post-upgrade." },
             { id: "plm-2", icon: <Component className="w-5 h-5 md:w-6 md:h-6 text-emerald-500" />, title: "Advanced Configuration, BOM & Variant Management", desc: "● Multi-Level BOM Engineering: Creating, managing, and strictly validating Engineering Bills of Materials (EBOM) to match rigorous corporate Product Development Processes (PDP).\n● Variant Matrices & Rule Execution: Configuring complex product rules, variant effectivities, option strings, and model definitions for complex high-customization portfolios.\n● System Alignment & Reconciliation Loops: Executing automated audit protocols to bridge the gap between EBOM definitions and Manufacturing Bills of Material (MBOM) to completely remove part shortfalls and misbuild risks." },
             { id: "plm-3", icon: <ClipboardCheck className="w-5 h-5 md:w-6 md:h-6 text-purple-500" />, title: "Change Control Board (CCB) Governance & Workflows", desc: "● End-to-End Change Engineering: Structuring operational paths for Issues, Change Requests (CR), Engineering Change Orders (ECO), and Engineering Change Notices (ECN).\n● Approval Routing & Matrix Workflows: Designing and mapping corporate approval lifecycles across multinational internal teams to prevent documentation drag.\n● Obsolescence & Alternate Component Validation: Mitigating risk during a part's End of Life (EOL) or Death of Vehicle (DOV) milestones by coordinating technical replacements alongside Supply Chain, SCM, and Purchasing." },
             { id: "plm-4", icon: <Box className="w-5 h-5 md:w-6 md:h-6 text-cyan-500" />, title: "Production-Ready CAD & New Product Development (NPD)", desc: "● High-Precision 3D Parametric Modeling: Delivering native, production-compliant component designs and deep structural assembly sets inside CATIA V5 and SolidWorks.\n● Advanced Quality Launch Standards: Drafting and setting up core APQP and PPAP packages including Control Plans, Process Flows, and Failure Mode and Effects Analysis (FMEA).\n● Structured Root Cause Defect Resolution: Isolating shop floor, prototyping, and assembly defects utilizing engineering analytics (8D problem solving, Fishbone, 5-Whys)." }
@@ -61,9 +61,9 @@ export default function ServicesPage() {
                 <div className="space-y-12 md:space-y-20">
                     {categories.map((cat, catIdx) => (
                         <div key={catIdx}>
-                            <motion.h2 
-                                initial={{ opacity: 0, x: -20 }} 
-                                whileInView={{ opacity: 1, x: 0 }} 
+                            <motion.h2
+                                initial={{ opacity: 0, x: -20 }}
+                                whileInView={{ opacity: 1, x: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.5 }}
                                 className="text-xl md:text-3xl font-bold text-white mb-6 md:mb-8 border-b border-white/10 pb-3 flex items-center gap-3"
@@ -71,20 +71,20 @@ export default function ServicesPage() {
                                 <span className="w-1.5 md:w-2 h-6 md:h-8 bg-cyan-400 rounded-sm shadow-[0_0_10px_rgba(34,211,238,0.5)]"></span>
                                 {cat.title}
                             </motion.h2>
-                            
+
                             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 items-stretch">
                                 {cat.items.map((svc, idx) => (
-                                    <motion.div 
-                                        key={svc.id} 
-                                        initial={{ opacity: 0, y: 30 }} 
-                                        whileInView={{ opacity: 1, y: 0 }} 
+                                    <motion.div
+                                        key={svc.id}
+                                        initial={{ opacity: 0, y: 30 }}
+                                        whileInView={{ opacity: 1, y: 0 }}
                                         viewport={{ once: true }}
                                         transition={{ duration: 0.4, delay: idx * 0.05 }}
                                         onClick={() => setSelectedService(svc)}
                                         className="flex flex-col justify-between group relative p-3.5 md:p-6 rounded-2xl border border-white/10 hover:border-cyan-400/50 bg-white/[0.03] transition-all cursor-pointer overflow-hidden h-full shadow-lg hover:shadow-cyan-500/5"
                                     >
                                         <div className="absolute inset-0 bg-gradient-to-br from-cyan-400/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-                                        
+
                                         <div className="relative z-10 flex flex-col items-start w-full">
                                             <div className="mb-3 md:mb-4 p-2.5 md:p-3 rounded-xl bg-black/40 inline-flex border border-white/10 group-hover:border-cyan-400/40 transition-all">
                                                 {svc.icon}
@@ -123,16 +123,16 @@ export default function ServicesPage() {
                 {selectedService && (
                     <div className="fixed inset-0 z-50 flex items-center justify-center px-4 sm:px-6">
                         {/* Backdrop */}
-                        <motion.div 
+                        <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             onClick={() => setSelectedService(null)}
                             className="absolute inset-0 bg-black/80 backdrop-blur-md"
                         />
-                        
+
                         {/* Modal Content */}
-                        <motion.div 
+                        <motion.div
                             initial={{ scale: 0.95, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
                             exit={{ scale: 0.95, opacity: 0 }}
@@ -140,7 +140,7 @@ export default function ServicesPage() {
                             className="relative w-full max-w-2xl bg-neutral-900 border border-white/10 rounded-2xl shadow-2xl p-6 md:p-8 overflow-hidden z-10"
                         >
                             {/* Close Button */}
-                            <button 
+                            <button
                                 onClick={() => setSelectedService(null)}
                                 className="absolute top-4 right-4 md:top-6 md:right-6 p-2 rounded-full bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white transition-colors z-20"
                             >
@@ -153,9 +153,9 @@ export default function ServicesPage() {
                                 <div className="mb-4 md:mb-5 p-3 md:p-4 rounded-xl bg-black/40 inline-flex border border-white/10">
                                     {selectedService.icon}
                                 </div>
-                                
+
                                 <h2 className="text-xl md:text-3xl font-bold text-white mb-4 md:mb-6 leading-tight pr-8">{selectedService.title}</h2>
-                                
+
                                 <div className="py-4 md:py-6 border-y border-white/10 text-gray-300 text-sm md:text-base leading-relaxed space-y-3 md:space-y-4 max-h-[50vh] overflow-y-auto">
                                     {selectedService.desc.split('\n').map((line: string, i: number) => (
                                         <p key={i} className="flex items-start gap-2 md:gap-3">
