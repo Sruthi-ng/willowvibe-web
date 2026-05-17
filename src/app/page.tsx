@@ -117,50 +117,65 @@ function TestimonialsCarousel() {
     </div>
   );
 }
-function CoreCapabilitiesMarquee() {
-  const [isHovered, setIsHovered] = useState(false);
-  const baseX = useMotionValue(0);
-  const trackRef = useRef<HTMLDivElement>(null);
-
-  useAnimationFrame((time, delta) => {
-    let moveBy = 1.5 * (delta / 16);
-    if (isHovered) {
-      moveBy *= 0.15; // slow down significantly
-    }
-    
-    if (trackRef.current) {
-      const totalWidth = trackRef.current.scrollWidth;
-      const halfWidth = totalWidth / 2;
-      
-      let newX = baseX.get() - moveBy;
-      if (newX <= -halfWidth) {
-        newX += halfWidth;
-      }
-      baseX.set(newX);
-    }
-  });
+function CoreCapabilitiesTerminal() {
+  const [activeIndex, setActiveIndex] = useState(0);
 
   return (
-    <div 
-      className="w-full overflow-hidden relative py-4" 
-      style={{ maskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)', WebkitMaskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)' }}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
-      <motion.div ref={trackRef} className="flex gap-4 md:gap-6 w-max pr-4 md:pr-6" style={{ x: baseX }}>
-        {[...SERVICES, ...SERVICES].map((service, index) => (
-          <div key={index} className="w-72 md:w-80 shrink-0 p-5 md:p-6 rounded-xl bg-neutral-900 border border-neutral-700 hover:border-cyan-400/50 transition-all duration-300 group flex flex-col shadow-lg hover:shadow-cyan-500/10 h-[220px] md:h-[240px]">
-            <div className="mb-4 p-2.5 rounded-lg bg-black/50 inline-block group-hover:bg-cyan-400/10 transition-colors border border-white/5 w-max">
-                {service.icon}
-            </div>
-            <h3 className="text-base md:text-lg font-bold mb-2 text-white leading-tight group-hover:text-cyan-400 transition-colors">{service.title}</h3>
-            <p className="text-gray-400 text-xs md:text-sm leading-relaxed flex-grow">{service.desc}</p>
-            <Link href="/services" className="inline-flex items-center gap-1.5 text-cyan-500 text-xs md:text-sm font-bold group-hover:text-cyan-300 transition-colors mt-3">
-                Learn More <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
-            </Link>
-          </div>
-        ))}
-      </motion.div>
+    <div className="w-full max-w-6xl mx-auto flex flex-col lg:flex-row gap-6 lg:gap-10 items-stretch">
+      {/* Left side: Tabs */}
+      <div className="w-full lg:w-1/3 flex flex-col gap-2">
+        {SERVICES.map((service, index) => {
+          const isActive = activeIndex === index;
+          return (
+            <button
+              key={index}
+              onClick={() => setActiveIndex(index)}
+              className={`flex items-center gap-3 w-full text-left px-4 py-3 md:py-4 transition-all duration-300 font-mono text-sm md:text-base border-l-2 ${
+                isActive 
+                  ? "border-cyan-400 bg-cyan-400/10 text-cyan-400 shadow-[inset_2px_0_10px_rgba(34,211,238,0.1)]" 
+                  : "border-neutral-800 bg-neutral-900/50 text-gray-500 hover:text-gray-300 hover:bg-neutral-800 hover:border-gray-500"
+              }`}
+            >
+              <span className={`text-xs ${isActive ? "text-cyan-400" : "text-gray-600"}`}>{`>_`}</span>
+              <span className="truncate">{service.title}</span>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Right side: Display Window */}
+      <div className="w-full lg:w-2/3">
+        <div className="h-full w-full rounded-2xl bg-neutral-900/50 border border-white/10 p-6 md:p-10 flex flex-col backdrop-blur-sm relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-cyan-400/5 to-transparent pointer-events-none" />
+          
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeIndex}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+              className="relative z-10 flex flex-col h-full"
+            >
+              <div className="mb-6 p-4 rounded-xl bg-black/40 inline-block border border-white/5 w-max shadow-[0_0_15px_rgba(0,0,0,0.5)]">
+                  {SERVICES[activeIndex].icon}
+              </div>
+              <h3 className="text-2xl md:text-4xl font-bold mb-4 text-white leading-tight">
+                {SERVICES[activeIndex].title}
+              </h3>
+              <p className="text-gray-300 text-base md:text-lg leading-relaxed flex-grow">
+                {SERVICES[activeIndex].desc}
+              </p>
+              
+              <div className="mt-8 md:mt-12">
+                <Link href="/services" className="inline-flex items-center gap-2 px-6 py-3 bg-cyan-400/10 text-cyan-400 hover:bg-cyan-400 hover:text-black border border-cyan-400/30 rounded-lg text-sm md:text-base font-bold transition-all shadow-[0_0_15px_rgba(34,211,238,0.1)] hover:shadow-[0_0_20px_rgba(34,211,238,0.3)] w-max">
+                  Explore this capability <ArrowRight size={16} />
+                </Link>
+              </div>
+            </motion.div>
+          </AnimatePresence>
+        </div>
+      </div>
     </div>
   );
 }
@@ -294,7 +309,7 @@ export default function Home() {
           <h2 className="text-xl md:text-3xl font-bold mb-3 font-mono">CORE_CAPABILITIES</h2>
           <div className="h-0.5 w-16 bg-cyan-400 mx-auto" />
         </div>
-        <CoreCapabilitiesMarquee />
+        <CoreCapabilitiesTerminal />
       </section>
 
       {/* 5. FEATURED PROJECTS */}
