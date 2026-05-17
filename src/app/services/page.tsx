@@ -1,18 +1,26 @@
 "use client";
 
-import { Network, CloudCog, ArrowRightLeft, ShieldCheck, Activity, Eye, BrainCircuit, LineChart, ArrowRight } from "lucide-react";
+import { CloudCog, Network, ShieldCheck, Layers, Sliders, RefreshCw, GitMerge, CheckSquare, AlertTriangle, Box, Award, Search, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 
 const services = [
-    { icon: <Network className="w-6 h-6 text-cyan-400" />, title: "Data Pipeline Development", desc: "Design and implement robust, scalable ETL/ELT pipelines with guaranteed SLAs and minimal downtime." },
-    { icon: <CloudCog className="w-6 h-6 text-blue-400" />, title: "Cloud Engineering", desc: "Architect high-performance foundations on AWS, Azure, or GCP. Minimize costs while maximizing query speeds." },
-    { icon: <ArrowRightLeft className="w-6 h-6 text-emerald-400" />, title: "Data Migration", desc: "Transition from legacy systems to cloud-native architectures with zero data loss and automated validation." },
-    { icon: <ShieldCheck className="w-6 h-6 text-rose-400" />, title: "Data Quality", desc: "Deploy automated testing and anomaly detection to ensure 100% data reliability before reaching production." },
-    { icon: <Eye className="w-6 h-6 text-indigo-400" />, title: "Observability", desc: "Comprehensive monitoring across your data ecosystem with proactive alerts and automated circuit breakers." },
-    { icon: <Activity className="w-6 h-6 text-amber-400" />, title: "Governance", desc: "Build fine-grained RBAC, masking, and compliance auditing frameworks to secure your most sensitive assets." },
-    { icon: <BrainCircuit className="w-6 h-6 text-purple-400" />, title: "AI Infrastructure", desc: "Feature stores, model registries, and GPU-accelerated environments for production MLOps workloads." },
-    { icon: <LineChart className="w-6 h-6 text-teal-400" />, title: "Business Intelligence", desc: "Transform complex data models into real-time dashboards using Tableau and PowerBI." },
+    // Pillar 1: Enterprise PLM Platform Architecture & Administration
+    { icon: <CloudCog className="w-6 h-6 text-blue-400" />, title: "Platform Cloud Setup & Configuration", desc: "Full-lifecycle tenant deployment, administration, configuration, and P&O (People & Organization) setup for both 3DEXPERIENCE (SaaS/On-Prem) and Teamcenter environments." },
+    { icon: <Network className="w-6 h-6 text-cyan-400" />, title: "Cross-Enterprise PLM-ERP Integration", desc: "Technical project management and architecture to seamlessly bridge engineering realities with production operations, specializing in connecting 3DEXPERIENCE with Microsoft Dynamics 365, SAP, and MuleSoft ecosystems." },
+    { icon: <ShieldCheck className="w-6 h-6 text-emerald-400" />, title: "Environment Management & Test Automation", desc: "Enforcing robust multi-stage deployment methodologies (Sandbox, Test, Prod) powered by automated UI validation routines (e.g., UiPath) to ensure complete system stability post-upgrade." },
+    // Pillar 2: Advanced Configuration, BOM & Variant Management
+    { icon: <Layers className="w-6 h-6 text-indigo-400" />, title: "Multi-Level BOM Engineering", desc: "Creating, managing, and strictly validating Engineering Bills of Materials (EBOM) to match rigorous corporate Product Development Processes (PDP)." },
+    { icon: <Sliders className="w-6 h-6 text-amber-400" />, title: "Variant Matrices & Rule Execution", desc: "Configuring complex product rules, variant effectivities, option strings, and model definitions for complex high-customization portfolios." },
+    { icon: <RefreshCw className="w-6 h-6 text-teal-400" />, title: "System Alignment & Reconciliation Loops", desc: "Executing automated audit protocols to bridge the gap between EBOM definitions and Manufacturing Bills of Material (MBOM) to completely remove part shortfalls and misbuild risks." },
+    // Pillar 3: Change Control Board (CCB) Governance & Workflows
+    { icon: <GitMerge className="w-6 h-6 text-purple-400" />, title: "End-to-End Change Engineering", desc: "Structuring operational paths for Issues, Change Requests (CR), Engineering Change Orders (ECO), and Engineering Change Notices (ECN)." },
+    { icon: <CheckSquare className="w-6 h-6 text-rose-400" />, title: "Approval Routing & Matrix Workflows", desc: "Designing and mapping corporate approval lifecycles across multinational internal teams to prevent documentation drag." },
+    { icon: <AlertTriangle className="w-6 h-6 text-orange-400" />, title: "Obsolescence & Alternate Component Validation", desc: "Mitigating risk during a part's End of Life (EOL) or Death of Vehicle (DOV) milestones by coordinating technical replacements alongside Supply Chain, SCM, and Purchasing." },
+    // Pillar 4: Production-Ready CAD & New Product Development (NPD)
+    { icon: <Box className="w-6 h-6 text-cyan-300" />, title: "High-Precision 3D Parametric Modeling", desc: "Delivering native, production-compliant component designs and deep structural assembly sets inside CATIA V5 and SolidWorks." },
+    { icon: <Award className="w-6 h-6 text-yellow-400" />, title: "Advanced Quality Launch Standards", desc: "Drafting and setting up core APQP and PPAP packages including Control Plans, Process Flows, and Failure Mode and Effects Analysis (FMEA)." },
+    { icon: <Search className="w-6 h-6 text-blue-300" />, title: "Structured Root Cause Defect Resolution", desc: "Isolating shop floor, prototyping, and assembly defects utilizing engineering analytics (8D problem solving, Fishbone, 5-Whys)." },
 ];
 
 export default function ServicesPage() {
