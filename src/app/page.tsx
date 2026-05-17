@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
-import { Database, Server, Cloud, Cpu, Bot, Settings, RefreshCw, ClipboardCheck, Quote, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
+import { Database, Server, Cloud, Cpu, Bot, Settings, RefreshCw, ClipboardCheck, Quote, ArrowRight, ChevronLeft, ChevronRight, ServerCog, Component, ShieldCheck, Box, Network } from "lucide-react";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useAnimationFrame, useMotionValue } from "framer-motion";
 import { BeforeAfterSlider } from "@/components/BeforeAfterSlider";
 import { DataStreamVisual } from "@/components/DataStreamVisual";
 import { AnomalyDetectionVisual } from "@/components/AnomalyDetectionVisual";
@@ -15,10 +15,14 @@ const PROJECTS = [
 ];
 
 const SERVICES = [
-  { icon: <Database className="w-6 h-6 text-cyan-400" />, title: "Data Lakehouse Architecture", desc: "Unifying data warehouses and lakes for scalable, high-performance analytics." },
-  { icon: <Cloud className="w-6 h-6 text-cyan-400" />, title: "Cloud Infrastructure", desc: "Resilient, auto-scaling cloud environments on AWS, Azure, and GCP." },
-  { icon: <RefreshCw className="w-6 h-6 text-cyan-400" />, title: "Data Migration", desc: "Moving legacy on-premise data to modern cloud architectures with zero downtime." },
-  { icon: <ClipboardCheck className="w-6 h-6 text-cyan-400" />, title: "Data Pipeline Audit", desc: "Identifying bottlenecks, reducing costs, and optimising pipeline performance." },
+  { icon: <ServerCog className="w-6 h-6 text-blue-400" />, title: "PLM Architecture", desc: "Full-lifecycle tenant deployment for 3DEXPERIENCE and Teamcenter." },
+  { icon: <Component className="w-6 h-6 text-emerald-400" />, title: "BOM & Variant Mgmt", desc: "Multi-Level BOM Engineering and complex product variant configurations." },
+  { icon: <ClipboardCheck className="w-6 h-6 text-purple-400" />, title: "Change Control Board", desc: "Structuring operational paths for Issues, CRs, and ECOs." },
+  { icon: <Box className="w-6 h-6 text-cyan-400" />, title: "CAD & Product Dev", desc: "High-precision 3D parametric modeling and APQP/PPAP packages." },
+  { icon: <Network className="w-6 h-6 text-cyan-400" />, title: "Data Pipeline Dev", desc: "Scalable ETL/ELT pipelines with guaranteed SLAs and minimal downtime." },
+  { icon: <Cloud className="w-6 h-6 text-blue-400" />, title: "Cloud Engineering", desc: "High-performance foundations on AWS, Azure, or GCP." },
+  { icon: <RefreshCw className="w-6 h-6 text-emerald-400" />, title: "Data Migration", desc: "Transition from legacy to cloud-native architectures with zero data loss." },
+  { icon: <ShieldCheck className="w-6 h-6 text-rose-400" />, title: "Data Quality & Trust", desc: "Automated testing and anomaly detection for reliable data." },
 ];
 
 const TESTIMONIALS = [
@@ -110,6 +114,53 @@ function TestimonialsCarousel() {
           <ChevronRight className="w-4 h-4" />
         </button>
       </div>
+    </div>
+  );
+}
+function CoreCapabilitiesMarquee() {
+  const [isHovered, setIsHovered] = useState(false);
+  const baseX = useMotionValue(0);
+  const trackRef = useRef<HTMLDivElement>(null);
+
+  useAnimationFrame((time, delta) => {
+    let moveBy = 1.5 * (delta / 16);
+    if (isHovered) {
+      moveBy *= 0.15; // slow down significantly
+    }
+    
+    if (trackRef.current) {
+      const totalWidth = trackRef.current.scrollWidth;
+      const halfWidth = totalWidth / 2;
+      
+      let newX = baseX.get() - moveBy;
+      if (newX <= -halfWidth) {
+        newX += halfWidth;
+      }
+      baseX.set(newX);
+    }
+  });
+
+  return (
+    <div 
+      className="w-full overflow-hidden relative py-4" 
+      style={{ maskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)', WebkitMaskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)' }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <motion.div ref={trackRef} className="flex gap-4 md:gap-6 w-max pr-4 md:pr-6" style={{ x: baseX }}>
+        {[...SERVICES, ...SERVICES].map((service, index) => (
+          <div key={index} className="w-72 md:w-80 shrink-0 p-5 md:p-6 rounded-xl bg-neutral-900 border border-neutral-700 hover:border-cyan-400/50 transition-all duration-300 group flex flex-col shadow-lg hover:shadow-cyan-500/10 h-[220px] md:h-[240px]">
+            <div className="mb-4 p-2.5 rounded-lg bg-black/50 inline-block group-hover:bg-cyan-400/10 transition-colors border border-white/5 w-max">
+                {service.icon}
+            </div>
+            <h3 className="text-base md:text-lg font-bold mb-2 text-white leading-tight group-hover:text-cyan-400 transition-colors">{service.title}</h3>
+            <p className="text-gray-400 text-xs md:text-sm leading-relaxed flex-grow">{service.desc}</p>
+            <Link href="/services" className="inline-flex items-center gap-1.5 text-cyan-500 text-xs md:text-sm font-bold group-hover:text-cyan-300 transition-colors mt-3">
+                Learn More <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </div>
+        ))}
+      </motion.div>
     </div>
   );
 }
@@ -238,21 +289,12 @@ export default function Home() {
       </section>
 
       {/* 4. CORE CAPABILITIES */}
-      <section className="w-full max-w-7xl mx-auto px-4 py-8 md:py-20 border-b border-white/5">
-        <div className="text-center mb-6 md:mb-12">
+      <section className="w-full py-8 md:py-20 border-b border-white/5 bg-white/[0.01]">
+        <div className="max-w-7xl mx-auto px-4 text-center mb-6 md:mb-12">
           <h2 className="text-xl md:text-3xl font-bold mb-3 font-mono">CORE_CAPABILITIES</h2>
           <div className="h-0.5 w-16 bg-cyan-400 mx-auto" />
         </div>
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
-          {SERVICES.map((service, index) => (
-            <motion.div key={index} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="p-4 md:p-6 rounded-xl bg-neutral-800 border border-neutral-600 hover:border-cyan-400/50 transition-all duration-300 group">
-              <div className="mb-3 p-2 rounded-lg bg-black/40 inline-block group-hover:bg-cyan-400/10 transition-colors">{service.icon}</div>
-              <h3 className="text-sm md:text-lg font-bold mb-2 text-white leading-tight">{service.title}</h3>
-              <p className="text-gray-300 text-xs md:text-sm leading-relaxed">{service.desc}</p>
-            </motion.div>
-          ))}
-        </div>
+        <CoreCapabilitiesMarquee />
       </section>
 
       {/* 5. FEATURED PROJECTS */}
