@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
-import { Database, Server, Cloud, Cpu, Bot, Settings, RefreshCw, ClipboardCheck, Quote, ArrowRight, ChevronLeft, ChevronRight, ServerCog, Component, ShieldCheck, Box, Network } from "lucide-react";
+import { Database, Server, Cloud, Cpu, Bot, Settings, RefreshCw, ClipboardCheck, Quote, ArrowRight, ChevronLeft, ChevronRight, ServerCog, Component, ShieldCheck, Box, Network, FolderOpen, Folder, FileCode2, FileJson, ChevronDown } from "lucide-react";
 import Link from "next/link";
 import { motion, AnimatePresence, useAnimationFrame, useMotionValue } from "framer-motion";
 import { BeforeAfterSlider } from "@/components/BeforeAfterSlider";
@@ -14,15 +14,30 @@ const PROJECTS = [
   { id: 3, title: "Fintech Fraud Detection", tags: ["Snowflake", "dbt", "Airflow"], stat: "< 50ms latency", desc: "Built an end-to-end data pipeline feeding ML models to detect anomalies in real-time.", visual: "anomaly" },
 ];
 
-const SERVICES = [
-  { icon: <ServerCog className="w-6 h-6 text-blue-400" />, title: "PLM Architecture", desc: "Full-lifecycle tenant deployment for 3DEXPERIENCE and Teamcenter." },
-  { icon: <Component className="w-6 h-6 text-emerald-400" />, title: "BOM & Variant Mgmt", desc: "Multi-Level BOM Engineering and complex product variant configurations." },
-  { icon: <ClipboardCheck className="w-6 h-6 text-purple-400" />, title: "Change Control Board", desc: "Structuring operational paths for Issues, CRs, and ECOs." },
-  { icon: <Box className="w-6 h-6 text-cyan-400" />, title: "CAD & Product Dev", desc: "High-precision 3D parametric modeling and APQP/PPAP packages." },
-  { icon: <Network className="w-6 h-6 text-cyan-400" />, title: "Data Pipeline Dev", desc: "Scalable ETL/ELT pipelines with guaranteed SLAs and minimal downtime." },
-  { icon: <Cloud className="w-6 h-6 text-blue-400" />, title: "Cloud Engineering", desc: "High-performance foundations on AWS, Azure, or GCP." },
-  { icon: <RefreshCw className="w-6 h-6 text-emerald-400" />, title: "Data Migration", desc: "Transition from legacy to cloud-native architectures with zero data loss." },
-  { icon: <ShieldCheck className="w-6 h-6 text-rose-400" />, title: "Data Quality & Trust", desc: "Automated testing and anomaly detection for reliable data." },
+const CAPABILITY_TREE = [
+  {
+    folder: "enterprise-platforms",
+    files: [
+      { id: "plm-architecture.ts", icon: <ServerCog className="w-5 h-5 lg:w-6 lg:h-6 text-blue-400" />, title: "PLM Architecture", desc: "Full-lifecycle tenant deployment for 3DEXPERIENCE and Teamcenter." },
+      { id: "bom-variant-mgmt.tsx", icon: <Component className="w-5 h-5 lg:w-6 lg:h-6 text-emerald-400" />, title: "BOM & Variant Mgmt", desc: "Multi-Level BOM Engineering and complex product variant configurations." },
+      { id: "change-control.yml", icon: <ClipboardCheck className="w-5 h-5 lg:w-6 lg:h-6 text-purple-400" />, title: "Change Control Board", desc: "Structuring operational paths for Issues, CRs, and ECOs." },
+      { id: "cad-product-dev.rs", icon: <Box className="w-5 h-5 lg:w-6 lg:h-6 text-cyan-400" />, title: "CAD & Product Dev", desc: "High-precision 3D parametric modeling and APQP/PPAP packages." },
+    ]
+  },
+  {
+    folder: "core-data-engineering",
+    files: [
+      { id: "data-pipelines.py", icon: <Network className="w-5 h-5 lg:w-6 lg:h-6 text-cyan-400" />, title: "Data Pipeline Dev", desc: "Scalable ETL/ELT pipelines with guaranteed SLAs and minimal downtime." },
+      { id: "cloud-engineering.tf", icon: <Cloud className="w-5 h-5 lg:w-6 lg:h-6 text-blue-400" />, title: "Cloud Engineering", desc: "High-performance foundations on AWS, Azure, or GCP." },
+      { id: "data-migration.sh", icon: <RefreshCw className="w-5 h-5 lg:w-6 lg:h-6 text-emerald-400" />, title: "Data Migration", desc: "Transition from legacy to cloud-native architectures with zero data loss." },
+    ]
+  },
+  {
+    folder: "data-trust-analytics",
+    files: [
+      { id: "data-quality.json", icon: <ShieldCheck className="w-5 h-5 lg:w-6 lg:h-6 text-rose-400" />, title: "Data Quality & Trust", desc: "Automated testing and anomaly detection for reliable data." },
+    ]
+  }
 ];
 
 const TESTIMONIALS = [
@@ -117,63 +132,143 @@ function TestimonialsCarousel() {
     </div>
   );
 }
-function CoreCapabilitiesTerminal() {
-  const [activeIndex, setActiveIndex] = useState(0);
+function CoreCapabilitiesIDE() {
+  const [expandedFolders, setExpandedFolders] = useState<string[]>(["enterprise-platforms", "core-data-engineering", "data-trust-analytics"]);
+  const [selectedCapability, setSelectedCapability] = useState(CAPABILITY_TREE[0].files[0]);
+
+  const toggleFolder = (folder: string) => {
+    setExpandedFolders(prev => 
+      prev.includes(folder) ? prev.filter(f => f !== folder) : [...prev, folder]
+    );
+  };
 
   return (
-    <div className="w-full max-w-6xl mx-auto flex flex-col lg:flex-row gap-6 lg:gap-10 items-stretch">
-      {/* Left side: Tabs */}
-      <div className="w-full lg:w-1/3 flex flex-col gap-2">
-        {SERVICES.map((service, index) => {
-          const isActive = activeIndex === index;
-          return (
-            <button
-              key={index}
-              onClick={() => setActiveIndex(index)}
-              className={`flex items-center gap-3 w-full text-left px-4 py-3 md:py-4 transition-all duration-300 font-mono text-sm md:text-base border-l-2 ${
-                isActive 
-                  ? "border-cyan-400 bg-cyan-400/10 text-cyan-400 shadow-[inset_2px_0_10px_rgba(34,211,238,0.1)]" 
-                  : "border-neutral-800 bg-neutral-900/50 text-gray-500 hover:text-gray-300 hover:bg-neutral-800 hover:border-gray-500"
-              }`}
-            >
-              <span className={`text-xs ${isActive ? "text-cyan-400" : "text-gray-600"}`}>{`>_`}</span>
-              <span className="truncate">{service.title}</span>
-            </button>
-          );
-        })}
+    <div className="w-full max-w-6xl mx-auto flex flex-col rounded-xl overflow-hidden bg-[#0d1117] border border-neutral-700 shadow-[0_0_30px_rgba(0,0,0,0.8)]">
+      {/* IDE Header */}
+      <div className="w-full bg-[#161b22] px-4 py-2.5 flex items-center border-b border-neutral-700">
+        <div className="flex gap-2">
+          <div className="w-3 h-3 rounded-full bg-[#ff5f56] border border-[#e0443e]" />
+          <div className="w-3 h-3 rounded-full bg-[#ffbd2e] border border-[#dea123]" />
+          <div className="w-3 h-3 rounded-full bg-[#27c93f] border border-[#1aab29]" />
+        </div>
+        <div className="mx-auto text-xs font-mono text-gray-500 font-medium tracking-wide">willowvibe-workspace — Core_Capabilities</div>
       </div>
 
-      {/* Right side: Display Window */}
-      <div className="w-full lg:w-2/3">
-        <div className="h-full w-full rounded-2xl bg-neutral-900/50 border border-white/10 p-6 md:p-10 flex flex-col backdrop-blur-sm relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-cyan-400/5 to-transparent pointer-events-none" />
-          
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={activeIndex}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.3 }}
-              className="relative z-10 flex flex-col h-full"
-            >
-              <div className="mb-6 p-4 rounded-xl bg-black/40 inline-block border border-white/5 w-max shadow-[0_0_15px_rgba(0,0,0,0.5)]">
-                  {SERVICES[activeIndex].icon}
-              </div>
-              <h3 className="text-2xl md:text-4xl font-bold mb-4 text-white leading-tight">
-                {SERVICES[activeIndex].title}
-              </h3>
-              <p className="text-gray-300 text-base md:text-lg leading-relaxed flex-grow">
-                {SERVICES[activeIndex].desc}
-              </p>
-              
-              <div className="mt-8 md:mt-12">
-                <Link href="/services" className="inline-flex items-center gap-2 px-6 py-3 bg-cyan-400/10 text-cyan-400 hover:bg-cyan-400 hover:text-black border border-cyan-400/30 rounded-lg text-sm md:text-base font-bold transition-all shadow-[0_0_15px_rgba(34,211,238,0.1)] hover:shadow-[0_0_20px_rgba(34,211,238,0.3)] w-max">
-                  Explore this capability <ArrowRight size={16} />
-                </Link>
-              </div>
-            </motion.div>
-          </AnimatePresence>
+      <div className="flex flex-col lg:grid lg:grid-cols-12 flex-grow h-auto lg:h-[450px]">
+        {/* Left Side: File Explorer */}
+        <div className="lg:col-span-4 bg-[#0d1117] border-r border-neutral-800 flex flex-col font-mono text-sm overflow-y-auto max-h-[300px] lg:max-h-none">
+          <div className="px-4 py-3 text-xs font-bold text-gray-400 uppercase tracking-widest border-b border-neutral-800 select-none">
+            Explorer
+          </div>
+          <div className="py-2">
+            {CAPABILITY_TREE.map((cat) => {
+              const isExpanded = expandedFolders.includes(cat.folder);
+              return (
+                <div key={cat.folder} className="select-none">
+                  <div 
+                    className="flex items-center gap-1.5 px-3 py-1.5 hover:bg-white/5 cursor-pointer text-gray-300 transition-colors"
+                    onClick={() => toggleFolder(cat.folder)}
+                  >
+                    {isExpanded ? <ChevronDown size={14} className="text-gray-400" /> : <ChevronRight size={14} className="text-gray-400" />}
+                    {isExpanded ? <FolderOpen size={14} className="text-cyan-500" /> : <Folder size={14} className="text-cyan-500" />}
+                    <span className="truncate">{cat.folder}</span>
+                  </div>
+                  
+                  {isExpanded && (
+                    <div className="flex flex-col mt-0.5 mb-1.5">
+                      {cat.files.map((file) => {
+                        const isSelected = selectedCapability.id === file.id;
+                        return (
+                          <div 
+                            key={file.id}
+                            onClick={() => setSelectedCapability(file)}
+                            className={`flex items-center gap-2 pl-9 pr-3 py-1.5 cursor-pointer border-l-2 transition-colors ${
+                              isSelected 
+                                ? "bg-cyan-900/30 text-cyan-400 border-cyan-400" 
+                                : "text-gray-400 border-transparent hover:bg-white/5 hover:text-gray-200"
+                            }`}
+                          >
+                            {file.id.endsWith('.json') || file.id.endsWith('.yml') ? (
+                               <FileJson size={14} className={isSelected ? "text-cyan-400" : "text-emerald-400"} />
+                            ) : (
+                               <FileCode2 size={14} className={isSelected ? "text-cyan-400" : "text-blue-400"} />
+                            )}
+                            <span className="truncate text-[13px]">{file.id}</span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Right Side: Editor Window */}
+        <div className="lg:col-span-8 bg-[#0a0d12] flex flex-col relative overflow-hidden">
+            {/* Editor Tabs */}
+            <div className="flex bg-[#0d1117] border-b border-neutral-800 overflow-x-auto custom-scrollbar select-none">
+               <div className="flex items-center gap-2 px-4 py-2.5 bg-[#0a0d12] border-t-2 border-t-cyan-400 border-r border-r-neutral-800 min-w-max">
+                  {selectedCapability.id.endsWith('.json') || selectedCapability.id.endsWith('.yml') ? (
+                     <FileJson size={14} className="text-cyan-400" />
+                  ) : (
+                     <FileCode2 size={14} className="text-cyan-400" />
+                  )}
+                  <span className="text-cyan-400 font-mono text-sm">{selectedCapability.id}</span>
+               </div>
+            </div>
+
+            <div className="flex-grow flex relative">
+                {/* Line Numbers */}
+                <div className="hidden lg:flex w-12 bg-[#0d1117] border-r border-neutral-800 flex-col items-end py-4 pr-2 font-mono text-xs text-neutral-600 select-none opacity-60">
+                    {[1,2,3,4,5,6,7,8,9,10,11,12].map(n => <span key={n} className="leading-8">{n}</span>)}
+                </div>
+
+                {/* Editor Content */}
+                <div className="flex-grow p-4 lg:p-8 relative overflow-y-auto">
+                   <div className="absolute inset-0 bg-gradient-to-br from-cyan-400/5 to-transparent pointer-events-none" />
+                   <AnimatePresence mode="wait">
+                       <motion.div
+                          key={selectedCapability.id}
+                          initial={{ opacity: 0, x: -5 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          exit={{ opacity: 0, x: 5 }}
+                          transition={{ duration: 0.15 }}
+                          className="relative z-10 flex flex-col h-full font-mono"
+                       >
+                           <div className="flex items-start gap-4 lg:gap-6 mb-4 lg:mb-6">
+                               <div className="p-3 rounded-xl bg-[#0d1117] border border-neutral-700 shadow-lg shrink-0 mt-1 lg:mt-0">
+                                   {selectedCapability.icon}
+                               </div>
+                               <div>
+                                   <div className="text-gray-500 text-[11px] lg:text-xs mb-1">export const <span className="text-emerald-400">capability</span> = {"{"}</div>
+                                   <div className="text-base lg:text-xl font-bold text-white mb-2 ml-4 lg:ml-6 leading-tight">
+                                       <span className="text-blue-400">title:</span> <span className="text-amber-300 font-sans">"{selectedCapability.title}"</span>,
+                                   </div>
+                               </div>
+                           </div>
+
+                           <div className="ml-4 lg:ml-8 flex-grow">
+                               <div className="text-gray-500 text-[11px] lg:text-xs mb-1">/**</div>
+                               <div className="text-gray-500 text-[11px] lg:text-xs mb-1 leading-relaxed max-w-xl flex">
+                                   <span className="mr-2">*</span> 
+                                   <p className="text-gray-300 text-xs lg:text-sm font-sans">{selectedCapability.desc}</p>
+                               </div>
+                               <div className="text-gray-500 text-[11px] lg:text-xs mb-4">*/</div>
+                           </div>
+                           
+                           <div className="text-gray-500 text-[11px] lg:text-xs mt-auto">{"};"}</div>
+
+                           <div className="mt-6 lg:mt-8 flex font-sans">
+                               <Link href="/services" className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#21262d] hover:bg-[#30363d] text-gray-200 border border-neutral-600 rounded-md text-xs lg:text-sm font-semibold transition-all w-max shadow-sm">
+                                   Explore Module <ArrowRight size={14} />
+                               </Link>
+                           </div>
+                       </motion.div>
+                   </AnimatePresence>
+                </div>
+            </div>
         </div>
       </div>
     </div>
@@ -309,7 +404,7 @@ export default function Home() {
           <h2 className="text-xl md:text-3xl font-bold mb-3 font-mono">CORE_CAPABILITIES</h2>
           <div className="h-0.5 w-16 bg-cyan-400 mx-auto" />
         </div>
-        <CoreCapabilitiesTerminal />
+        <CoreCapabilitiesIDE />
       </section>
 
       {/* 5. FEATURED PROJECTS */}
