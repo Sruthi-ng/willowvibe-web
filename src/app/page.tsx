@@ -285,17 +285,17 @@ function CoreCapabilitiesIDE() {
         {/* Right Side: Editor Window */}
         <div className="lg:col-span-8 bg-[#0a0d12] flex flex-col relative overflow-hidden font-mono">
             {/* Editor Tabs */}
-            <div className="flex bg-[#0d1117] border-b border-neutral-800 overflow-x-auto custom-scrollbar select-none pt-2 px-2 gap-1">
+            <div className="flex flex-row overflow-x-auto bg-neutral-900/80 border-b border-white/10 custom-scrollbar select-none pt-2 px-2 gap-1">
                 {activeFolderObj.files.map((file) => {
                     const isTabActive = activeFileId === file.id;
                     return (
                         <div 
                             key={file.id}
                             onClick={() => handleFileClick(activeFolderId, file.id)}
-                            className={`flex items-center gap-2 px-4 py-2 cursor-pointer min-w-max rounded-t-lg border-t-2 border-l border-r transition-colors ${
+                            className={`flex items-center gap-2 px-4 py-2 cursor-pointer min-w-max rounded-t-lg transition-colors ${
                                 isTabActive 
-                                    ? "bg-[#0a0d12] border-t-cyan-400 border-l-neutral-800 border-r-neutral-800 text-cyan-400" 
-                                    : "bg-[#161b22] border-transparent text-gray-500 hover:bg-[#1c2128]"
+                                    ? "bg-neutral-800 border-t-2 border-t-cyan-400 text-white" 
+                                    : "text-gray-500 hover:bg-neutral-800/50 hover:text-gray-300"
                             }`}
                         >
                             {file.icon}
@@ -305,14 +305,14 @@ function CoreCapabilitiesIDE() {
                 })}
             </div>
 
-            <div className="flex-grow flex relative">
+            <div className="flex-grow flex relative h-full min-h-0">
                 {/* Line Numbers */}
-                <div className="w-12 bg-[#0d1117] border-r border-neutral-800 flex flex-col items-end py-4 pr-3 text-xs text-neutral-600 select-none opacity-60">
+                <div className="w-12 bg-[#0d1117] border-r border-neutral-800 flex flex-col items-end py-4 pr-3 text-xs text-neutral-600 select-none opacity-60 shrink-0">
                     {[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15].map(n => <span key={n} className="leading-7 lg:leading-8">{n}</span>)}
                 </div>
 
                 {/* Editor Content */}
-                <div className="flex-grow p-4 lg:p-6 relative overflow-y-auto custom-scrollbar">
+                <div className="flex-grow p-4 lg:p-6 relative overflow-y-auto custom-scrollbar h-full">
                     <AnimatePresence mode="wait">
                         <motion.div
                             key={activeFileId}
@@ -322,38 +322,19 @@ function CoreCapabilitiesIDE() {
                             transition={{ duration: 0.15 }}
                             className="relative z-10 flex flex-col h-full"
                         >
-                            <div className="text-gray-500 text-xs lg:text-sm mb-4 lg:mb-6 leading-7 lg:leading-8 whitespace-nowrap overflow-hidden text-ellipsis">
+                            <div className="text-gray-500 text-xs lg:text-sm mb-4 lg:mb-6 leading-7 lg:leading-8 whitespace-nowrap overflow-hidden text-ellipsis shrink-0">
                                 <span className="text-purple-400 italic">// ==========================================</span><br/>
                                 <span className="text-purple-400 italic">// === </span><span className="text-white font-bold">{activeFileObj.fullTitle}</span><span className="text-purple-400 italic"> ===</span><br/>
                                 <span className="text-purple-400 italic">// ==========================================</span>
                             </div>
 
-                            {activeFileId.endsWith('.json') ? (
-                                <div className="text-gray-300 text-xs lg:text-sm leading-7 lg:leading-8 whitespace-pre-wrap">
-                                    <span className="text-amber-300">{"{"}</span><br/>
-                                    <span className="ml-4 text-blue-400">"module"</span>: <span className="text-emerald-400">"{activeFileObj.shortFileName}"</span>,<br/>
-                                    <span className="ml-4 text-blue-400">"config"</span>: <span className="text-amber-300">{"{"}</span><br/>
-                                    <span className="ml-8 text-blue-400">"description"</span>: <span className="text-emerald-400">"{activeFileObj.fullDescription}"</span>,<br/>
-                                    <span className="ml-8 text-blue-400">"status"</span>: <span className="text-emerald-400">"active"</span>,<br/>
-                                    <span className="ml-8 text-blue-400">"deploymentTarget"</span>: <span className="text-emerald-400">"production"</span><br/>
-                                    <span className="ml-4 text-amber-300">{"}"}</span><br/>
-                                    <span className="text-amber-300">{"}"}</span>
-                                </div>
-                            ) : (
-                                <div className="text-gray-300 text-xs lg:text-sm leading-7 lg:leading-8 whitespace-pre-wrap">
-                                    <span className="text-pink-500">export</span> <span className="text-purple-400">const</span> <span className="text-blue-400">initializeModule</span> = <span className="text-amber-300">()</span> <span className="text-pink-500">=&gt;</span> <span className="text-amber-300">{"{"}</span><br/>
-                                    <span className="ml-4 text-gray-500 italic">/**</span><br/>
-                                    <span className="ml-4 text-gray-500 italic block pr-4"> * {activeFileObj.fullDescription}</span><br/>
-                                    <span className="ml-4 text-gray-500 italic"> */</span><br/>
-                                    <br/>
-                                    <span className="ml-4 text-cyan-400">System</span>.<span className="text-emerald-400">deploy</span>(<span className="text-amber-300">"{activeFileObj.shortFileName}"</span>);<br/>
-                                    <span className="text-amber-300">{"}"}</span>;
-                                </div>
-                            )}
+                            <div className="text-gray-300 text-sm lg:text-base leading-relaxed lg:leading-loose whitespace-pre-wrap font-mono max-w-3xl flex-grow">
+                                {activeFileObj.fullDescription}
+                            </div>
 
-                            <div className="mt-8 flex font-sans">
-                                <Link href="/services" className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#21262d] hover:bg-[#30363d] text-cyan-400 border border-neutral-600 rounded-md text-xs lg:text-sm font-semibold transition-all w-max shadow-sm">
-                                    Explore Module <ArrowRight size={14} />
+                            <div className="mt-8 mb-4 shrink-0">
+                                <Link href="/services" className="inline-block px-6 py-2 bg-cyan-950/50 border border-cyan-500/50 text-cyan-400 rounded hover:bg-cyan-900/80 transition-colors shadow-sm font-sans text-sm font-bold">
+                                    Explore this service &rarr;
                                 </Link>
                             </div>
                         </motion.div>
