@@ -184,7 +184,6 @@ function CoreCapabilitiesIDE() {
   const [expandedFolders, setExpandedFolders] = useState<Set<string>>(new Set([CAPABILITY_TREE_ADVANCED[0].folder]));
   const [activeFileId, setActiveFileId] = useState(CAPABILITY_TREE_ADVANCED[0].files[0].id);
   const [userHasInteracted, setUserHasInteracted] = useState(false);
-  const [mobileView, setMobileView] = useState<'explorer' | 'editor'>('explorer');
   
   // The tab bar and auto-traverse should be scoped to the parent folder of the currently active file.
   const activeFolderObj = CAPABILITY_TREE_ADVANCED.find(f => f.files.some(file => file.id === activeFileId)) || CAPABILITY_TREE_ADVANCED[0];
@@ -225,7 +224,6 @@ function CoreCapabilitiesIDE() {
   const handleFileClick = (fileId: string) => {
     handleInteraction();
     setActiveFileId(fileId);
-    setMobileView('editor');
     
     // Automatically expand the folder of the clicked file if not already expanded
     const parentFolder = CAPABILITY_TREE_ADVANCED.find(f => f.files.some(file => file.id === fileId))?.folder;
@@ -238,138 +236,163 @@ function CoreCapabilitiesIDE() {
     }
   };
 
+  // Flatten all files for the mobile view
+  const allMobileFiles = CAPABILITY_TREE_ADVANCED.flatMap(folder => folder.files);
+
   return (
-    <div className="w-full max-w-6xl mx-auto flex flex-col rounded-xl overflow-hidden bg-[#0d1117] border border-neutral-700 shadow-[0_0_30px_rgba(0,0,0,0.8)]">
-      {/* IDE Header */}
-      <div className="w-full bg-[#161b22] px-4 py-2.5 flex items-center border-b border-neutral-700">
-        <div className="flex gap-2">
-          <div className="w-3 h-3 rounded-full bg-[#ff5f56] border border-[#e0443e]" />
-          <div className="w-3 h-3 rounded-full bg-[#ffbd2e] border border-[#dea123]" />
-          <div className="w-3 h-3 rounded-full bg-[#27c93f] border border-[#1aab29]" />
-        </div>
-        <div className="mx-auto text-xs font-mono text-gray-500 font-medium tracking-wide">willowvibe-workspace — Core_Capabilities</div>
-      </div>
-
-      <div className="flex flex-col lg:grid lg:grid-cols-12 flex-grow h-auto lg:h-[550px] relative overflow-hidden">
-        {/* Left Side: File Explorer */}
-        <div className={`lg:col-span-4 bg-[#0d1117] border-r border-neutral-800 font-mono text-sm overflow-y-auto max-h-[500px] lg:max-h-none ${mobileView === 'explorer' ? 'flex flex-col' : 'hidden lg:flex lg:flex-col'}`}>
-          <div className="px-4 py-3 text-xs font-bold text-gray-400 uppercase tracking-widest border-b border-neutral-800 select-none shrink-0">
-            Explorer
-          </div>
-          <div className="py-2">
-            {CAPABILITY_TREE_ADVANCED.map((cat) => {
-              const isFolderExpanded = expandedFolders.has(cat.folder);
-              return (
-                <div key={cat.folder} className="select-none">
-                  <div 
-                    className={`flex items-center gap-1.5 px-3 py-1.5 cursor-pointer text-gray-300 transition-colors hover:bg-white/5`}
-                    onClick={() => handleFolderClick(cat.folder)}
-                  >
-                    {isFolderExpanded ? <ChevronDown size={14} className="text-gray-400" /> : <ChevronRight size={14} className="text-gray-400" />}
-                    {isFolderExpanded ? <FolderOpen size={14} className="text-cyan-500" /> : <Folder size={14} className="text-cyan-500" />}
-                    <span className={`truncate ${isFolderExpanded ? "text-white font-bold" : "text-gray-300"}`}>{cat.folder}</span>
+    <>
+      {/* Mobile Cloud Console Layout (Hidden on Desktop) */}
+      <div className="flex flex-col gap-4 lg:hidden w-full max-w-lg mx-auto">
+        {allMobileFiles.map(file => (
+          <div key={file.id} className="bg-neutral-900/80 border border-white/10 rounded-lg p-5 flex flex-col shadow-lg relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-500/20 to-transparent" />
+            <div className="flex items-start justify-between mb-4">
+               <div className="flex items-center gap-3 pr-4">
+                  <div className="p-2.5 bg-black/40 rounded-lg border border-white/5 shrink-0 text-cyan-400">
+                     {file.icon}
                   </div>
-                  
-                  {isFolderExpanded && (
-                    <div className="flex flex-col mt-0.5 mb-1.5 ml-4 pl-3 border-l border-white/10 relative">
-                      {cat.files.map((file) => {
-                        const isSelected = activeFileId === file.id;
-                        return (
-                          <div 
-                            key={file.id}
-                            onClick={() => handleFileClick(file.id)}
-                            className={`flex items-center gap-2 pl-2 pr-3 py-1.5 cursor-pointer relative transition-colors ${
-                              isSelected 
-                                ? "bg-cyan-900/30 text-cyan-400" 
-                                : "text-gray-400 hover:bg-white/5 hover:text-gray-200"
-                            }`}
-                          >
-                            <div className="absolute left-[-13px] top-1/2 w-3 border-t border-white/10" />
-                            {file.icon}
-                            <span className="truncate text-[13px]">{file.shortFileName}</span>
-                          </div>
-                        );
-                      })}
+                  <h3 className="text-white font-bold text-sm leading-snug">{file.fullTitle}</h3>
+               </div>
+               <div className="flex items-center gap-1.5 shrink-0 mt-1 bg-black/30 px-2 py-1 rounded border border-white/5">
+                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  <span className="text-emerald-400 font-mono text-[9px] tracking-wider font-bold">ONLINE</span>
+               </div>
+            </div>
+            
+            <div className="text-gray-400 font-mono text-[12px] leading-relaxed bg-black/40 p-4 rounded border border-white/5 whitespace-pre-wrap">
+               {file.fullDescription}
+            </div>
+
+            <Link href="/services" className="mt-5 text-cyan-400 text-sm font-semibold hover:text-cyan-300 flex items-center gap-2 w-max transition-colors">
+               Explore this service <ArrowRight size={14} />
+            </Link>
+          </div>
+        ))}
+      </div>
+
+      {/* Desktop IDE Layout (Hidden on Mobile) */}
+      <div className="hidden lg:flex w-full max-w-6xl mx-auto flex-col rounded-xl overflow-hidden bg-[#0d1117] border border-neutral-700 shadow-[0_0_30px_rgba(0,0,0,0.8)]">
+        {/* IDE Header */}
+        <div className="w-full bg-[#161b22] px-4 py-2.5 flex items-center border-b border-neutral-700">
+          <div className="flex gap-2">
+            <div className="w-3 h-3 rounded-full bg-[#ff5f56] border border-[#e0443e]" />
+            <div className="w-3 h-3 rounded-full bg-[#ffbd2e] border border-[#dea123]" />
+            <div className="w-3 h-3 rounded-full bg-[#27c93f] border border-[#1aab29]" />
+          </div>
+          <div className="mx-auto text-xs font-mono text-gray-500 font-medium tracking-wide">willowvibe-workspace — Core_Capabilities</div>
+        </div>
+
+        <div className="flex flex-col lg:grid lg:grid-cols-12 flex-grow h-[550px] relative overflow-hidden">
+          {/* Left Side: File Explorer */}
+          <div className="lg:col-span-4 bg-[#0d1117] border-r border-neutral-800 font-mono text-sm overflow-y-auto flex flex-col">
+            <div className="px-4 py-3 text-xs font-bold text-gray-400 uppercase tracking-widest border-b border-neutral-800 select-none shrink-0">
+              Explorer
+            </div>
+            <div className="py-2">
+              {CAPABILITY_TREE_ADVANCED.map((cat) => {
+                const isFolderExpanded = expandedFolders.has(cat.folder);
+                return (
+                  <div key={cat.folder} className="select-none">
+                    <div 
+                      className={`flex items-center gap-1.5 px-3 py-1.5 cursor-pointer text-gray-300 transition-colors hover:bg-white/5`}
+                      onClick={() => handleFolderClick(cat.folder)}
+                    >
+                      {isFolderExpanded ? <ChevronDown size={14} className="text-gray-400" /> : <ChevronRight size={14} className="text-gray-400" />}
+                      {isFolderExpanded ? <FolderOpen size={14} className="text-cyan-500" /> : <Folder size={14} className="text-cyan-500" />}
+                      <span className={`truncate ${isFolderExpanded ? "text-white font-bold" : "text-gray-300"}`}>{cat.folder}</span>
                     </div>
-                  )}
-                </div>
-              );
-            })}
+                    
+                    {isFolderExpanded && (
+                      <div className="flex flex-col mt-0.5 mb-1.5 ml-4 pl-3 border-l border-white/10 relative">
+                        {cat.files.map((file) => {
+                          const isSelected = activeFileId === file.id;
+                          return (
+                            <div 
+                              key={file.id}
+                              onClick={() => handleFileClick(file.id)}
+                              className={`flex items-center gap-2 pl-2 pr-3 py-1.5 cursor-pointer relative transition-colors ${
+                                isSelected 
+                                  ? "bg-cyan-900/30 text-cyan-400" 
+                                  : "text-gray-400 hover:bg-white/5 hover:text-gray-200"
+                              }`}
+                            >
+                              <div className="absolute left-[-13px] top-1/2 w-3 border-t border-white/10" />
+                              {file.icon}
+                              <span className="truncate text-[13px]">{file.shortFileName}</span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Right Side: Editor Window */}
+          <div className="lg:col-span-8 bg-[#0a0d12] relative overflow-hidden font-mono flex flex-col h-full">
+              {/* Editor Tabs */}
+              <div className="flex flex-row overflow-x-auto bg-neutral-900/80 border-b border-white/10 custom-scrollbar select-none pt-2 px-2 gap-1 shrink-0">
+                  {activeFolderObj.files.map((file) => {
+                      const isTabActive = activeFileId === file.id;
+                      return (
+                          <div 
+                              key={file.id}
+                              onClick={() => handleFileClick(file.id)}
+                              className={`flex items-center gap-2 px-4 py-2 cursor-pointer min-w-max rounded-t-lg transition-colors ${
+                                  isTabActive 
+                                      ? "bg-neutral-800 border-t-2 border-t-cyan-400 text-white" 
+                                      : "text-gray-500 hover:bg-neutral-800/50 hover:text-gray-300"
+                              }`}
+                          >
+                              {file.icon}
+                              <span className="text-[13px]">{file.shortFileName}</span>
+                          </div>
+                      );
+                  })}
+              </div>
+
+              <div className="flex-grow flex relative h-full min-h-0">
+                  {/* Line Numbers */}
+                  <div className="w-12 bg-[#0d1117] border-r border-neutral-800 flex flex-col items-end py-4 pr-3 text-xs text-neutral-600 select-none opacity-60 shrink-0">
+                      {[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15].map(n => <span key={n} className="leading-7 lg:leading-8">{n}</span>)}
+                  </div>
+
+                  {/* Editor Content */}
+                  <div className="flex-grow p-4 lg:p-6 relative overflow-y-auto custom-scrollbar h-full">
+                      <AnimatePresence mode="wait">
+                          <motion.div
+                              key={activeFileId}
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              exit={{ opacity: 0 }}
+                              transition={{ duration: 0.15 }}
+                              className="relative z-10 flex flex-col h-full"
+                          >
+                              <div className="text-gray-500 text-xs lg:text-sm mb-4 lg:mb-6 leading-7 lg:leading-8 whitespace-nowrap overflow-hidden text-ellipsis shrink-0">
+                                  <span className="text-purple-400 italic">// ==========================================</span><br/>
+                                  <span className="text-purple-400 italic">// === </span><span className="text-white font-bold">{activeFileObj.fullTitle}</span><span className="text-purple-400 italic"> ===</span><br/>
+                                  <span className="text-purple-400 italic">// ==========================================</span>
+                              </div>
+
+                              <div className="text-gray-300 text-sm lg:text-base leading-relaxed lg:leading-loose whitespace-pre-wrap font-mono max-w-3xl flex-grow">
+                                  {activeFileObj.fullDescription}
+                              </div>
+
+                              <div className="mt-8 mb-4 shrink-0">
+                                  <Link href="/services" className="inline-block px-6 py-2 bg-cyan-950/50 border border-cyan-500/50 text-cyan-400 rounded hover:bg-cyan-900/80 transition-colors shadow-sm font-sans text-sm font-bold">
+                                      Explore this service &rarr;
+                                  </Link>
+                              </div>
+                          </motion.div>
+                      </AnimatePresence>
+                  </div>
+              </div>
           </div>
         </div>
-
-        {/* Right Side: Editor Window */}
-        <div className={`lg:col-span-8 bg-[#0a0d12] relative overflow-hidden font-mono ${mobileView === 'editor' ? 'flex flex-col' : 'hidden lg:flex lg:flex-col'} h-[550px] lg:h-auto`}>
-            {/* Mobile Back Button */}
-            <div className="lg:hidden w-full bg-[#0d1117] px-4 py-2 border-b border-neutral-800 flex items-center shrink-0">
-                <button 
-                    onClick={() => setMobileView('explorer')}
-                    className="text-cyan-400 font-mono text-xs hover:text-cyan-300 transition-colors flex items-center gap-2 py-1"
-                >
-                    <ChevronLeft size={14} /> cd .. / Return to Explorer
-                </button>
-            </div>
-
-            {/* Editor Tabs */}
-            <div className="flex flex-row overflow-x-auto bg-neutral-900/80 border-b border-white/10 custom-scrollbar select-none pt-2 px-2 gap-1 shrink-0">
-                {activeFolderObj.files.map((file) => {
-                    const isTabActive = activeFileId === file.id;
-                    return (
-                        <div 
-                            key={file.id}
-                            onClick={() => handleFileClick(file.id)}
-                            className={`flex items-center gap-2 px-4 py-2 cursor-pointer min-w-max rounded-t-lg transition-colors ${
-                                isTabActive 
-                                    ? "bg-neutral-800 border-t-2 border-t-cyan-400 text-white" 
-                                    : "text-gray-500 hover:bg-neutral-800/50 hover:text-gray-300"
-                            }`}
-                        >
-                            {file.icon}
-                            <span className="text-[13px]">{file.shortFileName}</span>
-                        </div>
-                    );
-                })}
-            </div>
-
-            <div className="flex-grow flex relative h-full min-h-0">
-                {/* Line Numbers */}
-                <div className="w-12 bg-[#0d1117] border-r border-neutral-800 flex flex-col items-end py-4 pr-3 text-xs text-neutral-600 select-none opacity-60 shrink-0">
-                    {[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15].map(n => <span key={n} className="leading-7 lg:leading-8">{n}</span>)}
-                </div>
-
-                {/* Editor Content */}
-                <div className="flex-grow p-4 lg:p-6 relative overflow-y-auto custom-scrollbar h-full">
-                    <AnimatePresence mode="wait">
-                        <motion.div
-                            key={activeFileId}
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            transition={{ duration: 0.15 }}
-                            className="relative z-10 flex flex-col h-full"
-                        >
-                            <div className="text-gray-500 text-xs lg:text-sm mb-4 lg:mb-6 leading-7 lg:leading-8 whitespace-nowrap overflow-hidden text-ellipsis shrink-0">
-                                <span className="text-purple-400 italic">// ==========================================</span><br/>
-                                <span className="text-purple-400 italic">// === </span><span className="text-white font-bold">{activeFileObj.fullTitle}</span><span className="text-purple-400 italic"> ===</span><br/>
-                                <span className="text-purple-400 italic">// ==========================================</span>
-                            </div>
-
-                            <div className="text-gray-300 text-sm lg:text-base leading-relaxed lg:leading-loose whitespace-pre-wrap font-mono max-w-3xl flex-grow">
-                                {activeFileObj.fullDescription}
-                            </div>
-
-                            <div className="mt-8 mb-4 shrink-0">
-                                <Link href="/services" className="inline-block px-6 py-2 bg-cyan-950/50 border border-cyan-500/50 text-cyan-400 rounded hover:bg-cyan-900/80 transition-colors shadow-sm font-sans text-sm font-bold">
-                                    Explore this service &rarr;
-                                </Link>
-                            </div>
-                        </motion.div>
-                    </AnimatePresence>
-                </div>
-            </div>
-        </div>
       </div>
-    </div>
+    </>
   );
 }
 
