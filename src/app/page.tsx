@@ -463,7 +463,7 @@ export default function Home() {
     <div className="flex flex-col items-center min-h-screen bg-neutral-950 text-white overflow-x-hidden selection:bg-cyan-400/30">
 
       {/* 1. HERO */}
-      <section className="relative w-full max-w-7xl mx-auto px-4 pt-8 pb-6 md:pt-24 md:pb-16 text-center">
+      <section className="relative w-full max-w-7xl mx-auto px-4 pt-8 pb-2 md:pt-24 md:pb-8 text-center">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-cyan-600/10 rounded-full blur-[120px] -z-10 animate-pulse" />
         <div className="w-full max-w-xl mx-auto relative mb-6 md:mb-8 pt-2 md:pt-8">
           <div className="absolute left-0 right-0 top-1/2 h-px bg-white/10 -translate-y-1/2 z-0 mt-3">
@@ -496,12 +496,12 @@ export default function Home() {
       </section>
 
       {/* 2. TRUST TICKER */}
-      <section className="w-full border-y border-white/5 bg-white/[0.02] py-4 md:py-6 overflow-hidden">
+      <section className="w-full border-y border-white/5 bg-white/[0.02] py-2 md:py-3 overflow-hidden">
         <div className="w-full relative flex overflow-hidden">
           <motion.div className="flex gap-6 md:gap-24 whitespace-nowrap px-4 md:px-12"
-            animate={{ x: [0, -800] }} transition={{ repeat: Infinity, ease: "linear", duration: 18 }}>
-            {["AWS", "SNOWFLAKE", "DATABRICKS", "KAFKA", "DBT", "AIRFLOW", "AWS", "SNOWFLAKE", "DATABRICKS", "KAFKA", "DBT", "AIRFLOW"].map((tech, i) => (
-              <span key={i} className="text-xs md:text-2xl font-mono font-bold text-gray-600 tracking-widest uppercase">{tech}</span>
+            animate={{ x: [0, -2000] }} transition={{ repeat: Infinity, ease: "linear", duration: 40 }}>
+            {["AWS", "SNOWFLAKE", "DATABRICKS", "KAFKA", "DBT", "AIRFLOW", "TEAMCENTER", "WINDCHILL", "BOM MANAGEMENT", "VARIANT CONFIGURATION", "CHANGE CONTROL", "ENOVIA", "AWS", "SNOWFLAKE", "DATABRICKS", "KAFKA", "DBT", "AIRFLOW", "TEAMCENTER", "WINDCHILL", "BOM MANAGEMENT", "VARIANT CONFIGURATION", "CHANGE CONTROL", "ENOVIA"].map((tech, i) => (
+              <span key={i} className="text-[10px] md:text-base font-mono font-bold text-white/10 tracking-widest uppercase">{tech}</span>
             ))}
           </motion.div>
         </div>
