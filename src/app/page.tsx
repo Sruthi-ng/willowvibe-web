@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { Database, Server, Cloud, Cpu, Bot, Settings, RefreshCw, ClipboardCheck, Quote, ArrowRight, ChevronLeft, ChevronRight, ServerCog, Component, ShieldCheck, Box, Network, FolderOpen, Folder, FileCode2, FileJson, ChevronDown } from "lucide-react";
 import Link from "next/link";
-import Image from "next/image";
 import { motion, AnimatePresence, useAnimationFrame, useMotionValue } from "framer-motion";
 import { BeforeAfterSlider } from "@/components/BeforeAfterSlider";
 import { DataStreamVisual } from "@/components/DataStreamVisual";
@@ -484,13 +483,9 @@ export default function Home() {
           </div>
 
           {/* RIGHT COLUMN: VISUAL SHOWCASE */}
-          <motion.div 
-            className="relative w-full h-full flex items-center justify-center lg:justify-end"
-            animate={{ y: [-10, 10, -10] }} 
-            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-          >
-            <Image src="/hero-data.svg" alt="Data Ecosystem Architecture" width={600} height={500} className="w-full h-auto max-w-[500px] object-contain drop-shadow-[0_0_25px_rgba(34,211,238,0.25)]" priority />
-          </motion.div>
+          <div className="relative w-full flex items-center justify-center lg:justify-end">
+            <motion.img src="/hero-data.svg" alt="Data Ecosystem Architecture" initial={{ opacity: 0, x: 100 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }} className="w-full h-auto max-w-[500px] object-contain drop-shadow-[0_0_25px_rgba(34,211,238,0.25)]" />
+          </div>
 
         </div>
       </section>
