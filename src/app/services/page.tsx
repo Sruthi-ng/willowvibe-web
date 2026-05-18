@@ -127,62 +127,112 @@ export default function ServicesPage() {
               Cutting-edge distributed systems with robust engineering to deliver platforms that scale infinitely.
             </motion.p>
           </div>
-          <motion.div initial={{ opacity: 0, x: 40 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8, delay: 0.3 }}
-            className="flex-shrink-0 w-full md:w-80 lg:w-96 flex items-center justify-center">
-            <img src="/core.svg" alt="Core engineering capabilities" className="w-full max-w-xs md:max-w-sm object-contain drop-shadow-[0_0_30px_rgba(34,211,238,0.15)]" />
+          <motion.div
+            initial={{ opacity: 0, x: 40 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="flex-shrink-0 w-full md:w-64 lg:w-72 flex items-center justify-end pr-4 md:pr-8"
+          >
+            <img
+              src="/core.svg"
+              alt="Core engineering capabilities"
+              className="w-full max-w-[220px] md:max-w-[260px] object-contain drop-shadow-[0_0_25px_rgba(34,211,238,0.12)] opacity-90"
+            />
           </motion.div>
         </div>
 
-        {/* Tree layout */}
-        <div className="flex flex-col gap-16 md:gap-24">
-          {TREE.map((category, catIdx) => (
-            <motion.div key={category.id}
-              initial={{ opacity: 0, y: 40 }}
+        {/* Full Tree */}
+        <div className="flex flex-col items-center w-full overflow-x-auto pb-8">
+          <div className="min-w-[320px] w-full flex flex-col items-center">
+
+            {/* ROOT NODE */}
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: catIdx * 0.1 }}
-              className="flex flex-col items-center"
+              transition={{ duration: 0.5 }}
+              className="px-8 py-4 rounded-2xl bg-black border-2 border-cyan-400/60 shadow-[0_0_25px_rgba(34,211,238,0.2)] text-center z-10"
             >
-              {/* Root node */}
-              <div className={`relative px-8 py-4 rounded-2xl bg-black border-2 ${category.border} ${category.glow} text-center mb-8 md:mb-12`}>
-                <h2 className={`text-lg md:text-2xl font-extrabold tracking-tight ${category.titleColor}`}>
-                  {category.title}
-                </h2>
-                {/* Vertical line down from root */}
-                <div className={`absolute left-1/2 -translate-x-1/2 -bottom-8 md:-bottom-12 w-0.5 h-8 md:h-12 ${category.lineColor}`} />
-              </div>
-
-              {/* Horizontal connector line */}
-              <div className="relative w-full flex items-center justify-center mb-8 md:mb-12">
-                <div className={`absolute h-0.5 ${category.lineColor}`}
-                  style={{ width: `${Math.min(category.services.length * 18, 85)}%` }} />
-                {/* Vertical drops to each bubble */}
-                <div className="relative w-full flex justify-center gap-3 md:gap-6">
-                  {category.services.map((svc, svcIdx) => (
-                    <div key={svc.id} className="flex flex-col items-center"
-                      style={{ width: `${90 / category.services.length}%`, maxWidth: '220px' }}>
-                      {/* Vertical line up to horizontal */}
-                      <div className={`w-0.5 h-6 md:h-8 ${category.lineColor} mb-0`} />
-                      {/* Bubble */}
-                      <motion.button
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.4, delay: svcIdx * 0.08 }}
-                        onClick={() => setSelected(svc)}
-                        className={`w-full text-left p-3 md:p-4 rounded-xl border ${category.bubble} hover:scale-105 hover:brightness-125 transition-all duration-300 cursor-pointer text-xs md:text-sm font-semibold leading-tight shadow-lg`}
-                      >
-                        {svc.title}
-                        <div className={`mt-2 flex items-center gap-1 text-[10px] font-mono opacity-70`}>
-                          Read more <ArrowRight size={10} />
-                        </div>
-                      </motion.button>
-                    </div>
-                  ))}
-                </div>
-              </div>
+              <h2 className="text-base md:text-xl font-extrabold tracking-tight bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">
+                CORE ENGINEERING CAPABILITIES
+              </h2>
             </motion.div>
-          ))}
+
+            {/* Line from root down */}
+            <div className="w-0.5 h-10 bg-cyan-400/40" />
+
+            {/* Horizontal bar spanning all three categories */}
+            <div className="relative w-full flex justify-center">
+              <div className="absolute top-0 left-[16.5%] right-[16.5%] h-0.5 bg-cyan-400/30" />
+
+              {/* Three category columns */}
+              <div className="relative w-full grid grid-cols-3 gap-2 md:gap-6">
+
+                {TREE.map((category, catIdx) => (
+                  <div key={category.id} className="flex flex-col items-center">
+
+                    {/* Vertical line from horizontal bar down to category node */}
+                    <div className={`w-0.5 h-10 ${category.lineColor}`} />
+
+                    {/* Category node */}
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.5, delay: catIdx * 0.1 }}
+                      className={`w-full px-3 py-3 md:px-5 md:py-4 rounded-xl bg-black border-2 ${category.border} ${category.glow} text-center z-10`}
+                    >
+                      <h3 className={`text-xs md:text-sm font-extrabold leading-tight ${category.titleColor}`}>
+                        {category.title}
+                      </h3>
+                    </motion.div>
+
+                    {/* Vertical line from category node down to horizontal connector */}
+                    <div className={`w-0.5 h-10 ${category.lineColor}`} />
+
+                    {/* Horizontal connector spanning service bubbles */}
+                    <div className="relative w-full flex justify-center">
+                      <div className={`absolute top-0 h-0.5 ${category.lineColor}`}
+                        style={{
+                          left: category.services.length === 1 ? '50%' : '10%',
+                          right: category.services.length === 1 ? '50%' : '10%',
+                        }}
+                      />
+
+                      {/* Service bubbles */}
+                      <div className="relative w-full flex flex-col md:flex-row justify-center gap-2 md:gap-3 flex-wrap">
+                        {category.services.map((svc, svcIdx) => (
+                          <div key={svc.id} className="flex flex-col items-center"
+                            style={{ width: `${Math.floor(90 / category.services.length)}%`, minWidth: '80px' }}>
+
+                            {/* Vertical drop line */}
+                            <div className={`w-0.5 h-6 ${category.lineColor}`} />
+
+                            {/* Bubble */}
+                            <motion.button
+                              initial={{ opacity: 0, y: 10 }}
+                              whileInView={{ opacity: 1, y: 0 }}
+                              viewport={{ once: true }}
+                              transition={{ duration: 0.4, delay: svcIdx * 0.07 }}
+                              onClick={() => setSelected(svc)}
+                              className={`w-full text-left p-2 md:p-3 rounded-xl border ${category.bubble} hover:scale-105 hover:brightness-125 transition-all duration-300 cursor-pointer text-[10px] md:text-xs font-semibold leading-snug shadow-lg`}
+                            >
+                              {svc.title}
+                              <div className="mt-1.5 flex items-center gap-1 text-[9px] font-mono opacity-60">
+                                Read more <ArrowRight size={9} />
+                              </div>
+                            </motion.button>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                  </div>
+                ))}
+              </div>
+            </div>
+
+          </div>
         </div>
 
         {/* CTA */}
