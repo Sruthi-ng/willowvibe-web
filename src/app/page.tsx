@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { Database, Server, Cloud, Cpu, Bot, Settings, RefreshCw, ClipboardCheck, Quote, ArrowRight, ChevronLeft, ChevronRight, ServerCog, Component, ShieldCheck, Box, Network, FolderOpen, Folder, FileCode2, FileJson, ChevronDown } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { motion, AnimatePresence, useAnimationFrame, useMotionValue } from "framer-motion";
 import { BeforeAfterSlider } from "@/components/BeforeAfterSlider";
 import { DataStreamVisual } from "@/components/DataStreamVisual";
@@ -484,16 +485,11 @@ export default function Home() {
 
           {/* RIGHT COLUMN: VISUAL SHOWCASE */}
           <motion.div 
-            className="relative w-full aspect-square md:aspect-[4/3] rounded-2xl bg-gradient-to-br from-cyan-900/20 to-neutral-900/50 border border-white/10 shadow-[0_0_40px_rgba(34,211,238,0.15)] backdrop-blur-sm overflow-hidden flex items-center justify-center"
+            className="relative w-full h-full flex items-center justify-center lg:justify-end"
             animate={{ y: [-10, 10, -10] }} 
             transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
           >
-            {/* Glowing cyan orb and abstract grid */}
-            <div className="absolute inset-0 bg-[linear-gradient(to_right,#22d3ee15_1px,transparent_1px),linear-gradient(to_bottom,#22d3ee15_1px,transparent_1px)] bg-[size:24px_24px]" />
-            <div className="absolute w-32 h-32 md:w-48 md:h-48 bg-cyan-400/20 rounded-full blur-3xl animate-pulse" />
-            <div className="relative z-10 w-16 h-16 md:w-24 md:h-24 rounded-full border border-cyan-400/50 flex items-center justify-center bg-black/50 backdrop-blur-md shadow-[0_0_20px_rgba(34,211,238,0.4)]">
-              <Server className="w-8 h-8 md:w-10 md:h-10 text-cyan-400 drop-shadow-[0_0_10px_rgba(34,211,238,0.8)]" />
-            </div>
+            <Image src="/hero-data.svg" alt="Data Ecosystem Architecture" width={600} height={500} className="w-full h-auto max-w-[500px] object-contain drop-shadow-[0_0_25px_rgba(34,211,238,0.25)]" priority />
           </motion.div>
 
         </div>
