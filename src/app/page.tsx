@@ -182,7 +182,7 @@ function CoreCapabilitiesIDE() {
             </div>
 
             {/* Bottom glow line */}
-            <div className={`absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-current to-transparent opacity-0 group-hover:opacity-30 transition-opacity duration-500 ${pillar.labelColor}`} />
+            <div className={`absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-current to-transparent opacity-0 group-hover:opacity-30 transition-opacity duration-500 `} />
           </motion.div>
         ))}
       </div>
