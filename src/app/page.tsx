@@ -501,7 +501,7 @@ export default function Home() {
           <motion.div className="flex gap-6 md:gap-24 whitespace-nowrap px-4 md:px-12"
             animate={{ x: [0, -2000] }} transition={{ repeat: Infinity, ease: "linear", duration: 40 }}>
             {["AWS", "SNOWFLAKE", "DATABRICKS", "KAFKA", "DBT", "AIRFLOW", "TEAMCENTER", "WINDCHILL", "BOM MANAGEMENT", "VARIANT CONFIGURATION", "CHANGE CONTROL", "ENOVIA", "AWS", "SNOWFLAKE", "DATABRICKS", "KAFKA", "DBT", "AIRFLOW", "TEAMCENTER", "WINDCHILL", "BOM MANAGEMENT", "VARIANT CONFIGURATION", "CHANGE CONTROL", "ENOVIA"].map((tech, i) => (
-              <span key={i} className="text-[10px] md:text-base font-mono font-bold text-white/10 tracking-widest uppercase">{tech}</span>
+              <span key={i} className="text-[10px] md:text-base font-mono font-bold text-gray-600 tracking-widest uppercase">{tech}</span>
             ))}
           </motion.div>
         </div>
