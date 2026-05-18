@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-background: #080c14;
+  --color-background: #070b18;
   --color-foreground: #eaeaea;
   --color-primary: #00f0ff;
   --color-secondary: #7000ff;
@@ -36,7 +36,7 @@
 }
 
 :root {
-  --background: #080c14;
+  --background: #070b18;
   --foreground: #eaeaea;
 }
 
@@ -49,14 +49,14 @@ body {
 
 /* Base futuristic utilities */
 .glass {
-  background: rgba(8, 12, 20, 0.5);
+  background: rgba(7, 11, 24, 0.5);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .glass-panel {
-  background: linear-gradient(145deg, rgba(12,18,30,0.8) 0%, rgba(8,12,20,0.9) 100%);
+  background: linear-gradient(145deg, rgba(12,18,30,0.8) 0%, rgba(7, 11, 24,0.9) 100%);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(0, 240, 255, 0.1);
   border-radius: 1rem;
@@ -94,11 +94,11 @@ body {
 }
 
 html, body, #__next {
-  background-color: #080c14 !important;
+  background-color: #070b18 !important;
 }
 
 .bg-neutral-950 {
-  background-color: #080c14 !important;
+  background-color: #070b18 !important;
 }
 
 .bg-neutral-900 {
