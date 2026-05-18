@@ -483,9 +483,18 @@ export default function Home() {
           </div>
 
           {/* RIGHT COLUMN: VISUAL SHOWCASE */}
-          <div className="relative w-full h-full flex items-center justify-center lg:justify-end">
-            <motion.img src="/hero-data.svg" alt="Data Ecosystem Architecture" initial={{ opacity: 0, x: 100 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }} className="w-full h-auto max-w-[500px] object-contain drop-shadow-[0_0_25px_rgba(34,211,238,0.25)]" />
-          </div>
+          <motion.div 
+            initial={{ opacity: 0, x: 100 }} 
+            animate={{ opacity: 1, x: 0 }} 
+            transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
+            className="relative w-full h-full flex items-center justify-center lg:justify-end min-h-[300px]"
+          >
+            <img 
+              src="/hero-data.svg" 
+              alt="Data Ecosystem Architecture" 
+              className="w-full h-auto max-w-[500px] object-contain drop-shadow-[0_0_25px_rgba(34,211,238,0.25)]" 
+            />
+          </motion.div>
 
         </div>
       </section>
