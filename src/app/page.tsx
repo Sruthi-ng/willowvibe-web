@@ -94,35 +94,14 @@ const TESTIMONIALS = [
   { quote: "Working with this team feels like having an elite in-house data unit. The pipeline audit alone saved us 40% on our monthly cloud warehouse computing costs.", name: "David Chen", role: "Head of Analytics, RetailPro" },
 ];
 
-// ── Compact robot animation — thin on mobile, full on desktop ──
-const DataRefineryAnimation = () => (
-  <div className="relative w-full h-[100px] md:h-[320px] bg-neutral-900/80 rounded-xl border border-white/10 flex items-center justify-center overflow-hidden">
+// ── Floating Chat Widget ──
+const FloatingChatWidget = () => (
+  <div className="fixed bottom-6 right-6 z-50 flex items-center gap-3 px-5 py-3 bg-neutral-900/90 backdrop-blur-md border border-cyan-500/50 shadow-[0_0_15px_rgba(34,211,238,0.3)] rounded-full cursor-pointer hover:scale-105 transition-transform overflow-hidden">
     <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]" />
-    <div className="absolute left-3 md:left-6 flex flex-col gap-2 md:gap-6">
-      {[12, -45, 30].map((rotation, i) => (
-        <motion.div key={i} className="w-4 h-4 md:w-7 md:h-7 bg-red-500/80 rounded-sm border border-red-400"
-          initial={{ x: -30, opacity: 0, rotate: rotation }}
-          animate={{ x: 60, opacity: [0, 1, 0], rotate: rotation + 90 }}
-          transition={{ duration: 2.5, repeat: Infinity, delay: i * 0.4, ease: "easeInOut" }} />
-      ))}
-    </div>
-    <div className="relative z-10 flex flex-col items-center justify-center p-2 md:p-5 bg-black border-2 border-cyan-500 rounded-lg md:rounded-xl shadow-[0_0_20px_rgba(34,211,238,0.2)]">
-      <Bot size={26} className="text-cyan-400 mb-1 md:mb-3 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]" />
-      <div className="flex gap-1 md:gap-2">
-        <motion.div animate={{ rotate: 360 }} transition={{ duration: 3, repeat: Infinity, ease: "linear" }}><Settings size={11} className="text-gray-400 md:w-5 md:h-5" /></motion.div>
-        <motion.div animate={{ rotate: -360 }} transition={{ duration: 3, repeat: Infinity, ease: "linear" }}><Settings size={11} className="text-cyan-400 md:w-5 md:h-5" /></motion.div>
-      </div>
-      <motion.div className="absolute inset-0 border-t-2 border-cyan-400 rounded-lg md:rounded-xl"
-        animate={{ y: [0, "80%", 0] }} transition={{ duration: 2, repeat: Infinity, ease: "linear" }} />
-    </div>
-    <div className="absolute right-3 md:right-6 flex flex-col gap-2 md:gap-4">
-      {[0, 1, 2].map((i) => (
-        <motion.div key={i} className="w-6 h-2 md:w-10 md:h-3 bg-cyan-400 rounded-sm shadow-[0_0_10px_rgba(34,211,238,0.6)]"
-          initial={{ x: -50, opacity: 0 }}
-          animate={{ x: 20, opacity: [0, 1, 0] }}
-          transition={{ duration: 2.5, repeat: Infinity, delay: i * 0.3 + 1, ease: "easeOut" }} />
-      ))}
-    </div>
+    <Bot className="w-6 h-6 text-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)] relative z-10" />
+    <span className="text-cyan-400 font-bold font-mono text-sm tracking-widest uppercase relative z-10">Ask Us</span>
+    <motion.div className="absolute inset-0 border-t border-cyan-400/80 rounded-full z-20 pointer-events-none"
+      animate={{ y: [0, "100%", 0] }} transition={{ duration: 2, repeat: Infinity, ease: "linear" }} />
   </div>
 );
 
@@ -507,32 +486,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 3. THE PROCESS — BOTH paragraphs visible on mobile, animation below */}
-      <section className="w-full bg-white/[0.02] border-b border-white/5 py-8 md:py-20 overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="md:grid md:grid-cols-2 md:gap-16 md:items-center">
-            <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-400/10 text-cyan-400 text-xs md:text-sm font-mono mb-3 md:mb-4">
-                <Cpu size={14} /> THE PROCESS
-              </div>
-              <h2 className="text-2xl md:text-4xl font-bold mb-3 md:mb-5">We turn the chaos of raw data into clarity.</h2>
-              {/* Both paragraphs visible on ALL screen sizes */}
-              <p className="text-sm md:text-lg text-gray-400 mb-3 leading-relaxed">
-                Think of your raw data like a disorganized warehouse. It&apos;s all there, but you can&apos;t use it.
-              </p>
-              <p className="text-sm md:text-lg text-gray-400 leading-relaxed">
-                Our pipelines act as the ultimate automated sorting machine — ingesting the mess, applying rigorous cleaning rules, and delivering perfectly structured, analysis-ready data to your team.
-              </p>
-            </div>
-            {/* Desktop: full animation alongside text */}
-            <div className="hidden md:block"><DataRefineryAnimation /></div>
-          </div>
-          {/* Mobile: compact thin animation strip below text */}
-          <div className="md:hidden mt-5">
-            <DataRefineryAnimation />
-          </div>
-        </div>
-      </section>
 
       {/* 4. CORE CAPABILITIES */}
       <section className="w-full py-8 md:py-20 border-b border-white/5 bg-white/[0.01]">
@@ -593,6 +546,7 @@ export default function Home() {
         </div>
       </section>
 
+      <FloatingChatWidget />
     </div>
   );
 }
