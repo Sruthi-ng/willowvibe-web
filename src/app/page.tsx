@@ -445,7 +445,7 @@ export default function Home() {
       <section className="relative w-full max-w-7xl mx-auto px-4 pt-8 pb-2 md:pt-24 md:pb-8 text-center">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-cyan-600/10 rounded-full blur-[120px] -z-10 animate-pulse" />
         
-        <div className="relative z-10 flex flex-col items-center text-center max-w-4xl mx-auto">
+        <div className="relative z-10 flex flex-col items-center text-center w-full max-w-7xl mx-auto">
           
           <div className="w-full max-w-xl mx-auto relative mb-6 md:mb-8 pt-2 md:pt-8">
             <div className="absolute left-0 right-0 top-1/2 h-px bg-white/10 -translate-y-1/2 z-0 mt-3">
@@ -465,12 +465,12 @@ export default function Home() {
           
           <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 }}
             className="text-3xl md:text-5xl lg:text-6xl font-extrabold mb-4 md:mb-6 tracking-tight mx-auto text-center">
-            Architecting the <span className="text-cyan-400 drop-shadow-[0_0_15px_rgba(34,211,238,0.5)]">Data Ecosystem</span> of Tomorrow.
+            Trusted data. Smarter products. Faster decisions.
           </motion.h1>
           
           <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.4 }}
-            className="max-w-2xl mx-auto text-sm md:text-lg text-gray-300 mb-6 md:mb-8 leading-relaxed font-light text-center">
-            Raw data is only valuable if you can trust it and access it instantly. We act as your dedicated engineering team — eliminating silos, automating pipelines, and building resilient cloud lakehouses.
+            className="mx-auto text-sm md:text-lg text-gray-300 mb-6 md:mb-8 leading-relaxed font-light text-center">
+            Your product data, your pipeline data, and your analytics data all live in different silos — and that's costing you. WillowVibe connects the dots. We engineer the systems that make your product lifecycle, data pipelines, and business intelligence work as one.
           </motion.p>
           
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.6 }} className="mx-auto">
