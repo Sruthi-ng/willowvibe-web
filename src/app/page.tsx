@@ -7,6 +7,7 @@ import { motion, AnimatePresence, useAnimationFrame, useMotionValue } from "fram
 import { BeforeAfterSlider } from "@/components/BeforeAfterSlider";
 import { DataStreamVisual } from "@/components/DataStreamVisual";
 import { AnomalyDetectionVisual } from "@/components/AnomalyDetectionVisual";
+import HeroIllustration from "@/components/HeroIllustration";
 
 const PROJECTS = [
   { id: 1, title: "PLM Data Lake Migration", tags: ["AWS", "Snowflake", "dbt"], stat: "96% Time Saved", desc: "Migrated legacy product lifecycle management data into a unified lakehouse, drastically reducing reporting time.", visual: "slider" },
@@ -487,13 +488,11 @@ export default function Home() {
             initial={{ opacity: 0, x: 100 }} 
             animate={{ opacity: 1, x: 0 }} 
             transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
-            className="relative w-full h-full flex items-center justify-center lg:justify-end min-h-[300px]"
+            className="relative w-full h-full flex items-center justify-center lg:justify-end min-h-[300px] drop-shadow-[0_0_25px_rgba(34,211,238,0.25)]"
           >
-            <img 
-              src="/hero-data.svg" 
-              alt="Data Ecosystem Architecture" 
-              className="w-full h-auto max-w-[500px] object-contain drop-shadow-[0_0_25px_rgba(34,211,238,0.25)]" 
-            />
+            <div className="w-full h-auto max-w-[500px]">
+              <HeroIllustration />
+            </div>
           </motion.div>
 
         </div>
