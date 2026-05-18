@@ -14,80 +14,6 @@ const PROJECTS = [
   { id: 3, title: "Fintech Fraud Detection", tags: ["Snowflake", "dbt", "Airflow"], stat: "< 50ms latency", desc: "Built an end-to-end data pipeline feeding ML models to detect anomalies in real-time.", visual: "anomaly" },
 ];
 
-const CAPABILITY_TREE_ADVANCED = [
-  {
-    folder: "enterprise-platforms",
-    files: [
-      { 
-        id: "plm-architecture.ts", 
-        shortFileName: "plm-architecture.ts",
-        icon: <ServerCog size={14} className="text-blue-400" />, 
-        fullTitle: "Enterprise PLM Platform Architecture & Administration", 
-        fullDescription: "Full-lifecycle tenant deployment, administration, configuration, and People & Organization setup for both 3DEXPERIENCE (SaaS/On-Prem) and Teamcenter environments. We ensure your core engineering platforms are perfectly tuned for global scale and security." 
-      },
-      { 
-        id: "bom-variant-mgmt.tsx", 
-        shortFileName: "bom-variant-mgmt.tsx",
-        icon: <Component size={14} className="text-emerald-400" />, 
-        fullTitle: "Advanced Configuration, BOM & Variant Management", 
-        fullDescription: "Creating, managing, and strictly validating Engineering Bills of Materials (EBOM) to match rigorous corporate Product Development Processes. We configure complex product rules, variant effectivities, and model definitions for high-customization portfolios." 
-      },
-      { 
-        id: "change-control.yml", 
-        shortFileName: "change-control.yml",
-        icon: <ClipboardCheck size={14} className="text-purple-400" />, 
-        fullTitle: "Change Control Board (CCB) Governance & Workflows", 
-        fullDescription: "Structuring operational paths for Issues, Change Requests (CR), Engineering Change Orders (ECO), and Engineering Change Notices (ECN). Designing and mapping corporate approval lifecycles across multinational internal teams." 
-      },
-      { 
-        id: "cad-product-dev.rs", 
-        shortFileName: "cad-product-dev.rs",
-        icon: <Box size={14} className="text-cyan-400" />, 
-        fullTitle: "Production-Ready CAD & New Product Development (NPD)", 
-        fullDescription: "Delivering native, production-compliant component designs and deep structural assembly sets inside CATIA V5 and SolidWorks. Drafting and setting up core APQP and PPAP packages including Control Plans, Process Flows, and FMEA." 
-      },
-    ]
-  },
-  {
-    folder: "core-data-engineering",
-    files: [
-      { 
-        id: "data-pipelines.py", 
-        shortFileName: "data-pipelines.py",
-        icon: <Network size={14} className="text-cyan-400" />, 
-        fullTitle: "Data Pipeline Development & Orchestration", 
-        fullDescription: "Design and implement robust, scalable ETL/ELT pipelines with guaranteed SLAs and minimal downtime. We process massive volumes of disparate raw data, transforming it into pristine, analysis-ready assets feeding your entire data ecosystem." 
-      },
-      { 
-        id: "cloud-engineering.tf", 
-        shortFileName: "cloud-engineering.tf",
-        icon: <Cloud size={14} className="text-blue-400" />, 
-        fullTitle: "Cloud Infrastructure Architecture", 
-        fullDescription: "Architect high-performance foundations on AWS, Azure, or GCP. We deploy auto-scaling, resilient computing environments utilizing Infrastructure as Code (IaC) to minimize ongoing operational costs while maximizing query execution speeds." 
-      },
-      { 
-        id: "data-migration.sh", 
-        shortFileName: "data-migration.sh",
-        icon: <RefreshCw size={14} className="text-emerald-400" />, 
-        fullTitle: "Zero-Downtime Data Migration", 
-        fullDescription: "Transition from legacy on-premise systems to modern cloud-native architectures with absolute zero data loss. We utilize automated validation scripts and parallel run methodologies to ensure complete confidence during critical switchovers." 
-      },
-    ]
-  },
-  {
-    folder: "data-trust-analytics",
-    files: [
-      { 
-        id: "data-quality.json", 
-        shortFileName: "data-quality.json",
-        icon: <ShieldCheck size={14} className="text-rose-400" />, 
-        fullTitle: "Data Quality, Observability & Trust", 
-        fullDescription: "Deploy automated testing frameworks and AI-driven anomaly detection to ensure 100% data reliability before it ever reaches production environments. Comprehensive monitoring across your ecosystem with proactive alerts and circuit breakers." 
-      },
-    ]
-  }
-];
-
 const TESTIMONIALS = [
   { quote: "They didn't just build a pipeline; they completely rescued our data architecture. We went from daily crashes to a fully automated lakehouse that hasn't dropped a single row.", name: "Sarah Jenkins", role: "CTO, Finova Tech" },
   { quote: "The sheer speed of the streaming architecture they deployed is incredible. We are now processing millions of logistics events with sub-50ms latency. Pure engineering excellence.", name: "Marcus Thorne", role: "VP of Engineering, GlobalFreight" },
@@ -160,233 +86,104 @@ function TestimonialsCarousel() {
   );
 }
 function CoreCapabilitiesIDE() {
-  const [expandedFolders, setExpandedFolders] = useState<Set<string>>(new Set([CAPABILITY_TREE_ADVANCED[0].folder]));
-  const [activeFileId, setActiveFileId] = useState(CAPABILITY_TREE_ADVANCED[0].files[0].id);
-  const [userHasInteracted, setUserHasInteracted] = useState(false);
-  const [expandedMobileFile, setExpandedMobileFile] = useState<string | null>(null);
-  
-  // The tab bar and auto-traverse should be scoped to the parent folder of the currently active file.
-  const activeFolderObj = CAPABILITY_TREE_ADVANCED.find(f => f.files.some(file => file.id === activeFileId)) || CAPABILITY_TREE_ADVANCED[0];
-  const activeFileObj = activeFolderObj.files.find(f => f.id === activeFileId) || activeFolderObj.files[0];
-
-  useEffect(() => {
-    if (userHasInteracted) return;
-    
-    const interval = setInterval(() => {
-      setActiveFileId(currentFileId => {
-        const currentFolder = CAPABILITY_TREE_ADVANCED.find(f => f.files.some(file => file.id === currentFileId)) || CAPABILITY_TREE_ADVANCED[0];
-        const currentIndex = currentFolder.files.findIndex(f => f.id === currentFileId);
-        const nextIndex = (currentIndex + 1) % currentFolder.files.length;
-        return currentFolder.files[nextIndex].id;
-      });
-    }, 4500);
-
-    return () => clearInterval(interval);
-  }, [userHasInteracted]);
-
-  const handleInteraction = () => {
-    if (!userHasInteracted) setUserHasInteracted(true);
-  };
-
-  const handleFolderClick = (folderId: string) => {
-    handleInteraction();
-    setExpandedFolders(prev => {
-      const next = new Set(prev);
-      if (next.has(folderId)) {
-        next.delete(folderId);
-      } else {
-        next.add(folderId);
-      }
-      return next;
-    });
-  };
-
-  const handleFileClick = (fileId: string) => {
-    handleInteraction();
-    setActiveFileId(fileId);
-    
-    // Automatically expand the folder of the clicked file if not already expanded
-    const parentFolder = CAPABILITY_TREE_ADVANCED.find(f => f.files.some(file => file.id === fileId))?.folder;
-    if (parentFolder) {
-      setExpandedFolders(prev => {
-        const next = new Set(prev);
-        next.add(parentFolder);
-        return next;
-      });
-    }
-  };
-
-  // Flatten all files for the mobile view
-  const allMobileFiles = CAPABILITY_TREE_ADVANCED.flatMap(folder => folder.files);
+  const PILLARS = [
+    {
+      id: "plm",
+      illustration: "/team.svg",
+      label: "PILLAR_01",
+      title: "Enterprise PLM & CAD",
+      description: "Full-lifecycle PLM architecture, BOM management, change control governance, and production-ready CAD for complex engineering environments.",
+      tags: ["3DEXPERIENCE", "Teamcenter", "CATIA V5", "SolidWorks"],
+      accent: "border-blue-500/40",
+      glow: "group-hover:shadow-[0_0_30px_rgba(59,130,246,0.15)]",
+      labelColor: "text-blue-400",
+      tagColor: "border-blue-900/50 bg-blue-950/30 text-blue-300",
+      iconBg: "bg-blue-950/30",
+    },
+    {
+      id: "de",
+      illustration: "/server.svg",
+      label: "PILLAR_02",
+      title: "Data Engineering & Integration",
+      description: "Resilient cloud lakehouses, automated ETL/ELT pipelines, zero-downtime migrations, and scalable cloud infrastructure on AWS, Azure, and GCP.",
+      tags: ["Snowflake", "Databricks", "Kafka", "dbt", "Airflow"],
+      accent: "border-cyan-500/40",
+      glow: "group-hover:shadow-[0_0_30px_rgba(34,211,238,0.15)]",
+      labelColor: "text-cyan-400",
+      tagColor: "border-cyan-900/50 bg-cyan-950/30 text-cyan-300",
+      iconBg: "bg-cyan-950/30",
+    },
+    {
+      id: "dta",
+      illustration: "/analytics.svg",
+      label: "PILLAR_03",
+      title: "Data Trust & Analytics",
+      description: "Data quality automation, governance frameworks, real-time observability, AI infrastructure, and business intelligence dashboards your team will actually trust.",
+      tags: ["Data Quality", "Observability", "AI Infra", "Power BI"],
+      accent: "border-purple-500/40",
+      glow: "group-hover:shadow-[0_0_30px_rgba(168,85,247,0.15)]",
+      labelColor: "text-purple-400",
+      tagColor: "border-purple-900/50 bg-purple-950/30 text-purple-300",
+      iconBg: "bg-purple-950/30",
+    },
+  ];
 
   return (
-    <>
-      {/* Mobile Terminal Directory Accordion (Hidden on Desktop) */}
-      <div className="flex flex-col lg:hidden w-full max-w-lg mx-auto bg-[#0d1117] border border-neutral-700 rounded-xl overflow-hidden shadow-lg font-mono">
-        {allMobileFiles.map(file => {
-          const isExpanded = expandedMobileFile === file.id;
-          return (
-            <div key={file.id} className="flex flex-col">
-              <div 
-                className={`flex items-center p-3 border-b border-white/5 cursor-pointer transition-colors select-none ${isExpanded ? 'bg-neutral-800' : 'bg-neutral-900/40 hover:bg-neutral-800/80 active:bg-neutral-800'}`}
-                onClick={() => setExpandedMobileFile(isExpanded ? null : file.id)}
-              >
-                <span className="text-cyan-500 mr-3 text-sm font-bold leading-none select-none">&gt;</span>
-                <div className="flex items-center gap-2 text-gray-300 text-sm truncate">
-                   {file.icon}
-                   <span className="truncate">{file.shortFileName}</span>
-                </div>
-              </div>
-              
-              <AnimatePresence>
-                {isExpanded && (
-                  <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: 'auto', opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.2 }}
-                    className="overflow-hidden"
+    <div className="w-full max-w-6xl mx-auto px-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {PILLARS.map((pillar, idx) => (
+          <motion.div
+            key={pillar.id}
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: idx * 0.15 }}
+            className={`group relative flex flex-col rounded-2xl bg-neutral-900 border ${pillar.accent} ${pillar.glow} transition-all duration-500 overflow-hidden hover:-translate-y-2`}
+          >
+            {/* Illustration area */}
+            <div className={`w-full flex items-center justify-center p-8 ${pillar.iconBg} border-b border-white/5`}>
+              <img
+                src={pillar.illustration}
+                alt={pillar.title}
+                className="w-40 h-40 object-contain drop-shadow-[0_0_15px_rgba(34,211,238,0.1)] group-hover:scale-105 transition-transform duration-500"
+              />
+            </div>
+
+            {/* Content area */}
+            <div className="flex flex-col flex-grow p-6">
+              <span className={`text-[10px] font-mono tracking-widest mb-2 ${pillar.labelColor}`}>
+                {pillar.label}
+              </span>
+              <h3 className="text-lg font-bold text-white mb-3 leading-tight">
+                {pillar.title}
+              </h3>
+              <p className="text-gray-400 text-sm leading-relaxed mb-5 flex-grow">
+                {pillar.description}
+              </p>
+              <div className="flex flex-wrap gap-2 mb-5">
+                {pillar.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className={`text-[10px] font-mono px-2 py-1 rounded border ${pillar.tagColor}`}
                   >
-                    <div className="px-4 pb-4 pt-3 bg-neutral-900/20 border-b border-white/5 flex flex-col">
-                       <h3 className="text-white font-bold text-sm font-sans mb-1.5">{file.fullTitle}</h3>
-                       <p className="text-gray-400 text-xs leading-relaxed font-sans line-clamp-2">
-                          {file.fullDescription}
-                       </p>
-                       <Link href="/services" className="inline-flex items-center w-max mt-4 px-4 py-2 bg-cyan-900/30 border border-cyan-500/50 text-cyan-400 text-xs font-semibold font-sans rounded hover:bg-cyan-800/50 transition-colors">
-                          Explore service &rarr;
-                       </Link>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Desktop IDE Layout (Hidden on Mobile) */}
-      <div className="hidden lg:flex w-full max-w-6xl mx-auto flex-col rounded-xl overflow-hidden bg-[#0d1117] border border-neutral-700 shadow-[0_0_30px_rgba(0,0,0,0.8)]">
-        {/* IDE Header */}
-        <div className="w-full bg-[#161b22] px-4 py-2.5 flex items-center border-b border-neutral-700">
-          <div className="flex gap-2">
-            <div className="w-3 h-3 rounded-full bg-[#ff5f56] border border-[#e0443e]" />
-            <div className="w-3 h-3 rounded-full bg-[#ffbd2e] border border-[#dea123]" />
-            <div className="w-3 h-3 rounded-full bg-[#27c93f] border border-[#1aab29]" />
-          </div>
-          <div className="mx-auto text-xs font-mono text-gray-500 font-medium tracking-wide">willowvibe-workspace — Core_Capabilities</div>
-        </div>
-
-        <div className="flex flex-col lg:grid lg:grid-cols-12 flex-grow h-[550px] relative overflow-hidden">
-          {/* Left Side: File Explorer */}
-          <div className="lg:col-span-4 bg-[#0d1117] border-r border-neutral-800 font-mono text-sm overflow-y-auto flex flex-col">
-            <div className="px-4 py-3 text-xs font-bold text-gray-400 uppercase tracking-widest border-b border-neutral-800 select-none shrink-0">
-              Explorer
-            </div>
-            <div className="py-2">
-              {CAPABILITY_TREE_ADVANCED.map((cat) => {
-                const isFolderExpanded = expandedFolders.has(cat.folder);
-                return (
-                  <div key={cat.folder} className="select-none">
-                    <div 
-                      className={`flex items-center gap-1.5 px-3 py-1.5 cursor-pointer text-gray-300 transition-colors hover:bg-white/5`}
-                      onClick={() => handleFolderClick(cat.folder)}
-                    >
-                      {isFolderExpanded ? <ChevronDown size={14} className="text-gray-400" /> : <ChevronRight size={14} className="text-gray-400" />}
-                      {isFolderExpanded ? <FolderOpen size={14} className="text-cyan-500" /> : <Folder size={14} className="text-cyan-500" />}
-                      <span className={`truncate ${isFolderExpanded ? "text-white font-bold" : "text-gray-300"}`}>{cat.folder}</span>
-                    </div>
-                    
-                    {isFolderExpanded && (
-                      <div className="flex flex-col mt-0.5 mb-1.5 ml-4 pl-3 border-l border-white/10 relative">
-                        {cat.files.map((file) => {
-                          const isSelected = activeFileId === file.id;
-                          return (
-                            <div 
-                              key={file.id}
-                              onClick={() => handleFileClick(file.id)}
-                              className={`flex items-center gap-2 pl-2 pr-3 py-1.5 cursor-pointer relative transition-colors ${
-                                isSelected 
-                                  ? "bg-cyan-900/30 text-cyan-400" 
-                                  : "text-gray-400 hover:bg-white/5 hover:text-gray-200"
-                              }`}
-                            >
-                              <div className="absolute left-[-13px] top-1/2 w-3 border-t border-white/10" />
-                              {file.icon}
-                              <span className="truncate text-[13px]">{file.shortFileName}</span>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Right Side: Editor Window */}
-          <div className="lg:col-span-8 bg-[#0a0d12] relative overflow-hidden font-mono flex flex-col h-full">
-              {/* Editor Tabs */}
-              <div className="flex flex-row overflow-x-auto bg-neutral-900/80 border-b border-white/10 custom-scrollbar select-none pt-2 px-2 gap-1 shrink-0">
-                  {activeFolderObj.files.map((file) => {
-                      const isTabActive = activeFileId === file.id;
-                      return (
-                          <div 
-                              key={file.id}
-                              onClick={() => handleFileClick(file.id)}
-                              className={`flex items-center gap-2 px-4 py-2 cursor-pointer min-w-max rounded-t-lg transition-colors ${
-                                  isTabActive 
-                                      ? "bg-neutral-800 border-t-2 border-t-cyan-400 text-white" 
-                                      : "text-gray-500 hover:bg-neutral-800/50 hover:text-gray-300"
-                              }`}
-                          >
-                              {file.icon}
-                              <span className="text-[13px]">{file.shortFileName}</span>
-                          </div>
-                      );
-                  })}
+                    {tag}
+                  </span>
+                ))}
               </div>
+              <Link
+                href="/services"
+                className={`inline-flex items-center gap-1.5 text-xs font-mono ${pillar.labelColor} hover:underline mt-auto`}
+              >
+                Explore service <ArrowRight size={12} />
+              </Link>
+            </div>
 
-              <div className="flex-grow flex relative h-full min-h-0">
-                  {/* Line Numbers */}
-                  <div className="w-12 bg-[#0d1117] border-r border-neutral-800 flex flex-col items-end py-4 pr-3 text-xs text-neutral-600 select-none opacity-60 shrink-0">
-                      {[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15].map(n => <span key={n} className="leading-7 lg:leading-8">{n}</span>)}
-                  </div>
-
-                  {/* Editor Content */}
-                  <div className="flex-grow p-4 lg:p-6 relative overflow-y-auto custom-scrollbar h-full">
-                      <AnimatePresence mode="wait">
-                          <motion.div
-                              key={activeFileId}
-                              initial={{ opacity: 0 }}
-                              animate={{ opacity: 1 }}
-                              exit={{ opacity: 0 }}
-                              transition={{ duration: 0.15 }}
-                              className="relative z-10 flex flex-col h-full"
-                          >
-                              <div className="text-gray-500 text-xs lg:text-sm mb-4 lg:mb-6 leading-7 lg:leading-8 whitespace-nowrap overflow-hidden text-ellipsis shrink-0">
-                                  <span className="text-purple-400 italic">// ==========================================</span><br/>
-                                  <span className="text-purple-400 italic">// === </span><span className="text-white font-bold">{activeFileObj.fullTitle}</span><span className="text-purple-400 italic"> ===</span><br/>
-                                  <span className="text-purple-400 italic">// ==========================================</span>
-                              </div>
-
-                              <div className="text-gray-300 text-sm lg:text-base leading-relaxed lg:leading-loose whitespace-pre-wrap font-mono max-w-3xl flex-grow">
-                                  {activeFileObj.fullDescription}
-                              </div>
-
-                              <div className="mt-8 mb-4 shrink-0">
-                                  <Link href="/services" className="inline-block px-6 py-2 bg-cyan-950/50 border border-cyan-500/50 text-cyan-400 rounded hover:bg-cyan-900/80 transition-colors shadow-sm font-sans text-sm font-bold">
-                                      Explore this service &rarr;
-                                  </Link>
-                              </div>
-                          </motion.div>
-                      </AnimatePresence>
-                  </div>
-              </div>
-          </div>
-        </div>
+            {/* Bottom glow line */}
+            <div className={`absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-current to-transparent opacity-0 group-hover:opacity-30 transition-opacity duration-500 ${pillar.labelColor}`} />
+          </motion.div>
+        ))}
       </div>
-    </>
+    </div>
   );
 }
 
