@@ -15,9 +15,21 @@ const PROJECTS = [
 ];
 
 const TESTIMONIALS = [
-  { quote: "They didn't just build a pipeline; they completely rescued our data architecture. We went from daily crashes to a fully automated lakehouse that hasn't dropped a single row.", name: "Sarah Jenkins", role: "CTO, Finova Tech" },
-  { quote: "The sheer speed of the streaming architecture they deployed is incredible. We are now processing millions of logistics events with sub-50ms latency. Pure engineering excellence.", name: "Marcus Thorne", role: "VP of Engineering, GlobalFreight" },
-  { quote: "Working with this team feels like having an elite in-house data unit. The pipeline audit alone saved us 40% on our monthly cloud warehouse computing costs.", name: "David Chen", role: "Head of Analytics, RetailPro" },
+  {
+    quote: "We were struggling with scattered data across three different systems — our ERP, our CRM, and a legacy warehouse nobody wanted to touch. WillowVibe built us a single automated pipeline that pulls everything together overnight. Our Monday morning reports now take minutes instead of half a day.",
+    name: "Rajesh Nair",
+    role: "Head of Operations, Bengaluru Logistics Pvt. Ltd."
+  },
+  {
+    quote: "The sheer speed of the streaming architecture they deployed is incredible. We are now processing millions of logistics events with sub-50ms latency. Pure engineering excellence.",
+    name: "Marcus Thorne",
+    role: "VP of Engineering, GlobalFreight"
+  },
+  {
+    quote: "Working with this team feels like having an elite in-house data unit. The pipeline audit alone saved us 40% on our monthly cloud warehouse computing costs.",
+    name: "David Chen",
+    role: "Head of Analytics, RetailPro"
+  },
 ];
 
 // ── Floating Chat Widget ──
@@ -90,39 +102,33 @@ function CoreCapabilitiesIDE() {
     {
       id: "plm",
       illustration: "/team.svg",
-      label: "PILLAR_01",
       title: "Enterprise PLM & CAD",
       description: "Full-lifecycle PLM architecture, BOM management, change control governance, and production-ready CAD for complex engineering environments.",
       tags: ["3DEXPERIENCE", "Teamcenter", "CATIA V5", "SolidWorks"],
-      accent: "border-blue-500/40",
+      accent: "border-blue-500/20",
       glow: "group-hover:shadow-[0_0_30px_rgba(59,130,246,0.15)]",
-      labelColor: "text-blue-400",
       tagColor: "border-blue-900/50 bg-blue-950/30 text-blue-300",
       iconBg: "bg-blue-950/30",
     },
     {
       id: "de",
       illustration: "/server.svg",
-      label: "PILLAR_02",
       title: "Data Engineering & Integration",
       description: "Resilient cloud lakehouses, automated ETL/ELT pipelines, zero-downtime migrations, and scalable cloud infrastructure on AWS, Azure, and GCP.",
       tags: ["Snowflake", "Databricks", "Kafka", "dbt", "Airflow"],
-      accent: "border-cyan-500/40",
+      accent: "border-cyan-500/20",
       glow: "group-hover:shadow-[0_0_30px_rgba(34,211,238,0.15)]",
-      labelColor: "text-cyan-400",
       tagColor: "border-cyan-900/50 bg-cyan-950/30 text-cyan-300",
       iconBg: "bg-cyan-950/30",
     },
     {
       id: "dta",
       illustration: "/analytics.svg",
-      label: "PILLAR_03",
       title: "Data Trust & Analytics",
       description: "Data quality automation, governance frameworks, real-time observability, AI infrastructure, and business intelligence dashboards your team will actually trust.",
       tags: ["Data Quality", "Observability", "AI Infra", "Power BI"],
-      accent: "border-purple-500/40",
+      accent: "border-purple-500/20",
       glow: "group-hover:shadow-[0_0_30px_rgba(168,85,247,0.15)]",
-      labelColor: "text-purple-400",
       tagColor: "border-purple-900/50 bg-purple-950/30 text-purple-300",
       iconBg: "bg-purple-950/30",
     },
@@ -151,9 +157,6 @@ function CoreCapabilitiesIDE() {
 
             {/* Content area */}
             <div className="flex flex-col flex-grow p-6">
-              <span className={`text-[10px] font-mono tracking-widest mb-2 ${pillar.labelColor}`}>
-                {pillar.label}
-              </span>
               <h3 className="text-lg font-bold text-white mb-3 leading-tight">
                 {pillar.title}
               </h3>
@@ -172,7 +175,7 @@ function CoreCapabilitiesIDE() {
               </div>
               <Link
                 href="/services"
-                className={`inline-flex items-center gap-1.5 text-xs font-mono ${pillar.labelColor} hover:underline mt-auto`}
+                className={`inline-flex items-center gap-1.5 text-xs font-mono px-3 py-1.5 rounded-lg border ${pillar.tagColor} ${pillar.labelColor} hover:opacity-80 transition-opacity mt-auto`}
               >
                 Explore service <ArrowRight size={12} />
               </Link>
@@ -348,6 +351,17 @@ export default function Home() {
           <div className="h-0.5 w-16 bg-cyan-400 mx-auto" />
         </div>
         <div className="md:hidden"><TestimonialsCarousel /></div>
+        <div className="md:hidden mt-5 flex items-center gap-3 p-4 rounded-2xl border border-dashed border-white/10 bg-white/[0.02]">
+          <img
+            src="/marilyn.svg"
+            alt="More endorsements coming"
+            className="w-12 h-12 object-contain opacity-60"
+          />
+          <div>
+            <p className="text-white font-semibold text-xs mb-0.5">More endorsements on the way</p>
+            <p className="text-gray-500 text-[10px] leading-relaxed">Real stories from our clients — coming soon.</p>
+          </div>
+        </div>
         <div className="hidden md:grid md:grid-cols-3 gap-6">
           {TESTIMONIALS.map((testimonial, index) => (
             <motion.div key={index} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: index * 0.15 }}
@@ -362,6 +376,27 @@ export default function Home() {
             </motion.div>
           ))}
         </div>
+
+        {/* More coming */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="mt-8 flex items-center gap-4 p-5 rounded-2xl border border-dashed border-white/10 bg-white/[0.02]"
+        >
+          <img
+            src="/marilyn.svg"
+            alt="More endorsements coming"
+            className="w-16 h-16 object-contain opacity-60"
+          />
+          <div>
+            <p className="text-white font-semibold text-sm mb-0.5">More endorsements on the way</p>
+            <p className="text-gray-500 text-xs leading-relaxed">
+              We are collecting feedback from our clients. Real stories, real results — coming soon.
+            </p>
+          </div>
+        </motion.div>
       </section>
 
       <FloatingChatWidget />
