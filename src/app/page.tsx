@@ -18,17 +18,8 @@ const TESTIMONIALS = [
   {
     quote: "We were struggling with scattered data across three different systems — our ERP, our CRM, and a legacy warehouse nobody wanted to touch. WillowVibe built us a single automated pipeline that pulls everything together overnight. Our Monday morning reports now take minutes instead of half a day.",
     name: "Rajesh Nair",
-    role: "Head of Operations, Bengaluru Logistics Pvt. Ltd."
-  },
-  {
-    quote: "The sheer speed of the streaming architecture they deployed is incredible. We are now processing millions of logistics events with sub-50ms latency. Pure engineering excellence.",
-    name: "Marcus Thorne",
-    role: "VP of Engineering, GlobalFreight"
-  },
-  {
-    quote: "Working with this team feels like having an elite in-house data unit. The pipeline audit alone saved us 40% on our monthly cloud warehouse computing costs.",
-    name: "David Chen",
-    role: "Head of Analytics, RetailPro"
+    role: "Head of Operations, Bengaluru Logistics Pvt. Ltd.",
+    real: true,
   },
 ];
 
@@ -43,60 +34,6 @@ const FloatingChatWidget = () => (
   </div>
 );
 
-// ── Testimonials swipe carousel ──
-function TestimonialsCarousel() {
-  const [current, setCurrent] = useState(0);
-  const total = TESTIMONIALS.length;
-  const prev = () => setCurrent((c) => (c - 1 + total) % total);
-  const next = () => setCurrent((c) => (c + 1) % total);
-
-  useEffect(() => {
-    const timer = setInterval(() => setCurrent((c) => (c + 1) % total), 5000);
-    return () => clearInterval(timer);
-  }, [total]);
-
-  return (
-    <div className="w-full">
-      <div className="relative overflow-hidden">
-        <AnimatePresence mode="wait">
-          <motion.div key={current}
-            initial={{ opacity: 0, x: 40 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -40 }}
-            transition={{ duration: 0.35 }}
-            className="relative p-4 rounded-xl bg-neutral-900 border border-neutral-700">
-            <Quote className="absolute top-3 right-3 w-6 h-6 text-cyan-400/10 rotate-180" />
-            <div className="flex gap-1 mb-2">
-              {[...Array(5)].map((_, i) => (
-                <svg key={i} className="w-3 h-3 text-cyan-400" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                </svg>
-              ))}
-            </div>
-            <p className="text-gray-300 text-sm leading-relaxed italic mb-3">&ldquo;{TESTIMONIALS[current].quote}&rdquo;</p>
-            <div className="border-t border-neutral-700 pt-3">
-              <h4 className="text-white font-bold text-sm">{TESTIMONIALS[current].name}</h4>
-              <p className="text-cyan-400 text-xs font-mono mt-0.5">{TESTIMONIALS[current].role}</p>
-            </div>
-          </motion.div>
-        </AnimatePresence>
-      </div>
-      <div className="flex items-center justify-center gap-4 mt-3">
-        <button onClick={prev} className="w-7 h-7 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:text-primary transition-all" aria-label="Previous">
-          <ChevronLeft className="w-4 h-4" />
-        </button>
-        <div className="flex items-center gap-2">
-          {TESTIMONIALS.map((_, i) => (
-            <button key={i} onClick={() => setCurrent(i)}
-              className={`h-2 rounded-full transition-all duration-300 ${i === current ? "w-6 bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.8)]" : "w-2 bg-white/30 hover:bg-white/50"}`}
-              aria-label={`Testimonial ${i + 1}`} />
-          ))}
-        </div>
-        <button onClick={next} className="w-7 h-7 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:text-primary transition-all" aria-label="Next">
-          <ChevronRight className="w-4 h-4" />
-        </button>
-      </div>
-    </div>
-  );
-}
 function CoreCapabilitiesIDE() {
   const PILLARS = [
     {
@@ -105,8 +42,8 @@ function CoreCapabilitiesIDE() {
       title: "Enterprise PLM & CAD",
       description: "Full-lifecycle PLM architecture, BOM management, change control governance, and production-ready CAD for complex engineering environments.",
       tags: ["3DEXPERIENCE", "Teamcenter", "CATIA V5", "SolidWorks"],
-      accent: "border-blue-500/20",
-      glow: "group-hover:shadow-[0_0_30px_rgba(59,130,246,0.15)]",
+      accent: "border-blue-500/60",
+      glow: "group-hover:shadow-[0_0_25px_rgba(59,130,246,0.25)]",
       tagColor: "border-blue-900/50 bg-blue-950/30 text-blue-300",
       iconBg: "bg-blue-950/30",
     },
@@ -116,8 +53,8 @@ function CoreCapabilitiesIDE() {
       title: "Data Engineering & Integration",
       description: "Resilient cloud lakehouses, automated ETL/ELT pipelines, zero-downtime migrations, and scalable cloud infrastructure on AWS, Azure, and GCP.",
       tags: ["Snowflake", "Databricks", "Kafka", "dbt", "Airflow"],
-      accent: "border-cyan-500/20",
-      glow: "group-hover:shadow-[0_0_30px_rgba(34,211,238,0.15)]",
+      accent: "border-cyan-500/60",
+      glow: "group-hover:shadow-[0_0_25px_rgba(34,211,238,0.25)]",
       tagColor: "border-cyan-900/50 bg-cyan-950/30 text-cyan-300",
       iconBg: "bg-cyan-950/30",
     },
@@ -127,8 +64,8 @@ function CoreCapabilitiesIDE() {
       title: "Data Trust & Analytics",
       description: "Data quality automation, governance frameworks, real-time observability, AI infrastructure, and business intelligence dashboards your team will actually trust.",
       tags: ["Data Quality", "Observability", "AI Infra", "Power BI"],
-      accent: "border-purple-500/20",
-      glow: "group-hover:shadow-[0_0_30px_rgba(168,85,247,0.15)]",
+      accent: "border-purple-500/60",
+      glow: "group-hover:shadow-[0_0_25px_rgba(168,85,247,0.25)]",
       tagColor: "border-purple-900/50 bg-purple-950/30 text-purple-300",
       iconBg: "bg-purple-950/30",
     },
@@ -175,7 +112,7 @@ function CoreCapabilitiesIDE() {
               </div>
               <Link
                 href="/services"
-                className={`inline-flex items-center gap-1.5 text-xs font-mono px-3 py-1.5 rounded-lg border ${pillar.tagColor} hover:opacity-80 transition-opacity mt-auto`}
+                className={`inline-flex items-center gap-2 text-xs font-mono font-bold px-4 py-2 rounded-lg border-2 ${pillar.tagColor} hover:scale-105 hover:opacity-90 transition-all mt-auto shadow-sm`}
               >
                 Explore service <ArrowRight size={12} />
               </Link>
@@ -350,21 +287,39 @@ export default function Home() {
           <h2 className="text-xl md:text-3xl font-bold mb-3 font-mono">CLIENT_ENDORSEMENTS</h2>
           <div className="h-0.5 w-16 bg-cyan-400 mx-auto" />
         </div>
-        <div className="md:hidden"><TestimonialsCarousel /></div>
-        <div className="md:hidden mt-5 flex items-center gap-3 p-4 rounded-2xl border border-dashed border-white/10 bg-white/[0.02]">
-          <img
-            src="/marilyn.svg"
-            alt="More endorsements coming"
-            className="w-12 h-12 object-contain opacity-60"
-          />
-          <div>
-            <p className="text-white font-semibold text-xs mb-0.5">More endorsements on the way</p>
-            <p className="text-gray-500 text-[10px] leading-relaxed">Real stories from our clients — coming soon.</p>
+        <div className="md:hidden flex flex-col gap-4">
+          {TESTIMONIALS.filter(t => t.real).map((testimonial, index) => (
+            <div key={index} className="relative p-4 rounded-xl bg-neutral-900 border border-neutral-700">
+              <Quote className="absolute top-3 right-3 w-6 h-6 text-cyan-400/10 rotate-180" />
+              <div className="flex gap-1 mb-2">
+                {[...Array(5)].map((_, i) => (
+                  <svg key={i} className="w-3 h-3 text-cyan-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
+                ))}
+              </div>
+              <p className="text-gray-300 text-sm leading-relaxed italic mb-3">&ldquo;{testimonial.quote}&rdquo;</p>
+              <div className="border-t border-neutral-700 pt-3">
+                <h4 className="text-white font-bold text-sm">{testimonial.name}</h4>
+                <p className="text-cyan-400 text-xs font-mono mt-0.5">{testimonial.role}</p>
+              </div>
+            </div>
+          ))}
+          <div className="flex flex-col items-center justify-center p-6 rounded-xl border border-dashed border-white/10 bg-white/[0.02] gap-4 text-center">
+            <img
+              src="/endorse.svg"
+              alt="More endorsements coming"
+              className="w-32 h-32 object-contain opacity-70"
+            />
+            <p className="text-gray-400 text-sm leading-relaxed">
+              We are collecting feedback from our clients. Real stories, real results — coming soon.
+            </p>
           </div>
         </div>
         <div className="hidden md:grid md:grid-cols-3 gap-6">
-          {TESTIMONIALS.map((testimonial, index) => (
-            <motion.div key={index} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: index * 0.15 }}
+          {/* Real testimonial — Rajesh Nair */}
+          {TESTIMONIALS.filter(t => t.real).map((testimonial, index) => (
+            <motion.div key={index} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}
               className="relative p-6 rounded-xl bg-neutral-900 border border-neutral-700 hover:border-cyan-400/30 transition-colors flex flex-col">
               <Quote className="absolute top-4 right-4 w-8 h-8 text-cyan-400/10 rotate-180" />
               <div className="flex gap-1 mb-3">{[...Array(5)].map((_, i) => (<svg key={i} className="w-3 h-3 text-cyan-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>))}</div>
@@ -375,28 +330,20 @@ export default function Home() {
               </div>
             </motion.div>
           ))}
-        </div>
 
-        {/* More coming */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="mt-8 flex items-center gap-4 p-5 rounded-2xl border border-dashed border-white/10 bg-white/[0.02]"
-        >
-          <img
-            src="/marilyn.svg"
-            alt="More endorsements coming"
-            className="w-16 h-16 object-contain opacity-60"
-          />
-          <div>
-            <p className="text-white font-semibold text-sm mb-0.5">More endorsements on the way</p>
-            <p className="text-gray-500 text-xs leading-relaxed">
+          {/* Coming soon block — spans 2 columns */}
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.15 }}
+            className="md:col-span-2 relative rounded-xl border border-dashed border-white/10 bg-white/[0.02] flex flex-col items-center justify-center p-8 gap-5 text-center">
+            <img
+              src="/endorse.svg"
+              alt="More endorsements coming"
+              className="w-48 h-48 object-contain opacity-70"
+            />
+            <p className="text-gray-300 text-base font-medium leading-relaxed max-w-sm">
               We are collecting feedback from our clients. Real stories, real results — coming soon.
             </p>
-          </div>
-        </motion.div>
+          </motion.div>
+        </div>
       </section>
 
       <FloatingChatWidget />
