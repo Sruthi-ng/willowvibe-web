@@ -183,10 +183,6 @@ export default function ServicesPage() {
           <div className="flex-1 flex flex-col items-center overflow-x-auto pb-8 pt-0">
             <div className="min-w-[320px] w-full flex flex-col items-center">
 
-        {/* Full Tree */}
-        <div className="flex flex-col items-center w-full overflow-x-auto pb-8">
-          <div className="min-w-[320px] w-full flex flex-col items-center">
-
             {/* ROOT NODE */}
             <motion.div
               initial={{ opacity: 0, y: -20 }}
@@ -270,8 +266,7 @@ export default function ServicesPage() {
             </div>
 
           </div>
-          </div>
-
+        </div>
         </div>
 
         {/* CTA */}
