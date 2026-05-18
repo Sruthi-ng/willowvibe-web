@@ -5,6 +5,39 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, X } from "lucide-react";
 import Link from "next/link";
 
+function AnimatedLine({ color, vertical = true }: { color: string; vertical?: boolean }) {
+  return (
+    <div className={`relative overflow-hidden ${vertical ? "w-0.5 h-12" : "h-0.5 w-full"}`}
+      style={{ background: "transparent" }}>
+      <div className={`absolute inset-0 ${color} opacity-20`} />
+      <motion.div
+        className={`absolute ${color}`}
+        style={vertical
+          ? { width: "100%", height: "40%", top: 0 }
+          : { height: "100%", width: "40%", left: 0 }}
+        animate={vertical
+          ? { top: ["0%", "60%", "0%"] }
+          : { left: ["0%", "60%", "0%"] }}
+        transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
+      />
+      {/* Arrow at end */}
+      {vertical && (
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 flex flex-col items-center">
+          <motion.div
+            animate={{ y: [0, 3, 0] }}
+            transition={{ duration: 0.8, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
+              <path d="M5 8L0 0H10L5 8Z" className={`fill-current`}
+                style={{ color: color.includes("cyan") ? "#22d3ee" : color.includes("blue") ? "#3b82f6" : "#a855f7" }} />
+            </svg>
+          </motion.div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 const TREE = [
   {
     id: "plm",
@@ -111,39 +144,44 @@ export default function ServicesPage() {
     <div className="flex flex-col items-center min-h-screen bg-black text-white overflow-x-hidden">
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-20">
 
-        {/* Header */}
-        <div className="flex flex-col md:flex-row items-center justify-between gap-8 mb-12 md:mb-20">
-          <div className="flex-1 text-center md:text-left">
+        {/* Header + Tree side by side */}
+        <div className="flex flex-col lg:flex-row items-start justify-between gap-8 mb-0">
+
+          {/* Left: illustration + what we build — sticky so it stays visible as tree scrolls */}
+          <div className="flex flex-col items-center lg:items-start text-center lg:text-left lg:sticky lg:top-24 lg:w-80 xl:w-96 flex-shrink-0">
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.1 }}
+              className="w-full flex items-center justify-center lg:justify-start mb-6"
+            >
+              <img
+                src="/core.svg"
+                alt="Core engineering capabilities"
+                className="w-48 md:w-56 lg:w-64 object-contain drop-shadow-[0_0_25px_rgba(34,211,238,0.15)] opacity-90"
+              />
+            </motion.div>
             <motion.h1
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              className="text-3xl md:text-6xl font-extrabold tracking-tight mb-4 bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent"
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="text-3xl md:text-5xl font-extrabold tracking-tight mb-4 bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent"
             >
               What We Build
             </motion.h1>
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="max-w-xl text-gray-300 text-sm md:text-lg leading-relaxed"
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="text-gray-300 text-sm md:text-base leading-relaxed max-w-sm"
             >
               Cutting-edge distributed systems with robust engineering to deliver platforms that scale infinitely.
             </motion.p>
           </div>
-          <motion.div
-            initial={{ opacity: 0, x: 40 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            className="flex-shrink-0 w-full md:w-64 lg:w-72 flex items-center justify-end pr-4 md:pr-8"
-          >
-            <img
-              src="/core.svg"
-              alt="Core engineering capabilities"
-              className="w-full max-w-[220px] md:max-w-[260px] object-contain drop-shadow-[0_0_25px_rgba(34,211,238,0.12)] opacity-90"
-            />
-          </motion.div>
-        </div>
+
+          {/* Right: full tree */}
+          <div className="flex-1 flex flex-col items-center overflow-x-auto pb-8 pt-0">
+            <div className="min-w-[320px] w-full flex flex-col items-center">
 
         {/* Full Tree */}
         <div className="flex flex-col items-center w-full overflow-x-auto pb-8">
@@ -162,20 +200,26 @@ export default function ServicesPage() {
               </h2>
             </motion.div>
 
-            {/* Line from root down to horizontal bar */}
-            <div className="w-0.5 h-10 bg-cyan-400/40" />
+            {/* Animated line from root down */}
+            <AnimatedLine color="bg-cyan-400" vertical={true} />
 
             {/* Horizontal bar spanning all three categories */}
             <div className="relative w-full flex justify-center mb-0">
-              <div className="absolute top-0 left-[16.5%] right-[16.5%] h-0.5 bg-cyan-400/30" />
+              <div className="absolute top-0 left-[16.5%] right-[16.5%] h-0.5 overflow-hidden">
+                <div className="absolute inset-0 bg-cyan-400/20" />
+                <motion.div
+                  className="absolute h-full w-1/3 bg-cyan-400/60"
+                  animate={{ left: ["0%", "100%"] }}
+                  transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                />
+              </div>
 
               {/* Three category columns */}
               <div className="relative w-full grid grid-cols-3 gap-2 md:gap-6">
                 {TREE.map((category, catIdx) => (
                   <div key={category.id} className="flex flex-col items-center">
 
-                    {/* Vertical line from horizontal bar down to category node */}
-                    <div className={`w-0.5 h-10 ${category.lineColor}`} />
+                    <AnimatedLine color={category.lineColor} vertical={true} />
 
                     {/* Category node */}
                     <motion.div
@@ -185,13 +229,12 @@ export default function ServicesPage() {
                       transition={{ duration: 0.5, delay: catIdx * 0.1 }}
                       className={`w-full px-3 py-3 md:px-5 md:py-4 rounded-xl bg-black border-2 ${category.border} ${category.glow} text-center z-10`}
                     >
-                      <h3 className={`text-xs md:text-sm font-extrabold leading-tight ${category.titleColor}`}>
+                      <h3 className={`text-sm md:text-base lg:text-lg font-extrabold leading-tight ${category.titleColor}`}>
                         {category.title}
                       </h3>
                     </motion.div>
 
-                    {/* Vertical line from category node down to first service */}
-                    <div className={`w-0.5 h-8 ${category.lineColor}`} />
+                    <AnimatedLine color={category.lineColor} vertical={true} />
 
                     {/* Service bubbles stacked vertically one after another */}
                     <div className="flex flex-col items-center w-full gap-0">
@@ -205,7 +248,7 @@ export default function ServicesPage() {
                             viewport={{ once: true }}
                             transition={{ duration: 0.4, delay: svcIdx * 0.08 }}
                             onClick={() => setSelected(svc)}
-                            className={`w-full text-left p-2 md:p-3 rounded-xl border ${category.bubble} hover:scale-105 hover:brightness-125 transition-all duration-300 cursor-pointer text-[10px] md:text-xs font-semibold leading-snug shadow-lg`}
+                            className={`w-full text-left p-3 md:p-4 rounded-xl border ${category.bubble} hover:scale-105 hover:brightness-125 transition-all duration-300 cursor-pointer text-xs md:text-sm font-semibold leading-snug shadow-lg`}
                           >
                             {svc.title}
                             <div className="mt-1.5 flex items-center gap-1 text-[9px] font-mono opacity-60">
@@ -213,9 +256,8 @@ export default function ServicesPage() {
                             </div>
                           </motion.button>
 
-                          {/* Vertical connector between bubbles — not shown after last item */}
                           {svcIdx < category.services.length - 1 && (
-                            <div className={`w-0.5 h-4 ${category.lineColor}`} />
+                            <AnimatedLine color={category.lineColor} vertical={true} />
                           )}
 
                         </div>
@@ -228,6 +270,8 @@ export default function ServicesPage() {
             </div>
 
           </div>
+          </div>
+
         </div>
 
         {/* CTA */}
