@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-background: #070b18;
+  --color-background: #080c14;
   --color-foreground: #eaeaea;
   --color-primary: #00f0ff;
   --color-secondary: #7000ff;
@@ -94,11 +94,11 @@ body {
 }
 
 html, body, #__next {
-  background-color: #070b18 !important;
+  background-color: #080c14 !important;
 }
 
 .bg-neutral-950 {
-  background-color: #070b18 !important;
+  background-color: #080c14 !important;
 }
 
 .bg-neutral-900 {
