@@ -248,7 +248,7 @@ export default function Home() {
       {/* 4. CORE CAPABILITIES */}
       <section className="w-full py-8 md:py-20 border-b border-white/5 bg-white/[0.01]">
         <div className="max-w-7xl mx-auto px-4 text-center mb-6 md:mb-12">
-          <h2 className="text-xl md:text-3xl font-bold mb-3 font-mono">CORE_CAPABILITIES</h2>
+          <h2 className="text-xl md:text-3xl font-extrabold mb-3 tracking-tight bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">Core Capabilities</h2>
           <div className="h-0.5 w-16 bg-cyan-400 mx-auto" />
         </div>
         <CoreCapabilitiesIDE />
@@ -257,7 +257,7 @@ export default function Home() {
       {/* 5. FEATURED PROJECTS */}
       <section className="w-full max-w-7xl mx-auto px-4 py-8 md:py-20 border-b border-white/5">
         <div className="mb-6 md:mb-10 text-center md:text-left">
-          <h2 className="text-xl md:text-3xl font-bold mb-3 font-mono">FEATURED_PROJECTS</h2>
+          <h2 className="text-xl md:text-3xl font-extrabold mb-3 tracking-tight bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">Featured Projects</h2>
           <div className="h-0.5 w-16 bg-cyan-400 mx-auto md:mx-0" />
         </div>
         <div className="relative">
@@ -284,7 +284,7 @@ export default function Home() {
       {/* 6. TESTIMONIALS — carousel on mobile, grid on desktop */}
       <section className="w-full max-w-7xl mx-auto px-4 py-8 pb-12 md:py-20 md:pb-28">
         <div className="text-center mb-6 md:mb-12">
-          <h2 className="text-xl md:text-3xl font-bold mb-3 font-mono">CLIENT_ENDORSEMENTS</h2>
+          <h2 className="text-xl md:text-3xl font-extrabold mb-3 tracking-tight bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">Client Endorsements</h2>
           <div className="h-0.5 w-16 bg-cyan-400 mx-auto" />
         </div>
         <div className="md:hidden flex flex-col gap-4">
