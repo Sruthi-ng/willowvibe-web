@@ -7,7 +7,6 @@ import { motion, AnimatePresence, useAnimationFrame, useMotionValue } from "fram
 import { BeforeAfterSlider } from "@/components/BeforeAfterSlider";
 import { DataStreamVisual } from "@/components/DataStreamVisual";
 import { AnomalyDetectionVisual } from "@/components/AnomalyDetectionVisual";
-import HeroIllustration from "@/components/HeroIllustration";
 
 const PROJECTS = [
   { id: 1, title: "PLM Data Lake Migration", tags: ["AWS", "Snowflake", "dbt"], stat: "96% Time Saved", desc: "Migrated legacy product lifecycle management data into a unified lakehouse, drastically reducing reporting time.", visual: "slider" },
@@ -443,56 +442,41 @@ export default function Home() {
     <div className="flex flex-col items-center min-h-screen bg-neutral-950 text-white overflow-x-hidden selection:bg-cyan-400/30">
 
       {/* 1. HERO */}
-      <section className="relative w-full max-w-7xl mx-auto px-4 pt-8 pb-2 md:pt-24 md:pb-8">
+      <section className="relative w-full max-w-7xl mx-auto px-4 pt-8 pb-2 md:pt-24 md:pb-8 text-center">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-cyan-600/10 rounded-full blur-[120px] -z-10 animate-pulse" />
         
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center relative z-10">
+        <div className="relative z-10 flex flex-col items-center text-center max-w-4xl mx-auto">
           
-          {/* LEFT COLUMN: TEXT CONTENT */}
-          <div className="flex flex-col items-start text-left">
-            <div className="w-full max-w-xl relative mb-6 md:mb-8 pt-2 md:pt-8">
-              <div className="absolute left-0 right-0 top-1/2 h-px bg-white/10 -translate-y-1/2 z-0 mt-3">
-                <motion.div className="h-full bg-cyan-400" animate={{ x: ["-100%", "200%"] }} transition={{ repeat: Infinity, duration: 3, ease: "linear" }} style={{ width: "30%" }} />
-              </div>
-              <div className="flex items-center justify-between w-full relative z-10">
-                {["INGESTION", "TRANSFORMATION", "INTELLIGENCE"].map((step) => (
-                  <div key={step} className="flex flex-col items-center gap-2 md:gap-4 bg-neutral-950 px-1 md:px-2 py-2 md:py-4 rounded-full">
-                    <div className="w-10 h-10 md:w-12 md:h-12 rounded-full border-2 border-cyan-400 flex items-center justify-center bg-black">
-                      <Server className="text-cyan-400 w-4 h-4 md:w-5 md:h-5" />
-                    </div>
-                    <span className="text-[9px] md:text-xs font-mono text-cyan-400 tracking-wider">{step}</span>
+          <div className="w-full max-w-xl mx-auto relative mb-6 md:mb-8 pt-2 md:pt-8">
+            <div className="absolute left-0 right-0 top-1/2 h-px bg-white/10 -translate-y-1/2 z-0 mt-3">
+              <motion.div className="h-full bg-cyan-400" animate={{ x: ["-100%", "200%"] }} transition={{ repeat: Infinity, duration: 3, ease: "linear" }} style={{ width: "30%" }} />
+            </div>
+            <div className="flex items-center justify-between w-full relative z-10">
+              {["INGESTION", "TRANSFORMATION", "INTELLIGENCE"].map((step) => (
+                <div key={step} className="flex flex-col items-center gap-2 md:gap-4 bg-neutral-950 px-1 md:px-2 py-2 md:py-4 rounded-full">
+                  <div className="w-10 h-10 md:w-12 md:h-12 rounded-full border-2 border-cyan-400 flex items-center justify-center bg-black">
+                    <Server className="text-cyan-400 w-4 h-4 md:w-5 md:h-5" />
                   </div>
-                ))}
-              </div>
+                  <span className="text-[9px] md:text-xs font-mono text-cyan-400 tracking-wider">{step}</span>
+                </div>
+              ))}
             </div>
-            
-            <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-3xl md:text-5xl lg:text-6xl font-extrabold mb-4 md:mb-6 tracking-tight">
-              Architecting the <span className="text-cyan-400 drop-shadow-[0_0_15px_rgba(34,211,238,0.5)]">Data Ecosystem</span> of Tomorrow.
-            </motion.h1>
-            
-            <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.4 }}
-              className="max-w-2xl text-sm md:text-lg text-gray-300 mb-6 md:mb-8 leading-relaxed font-light">
-              Raw data is only valuable if you can trust it and access it instantly. We act as your dedicated engineering team — eliminating silos, automating pipelines, and building resilient cloud lakehouses.
-            </motion.p>
-            
-            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.6 }}>
-              <Link href="/contact" className="inline-flex items-center gap-2 px-5 py-2.5 md:px-6 md:py-3 bg-cyan-400 text-black font-bold rounded-lg hover:scale-105 transition-all shadow-[0_0_20px_rgba(34,211,238,0.3)] text-sm">
-                Start a Project <ArrowRight size={16} />
-              </Link>
-            </motion.div>
           </div>
-
-          {/* RIGHT COLUMN: VISUAL SHOWCASE */}
-          <motion.div 
-            initial={{ opacity: 0, x: 100 }} 
-            animate={{ opacity: 1, x: 0 }} 
-            transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
-            className="relative w-full h-full flex items-center justify-center lg:justify-end min-h-[300px] drop-shadow-[0_0_25px_rgba(34,211,238,0.25)]"
-          >
-            <div className="w-full h-auto max-w-[500px]">
-              <HeroIllustration />
-            </div>
+          
+          <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 }}
+            className="text-3xl md:text-5xl lg:text-6xl font-extrabold mb-4 md:mb-6 tracking-tight mx-auto text-center">
+            Architecting the <span className="text-cyan-400 drop-shadow-[0_0_15px_rgba(34,211,238,0.5)]">Data Ecosystem</span> of Tomorrow.
+          </motion.h1>
+          
+          <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.4 }}
+            className="max-w-2xl mx-auto text-sm md:text-lg text-gray-300 mb-6 md:mb-8 leading-relaxed font-light text-center">
+            Raw data is only valuable if you can trust it and access it instantly. We act as your dedicated engineering team — eliminating silos, automating pipelines, and building resilient cloud lakehouses.
+          </motion.p>
+          
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.6 }} className="mx-auto">
+            <Link href="/contact" className="inline-flex items-center gap-2 px-5 py-2.5 md:px-6 md:py-3 bg-cyan-400 text-black font-bold rounded-lg hover:scale-105 transition-all shadow-[0_0_20px_rgba(34,211,238,0.3)] text-sm">
+              Start a Project <ArrowRight size={16} />
+            </Link>
           </motion.div>
 
         </div>
