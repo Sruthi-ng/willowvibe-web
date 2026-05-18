@@ -487,7 +487,7 @@ export default function Home() {
             className="w-full md:w-1/2 flex items-center justify-center"
           >
             <img
-              src="/hero-data.svg"
+              src="/hero-data-new.svg"
               alt="Data engineering illustration"
               className="w-full max-w-xs md:max-w-md lg:max-w-lg drop-shadow-[0_0_30px_rgba(34,211,238,0.15)]"
             />
