@@ -175,7 +175,7 @@ function CoreCapabilitiesIDE() {
               </div>
               <Link
                 href="/services"
-                className={`inline-flex items-center gap-1.5 text-xs font-mono px-3 py-1.5 rounded-lg border ${pillar.tagColor} ${pillar.labelColor} hover:opacity-80 transition-opacity mt-auto`}
+                className={`inline-flex items-center gap-1.5 text-xs font-mono px-3 py-1.5 rounded-lg border ${pillar.tagColor} hover:opacity-80 transition-opacity mt-auto`}
               >
                 Explore service <ArrowRight size={12} />
               </Link>
