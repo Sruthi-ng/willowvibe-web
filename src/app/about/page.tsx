@@ -287,7 +287,7 @@ export default function AboutPage() {
           </div>
 
           {/* Sruthi bubble — closer below the illustration */}
-          <div className="absolute z-30" style={{ left: "50%", top: "50%", transform: "translateX(-50%)" }}>
+          <div className="absolute z-30" style={{ left: "50%", top: "45%", transform: "translateX(-50%)" }}>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
