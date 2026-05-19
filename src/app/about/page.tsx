@@ -236,29 +236,29 @@ export default function AboutPage() {
             viewBox="0 0 1000 580"
             preserveAspectRatio="xMidYMid meet"
           >
-            {/* Arrow to Harish — left */}
+            {/* Arrow from left person (Harish figure) outward to left bubble */}
             <DrawingArrow
               color={THEME.cyan.arrow}
-              path="M 490 270 C 440 250 350 230 240 215"
+              path="M 440 295 C 400 280 360 265 300 250"
               delay={0.4}
             />
-            <ArrowHead color={THEME.cyan.arrow} points="240,215 258,207 255,223" delay={0.4} />
+            <ArrowHead color={THEME.cyan.arrow} points="300,250 318,242 315,258" delay={0.4} />
 
-            {/* Arrow to Sruthi — bottom center */}
+            {/* Arrow from girl figure (Sruthi) downward to bottom bubble */}
             <DrawingArrow
               color={THEME.purple.arrow}
-              path="M 500 320 C 500 370 500 410 500 455"
+              path="M 495 370 C 495 400 495 420 495 445"
               delay={0.7}
             />
-            <ArrowHead color={THEME.purple.arrow} points="500,455 492,440 508,440" delay={0.7} />
+            <ArrowHead color={THEME.purple.arrow} points="495,445 487,430 503,430" delay={0.7} />
 
-            {/* Arrow to Pawan — right */}
+            {/* Arrow from right person (Pawan figure) outward to right bubble */}
             <DrawingArrow
               color={THEME.emerald.arrow}
-              path="M 510 270 C 570 250 660 230 760 215"
+              path="M 560 295 C 600 280 640 265 700 250"
               delay={1.0}
             />
-            <ArrowHead color={THEME.emerald.arrow} points="760,215 742,207 745,223" delay={1.0} />
+            <ArrowHead color={THEME.emerald.arrow} points="700,250 682,242 685,258" delay={1.0} />
           </svg>
 
           {/* Center illustration */}
@@ -274,10 +274,10 @@ export default function AboutPage() {
             />
           </div>
 
-          {/* Harish — left */}
-          <div className="absolute z-30" style={{ left: "2%", top: "8%" }}>
+          {/* Harish bubble — closer to left figure */}
+          <div className="absolute z-30" style={{ left: "8%", top: "22%" }}>
             <motion.div
-              initial={{ opacity: 0, x: -30 }}
+              initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.5 }}
@@ -286,10 +286,10 @@ export default function AboutPage() {
             </motion.div>
           </div>
 
-          {/* Sruthi — bottom center */}
-          <div className="absolute z-30" style={{ left: "50%", top: "68%", transform: "translateX(-50%)" }}>
+          {/* Sruthi bubble — closer below the illustration */}
+          <div className="absolute z-30" style={{ left: "50%", top: "72%", transform: "translateX(-50%)" }}>
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.8 }}
@@ -298,10 +298,10 @@ export default function AboutPage() {
             </motion.div>
           </div>
 
-          {/* Pawan — right */}
-          <div className="absolute z-30" style={{ right: "2%", top: "8%" }}>
+          {/* Pawan bubble — closer to right figure */}
+          <div className="absolute z-30" style={{ right: "8%", top: "22%" }}>
             <motion.div
-              initial={{ opacity: 0, x: 30 }}
+              initial={{ opacity: 0, x: 20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 1.1 }}
@@ -342,24 +342,7 @@ export default function AboutPage() {
           </p>
         </motion.div>
 
-        {/* 4. Stats */}
-        <div className="grid grid-cols-3 gap-3 md:gap-6 w-full mb-12 md:mb-20">
-          {[["99.99%","Uptime SLA"],["50+","Enterprise Clients"],["10PB+","Data Processed"]].map(([v,l]) => (
-            <motion.div
-              key={l}
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-              className="p-3 md:p-6 text-center rounded-xl bg-neutral-900/80 border border-neutral-700 hover:border-cyan-400/50 transition-colors group"
-            >
-              <div className="text-xl md:text-4xl font-extrabold text-white mb-1 group-hover:text-cyan-400 transition-all font-mono">{v}</div>
-              <div className="text-[10px] md:text-xs tracking-wide text-gray-400 uppercase font-semibold leading-tight">{l}</div>
-            </motion.div>
-          ))}
-        </div>
-
-        {/* 5. Operating Principles */}
+        {/* 4. Operating Principles */}
         <div className="mb-12 md:mb-20">
           <div className="text-center mb-6 md:mb-10">
             <h2 className="text-xl md:text-3xl font-bold mb-3 bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">
