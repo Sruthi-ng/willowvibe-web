@@ -15,7 +15,7 @@ const PRODUCTS = [
     badge: "Free and Open Source",
     status: "Live",
     statusColor: "bg-emerald-500",
-    accent: "from-cyan-950/40 to-black",
+    accent: "from-white/10 to-cyan-950/60",
     border: "border-cyan-500/30",
     glow: "shadow-[0_0_40px_rgba(34,211,238,0.08)]",
     titleGradient: "from-cyan-400 to-blue-400",
@@ -42,7 +42,7 @@ const PRODUCTS = [
     badge: "Free and Open Source",
     status: "Live",
     statusColor: "bg-emerald-500",
-    accent: "from-purple-950/40 to-black",
+    accent: "from-white/10 to-purple-950/60",
     border: "border-purple-500/30",
     glow: "shadow-[0_0_40px_rgba(168,85,247,0.08)]",
     titleGradient: "from-purple-400 to-pink-400",
@@ -92,7 +92,7 @@ const PRODUCTS = [
     name: "Cosmic ID",
     tagline: "Modern life analytics through the lens of ancient wisdom.",
     description: "Cosmic ID is a first-of-its-kind life analytics platform combining Vedic Chinese and Western astrology with modern data science. Know exactly how many years days and seconds you have lived. Compare your chart with others for compatibility. Get realistic career profession and business recommendations based on your unique cosmic profile. Available in basic and beta modes with monthly yearly and decade level forecasts.",
-    illustration: "/cosmicid.svg",
+    illustration: "/cosmicid.jpeg",
     category: "Life Analytics",
     badge: "Client Project",
     status: "In Development",
@@ -167,7 +167,7 @@ export default function ProductsPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-80px" }}
                 transition={{ duration: 0.7, delay: 0.1 }}
-                className={`relative w-full flex flex-col ${isRight ? "lg:flex-row" : "lg:flex-row-reverse"} items-center gap-8 md:gap-16 py-16 md:py-24 border-b border-white/5`}
+                className={`relative w-full flex flex-col ${isRight ? "lg:flex-row" : "lg:flex-row-reverse"} items-center gap-6 md:gap-10 py-8 md:py-12 border-b border-white/5`}
               >
                 <div className={`absolute inset-0 bg-gradient-to-br ${product.accent} opacity-40 -z-10 rounded-3xl`} />
 
@@ -185,15 +185,15 @@ export default function ProductsPage() {
                     </span>
                   </div>
 
-                  <h2 className={`text-3xl md:text-5xl font-extrabold tracking-tight bg-gradient-to-r ${product.titleGradient} bg-clip-text text-transparent`}>
+                  <h2 className={`text-2xl md:text-3xl font-extrabold tracking-tight bg-gradient-to-r ${product.titleGradient} bg-clip-text text-transparent`}>
                     {product.name}
                   </h2>
 
-                  <p className="text-gray-200 text-base md:text-lg font-medium leading-relaxed">
+                  <p className="text-gray-200 text-sm md:text-base font-medium leading-relaxed">
                     {product.tagline}
                   </p>
 
-                  <p className="text-gray-400 text-sm md:text-base leading-relaxed">
+                  <p className="text-gray-400 text-xs md:text-sm leading-relaxed">
                     {product.description}
                   </p>
 
@@ -256,14 +256,14 @@ export default function ProductsPage() {
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.8, delay: 0.2 }}
-                  className="flex-shrink-0 w-full lg:w-[420px] xl:w-[480px] flex items-center justify-center"
+                  className="flex-shrink-0 w-full lg:w-[320px] xl:w-[360px] flex items-center justify-center"
                 >
-                  <div className={`relative w-full flex items-center justify-center p-8 md:p-12 rounded-3xl bg-gradient-to-br ${product.accent} border ${product.border} ${product.glow}`}>
+                  <div className={`relative w-full flex items-center justify-center p-6 md:p-8 rounded-3xl bg-gradient-to-br ${product.accent} border ${product.border} ${product.glow}`}>
                     <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:24px_24px] rounded-3xl" />
                     <img
                       src={product.illustration}
                       alt={product.name}
-                      className="relative z-10 w-64 h-64 md:w-80 md:h-80 object-contain"
+                      className="relative z-10 w-44 h-44 md:w-56 md:h-56 object-contain"
                     />
                   </div>
                 </motion.div>
