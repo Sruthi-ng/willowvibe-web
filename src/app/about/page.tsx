@@ -1,9 +1,9 @@
 "use client";
 
 import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
-import { ArrowRight, GitMerge } from "lucide-react";
+import { ArrowRight, X } from "lucide-react";
 
 const TEAM = [
   {
@@ -11,59 +11,94 @@ const TEAM = [
     name: "Harish Nagari Gurumoorthy",
     role: "Founder",
     focus: "Full Stack & Data Engineer",
-    initials: "HN",
     bio: "Python specialist and full-stack engineer architecting data pipelines and engineering foundations. Deep expertise in web scraping, automation, and end-to-end development.",
     keywords: ["Python", "Full Stack", "Web Scraping", "Pipelines"],
     theme: "cyan",
-    position: "left",
+    floatDelay: 0,
+    floatDuration: 4,
   },
   {
     id: 2,
     name: "Sruthi Nagari Gurumoorthy",
     role: "Co-Founder",
     focus: "Engineering, Marketing & Operations",
-    initials: "SN",
     bio: "Engineer and co-founder handling marketing, HR, management, and operations. Ensures every pipeline meets the highest reliability standards across software testing and CI/CD.",
     keywords: ["QA Automation", "CI/CD", "Marketing", "Operations"],
     theme: "purple",
-    position: "bottom",
+    floatDelay: 1.2,
+    floatDuration: 5,
   },
   {
     id: 3,
     name: "Pawan Kumar",
-    role: "PLM Specialist",
+    role: "PLM Advisor",
     focus: "Systems Integration & PLM",
-    initials: "PK",
     bio: "Meticulous analytical thinker handling PLM inputs and translating complex business requirements into precise technical solutions and integration strategies.",
     keywords: ["PLM", "IT Consulting", "Systems Analysis", "Integration"],
     theme: "emerald",
-    position: "right",
+    floatDelay: 0.6,
+    floatDuration: 4.5,
   },
 ];
 
-const THEME: Record<string, { border: string; shadow: string; badge: string; text: string; bg: string; arrow: string }> = {
-  cyan:    { border: "border-cyan-500/60",    shadow: "shadow-[0_0_20px_rgba(34,211,238,0.3)]",   badge: "border-cyan-900/50 bg-cyan-950/40",    text: "text-cyan-300",    bg: "bg-cyan-950/40",    arrow: "#22d3ee" },
-  purple:  { border: "border-purple-500/60",  shadow: "shadow-[0_0_20px_rgba(168,85,247,0.3)]",   badge: "border-purple-900/50 bg-purple-950/40", text: "text-purple-300",  bg: "bg-purple-950/40",  arrow: "#a855f7" },
-  emerald: { border: "border-emerald-500/60", shadow: "shadow-[0_0_20px_rgba(16,185,129,0.3)]",   badge: "border-emerald-900/50 bg-emerald-950/40",text: "text-emerald-300", bg: "bg-emerald-950/40", arrow: "#10b981" },
+const THEME: Record<string, {
+  border: string;
+  glow: string;
+  glowHover: string;
+  badge: string;
+  text: string;
+  bg: string;
+  arrow: string;
+  gradient: string;
+}> = {
+  cyan: {
+    border: "border-cyan-400/60",
+    glow: "shadow-[0_0_25px_rgba(34,211,238,0.2)]",
+    glowHover: "hover:shadow-[0_0_45px_rgba(34,211,238,0.5)]",
+    badge: "border-cyan-900/50 bg-cyan-950/40",
+    text: "text-cyan-300",
+    bg: "bg-cyan-950/30",
+    arrow: "#22d3ee",
+    gradient: "from-cyan-400 to-blue-400",
+  },
+  purple: {
+    border: "border-purple-400/60",
+    glow: "shadow-[0_0_25px_rgba(168,85,247,0.2)]",
+    glowHover: "hover:shadow-[0_0_45px_rgba(168,85,247,0.5)]",
+    badge: "border-purple-900/50 bg-purple-950/40",
+    text: "text-purple-300",
+    bg: "bg-purple-950/30",
+    arrow: "#a855f7",
+    gradient: "from-purple-400 to-pink-400",
+  },
+  emerald: {
+    border: "border-emerald-400/60",
+    glow: "shadow-[0_0_25px_rgba(16,185,129,0.2)]",
+    glowHover: "hover:shadow-[0_0_45px_rgba(16,185,129,0.5)]",
+    badge: "border-emerald-900/50 bg-emerald-950/40",
+    text: "text-emerald-300",
+    bg: "bg-emerald-950/30",
+    arrow: "#10b981",
+    gradient: "from-emerald-400 to-cyan-400",
+  },
 };
 
 function DrawingArrow({ color, path, delay }: { color: string; path: string; delay: number }) {
   const ref = useRef<SVGPathElement>(null);
   const inView = useInView(ref, { once: true });
-
   return (
     <path
       ref={ref}
       d={path}
       stroke={color}
-      strokeWidth="2.5"
+      strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
       fill="none"
-      strokeDasharray="200"
-      strokeDashoffset={inView ? "0" : "200"}
+      strokeDasharray="300"
+      strokeDashoffset={inView ? "0" : "300"}
       style={{
-        transition: `stroke-dashoffset 1.2s ease ${delay}s`,
+        transition: `stroke-dashoffset 1.4s ease ${delay}s`,
         filter: `drop-shadow(0 0 4px ${color})`,
       }}
     />
@@ -73,7 +108,6 @@ function DrawingArrow({ color, path, delay }: { color: string; path: string; del
 function ArrowHead({ color, points, delay }: { color: string; points: string; delay: number }) {
   const ref = useRef<SVGPolygonElement>(null);
   const inView = useInView(ref, { once: true });
-
   return (
     <polygon
       ref={ref}
@@ -81,38 +115,97 @@ function ArrowHead({ color, points, delay }: { color: string; points: string; de
       fill={color}
       style={{
         opacity: inView ? 1 : 0,
-        transition: `opacity 0.3s ease ${delay + 1}s`,
+        transition: `opacity 0.3s ease ${delay + 1.2}s`,
         filter: `drop-shadow(0 0 4px ${color})`,
       }}
     />
   );
 }
 
-function PersonCard({ member }: { member: typeof TEAM[0] }) {
+function BubbleCard({ member, size = "md" }: { member: typeof TEAM[0]; size?: "md" | "lg" }) {
+  const [showBio, setShowBio] = useState(false);
   const t = THEME[member.theme];
+  const diameter = size === "lg" ? 220 : 190;
+
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.6, delay: 0.8 }}
-      className={`relative p-4 rounded-2xl bg-neutral-900 border-2 ${t.border} ${t.shadow} flex flex-col gap-2 w-52`}
-    >
-      <div className={`w-12 h-12 rounded-full ${t.bg} border-2 ${t.border} flex items-center justify-center flex-shrink-0`}>
-        <span className={`text-lg font-extrabold font-mono ${t.text}`}>{member.initials}</span>
-      </div>
-      <div>
-        <p className={`text-[10px] font-mono font-bold ${t.text} tracking-widest`}>{member.role}</p>
-        <h3 className="text-white font-bold text-sm leading-tight">{member.name}</h3>
-        <p className="text-gray-400 text-[10px] leading-snug mt-0.5">{member.focus}</p>
-      </div>
-      <p className="text-gray-400 text-[10px] leading-relaxed">{member.bio}</p>
-      <div className="flex flex-wrap gap-1 mt-1">
-        {member.keywords.map((k) => (
-          <span key={k} className={`text-[9px] font-mono px-1.5 py-0.5 rounded border ${t.badge} ${t.text}`}>{k}</span>
-        ))}
-      </div>
-    </motion.div>
+    <>
+      <motion.div
+        animate={{ y: [0, -14, 0] }}
+        transition={{
+          duration: member.floatDuration,
+          repeat: Infinity,
+          ease: "easeInOut",
+          delay: member.floatDelay,
+        }}
+        whileHover={{ scale: 1.06 }}
+        onClick={() => setShowBio(true)}
+        className={`relative flex flex-col items-center justify-center rounded-full border-2 ${t.border} ${t.glow} ${t.glowHover} ${t.bg} cursor-pointer transition-all duration-300`}
+        style={{ width: diameter, height: diameter }}
+      >
+        {/* Pulsing ring */}
+        <motion.div
+          className={`absolute inset-0 rounded-full border-2 ${t.border}`}
+          animate={{ scale: [1, 1.08, 1], opacity: [0.5, 0.15, 0.5] }}
+          transition={{ duration: member.floatDuration, repeat: Infinity, ease: "easeInOut", delay: member.floatDelay }}
+        />
+
+        {/* Content */}
+        <div className="flex flex-col items-center gap-1.5 px-4 text-center z-10">
+          <h3 className="text-white font-extrabold text-xs md:text-sm leading-tight">
+            {member.name.split(" ").slice(0, 2).join(" ")}
+          </h3>
+          <p className={`text-[10px] md:text-xs font-bold bg-gradient-to-r ${t.gradient} bg-clip-text text-transparent`}>
+            {member.role}
+          </p>
+          <p className="text-gray-400 text-[9px] md:text-[10px] leading-snug">
+            {member.focus}
+          </p>
+          <div className="flex flex-wrap justify-center gap-1 mt-1">
+            {member.keywords.slice(0, 2).map((k) => (
+              <span key={k} className={`text-[8px] font-mono px-1.5 py-0.5 rounded border ${t.badge} ${t.text}`}>
+                {k}
+              </span>
+            ))}
+          </div>
+          <p className={`text-[8px] font-mono ${t.text} mt-1 opacity-70`}>tap for more</p>
+        </div>
+      </motion.div>
+
+      {/* Bio popup */}
+      {showBio && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center px-4"
+          onClick={() => setShowBio(false)}>
+          <div className="absolute inset-0 bg-black/70 backdrop-blur-md" />
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.9, opacity: 0 }}
+            transition={{ type: "spring", bounce: 0, duration: 0.4 }}
+            onClick={(e) => e.stopPropagation()}
+            className={`relative w-full max-w-sm p-6 rounded-3xl bg-neutral-900 border-2 ${t.border} ${t.glow} z-10 flex flex-col gap-3`}
+          >
+            <button
+              onClick={() => setShowBio(false)}
+              className="absolute top-4 right-4 p-1.5 rounded-full bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white transition-colors"
+            >
+              <X size={16} />
+            </button>
+            <h3 className="text-white font-extrabold text-lg">{member.name}</h3>
+            <p className={`text-sm font-bold bg-gradient-to-r ${t.gradient} bg-clip-text text-transparent`}>
+              {member.role} — {member.focus}
+            </p>
+            <p className="text-gray-300 text-sm leading-relaxed">{member.bio}</p>
+            <div className="flex flex-wrap gap-1.5 mt-1">
+              {member.keywords.map((k) => (
+                <span key={k} className={`text-xs font-mono px-2 py-1 rounded border ${t.badge} ${t.text}`}>
+                  {k}
+                </span>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+      )}
+    </>
   );
 }
 
@@ -134,90 +227,109 @@ export default function AboutPage() {
           </motion.h1>
         </div>
 
-        {/* 2. Constellation team section */}
-        <div className="relative flex flex-col items-center mb-16 md:mb-24">
+        {/* 2. Constellation — desktop */}
+        <div className="hidden md:block relative w-full mb-16" style={{ height: "580px" }}>
 
-          {/* Desktop constellation */}
-          <div className="hidden md:block relative w-full" style={{ height: "600px" }}>
+          {/* Arrows SVG layer */}
+          <svg
+            className="absolute inset-0 w-full h-full pointer-events-none z-10"
+            viewBox="0 0 1000 580"
+            preserveAspectRatio="xMidYMid meet"
+          >
+            {/* Arrow to Harish — left */}
+            <DrawingArrow
+              color={THEME.cyan.arrow}
+              path="M 490 270 C 440 250 350 230 240 215"
+              delay={0.4}
+            />
+            <ArrowHead color={THEME.cyan.arrow} points="240,215 258,207 255,223" delay={0.4} />
 
-            {/* SVG arrows layer */}
-            <svg className="absolute inset-0 w-full h-full pointer-events-none z-10" viewBox="0 0 900 600" preserveAspectRatio="xMidYMid meet">
-              {/* Arrow to Harish — curves left */}
-              <DrawingArrow
-                color={THEME.cyan.arrow}
-                path="M 450 280 C 400 260 320 240 230 220"
-                delay={0.3}
-              />
-              <ArrowHead color={THEME.cyan.arrow} points="230,220 245,212 243,228" delay={0.3} />
+            {/* Arrow to Sruthi — bottom center */}
+            <DrawingArrow
+              color={THEME.purple.arrow}
+              path="M 500 320 C 500 370 500 410 500 455"
+              delay={0.7}
+            />
+            <ArrowHead color={THEME.purple.arrow} points="500,455 492,440 508,440" delay={0.7} />
 
-              {/* Arrow to Sruthi — curves down */}
-              <DrawingArrow
-                color={THEME.purple.arrow}
-                path="M 450 320 C 450 370 440 420 430 470"
-                delay={0.6}
-              />
-              <ArrowHead color={THEME.purple.arrow} points="430,470 422,456 438,458" delay={0.6} />
+            {/* Arrow to Pawan — right */}
+            <DrawingArrow
+              color={THEME.emerald.arrow}
+              path="M 510 270 C 570 250 660 230 760 215"
+              delay={1.0}
+            />
+            <ArrowHead color={THEME.emerald.arrow} points="760,215 742,207 745,223" delay={1.0} />
+          </svg>
 
-              {/* Arrow to Pawan — curves right */}
-              <DrawingArrow
-                color={THEME.emerald.arrow}
-                path="M 450 280 C 510 260 580 240 670 220"
-                delay={0.9}
-              />
-              <ArrowHead color={THEME.emerald.arrow} points="670,220 655,212 657,228" delay={0.9} />
-            </svg>
-
-            {/* Center illustration */}
-            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
-              <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.7 }}
-              >
-                <img
-                  src="/team-3.svg"
-                  alt="WillowVibe team"
-                  className="w-64 h-64 object-contain drop-shadow-[0_0_30px_rgba(34,211,238,0.15)]"
-                />
-              </motion.div>
-            </div>
-
-            {/* Harish — left */}
-            <div className="absolute z-30" style={{ left: "2%", top: "20%" }}>
-              <PersonCard member={TEAM[0]} />
-            </div>
-
-            {/* Sruthi — bottom center */}
-            <div className="absolute z-30" style={{ left: "50%", top: "72%", transform: "translateX(-50%)" }}>
-              <PersonCard member={TEAM[1]} />
-            </div>
-
-            {/* Pawan — right */}
-            <div className="absolute z-30" style={{ right: "2%", top: "20%" }}>
-              <PersonCard member={TEAM[2]} />
-            </div>
-
-          </div>
-
-          {/* Mobile stacked layout */}
-          <div className="md:hidden flex flex-col items-center gap-6 w-full">
+          {/* Center illustration */}
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
             <motion.img
               src="/team-3.svg"
               alt="WillowVibe team"
-              className="w-56 h-56 object-contain"
+              className="w-72 h-72 object-contain drop-shadow-[0_0_30px_rgba(34,211,238,0.15)]"
               initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
               transition={{ duration: 0.7 }}
             />
-            {TEAM.map((member) => (
-              <PersonCard key={member.id} member={member} />
-            ))}
+          </div>
+
+          {/* Harish — left */}
+          <div className="absolute z-30" style={{ left: "2%", top: "8%" }}>
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.5 }}
+            >
+              <BubbleCard member={TEAM[0]} size="md" />
+            </motion.div>
+          </div>
+
+          {/* Sruthi — bottom center */}
+          <div className="absolute z-30" style={{ left: "50%", top: "68%", transform: "translateX(-50%)" }}>
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.8 }}
+            >
+              <BubbleCard member={TEAM[1]} size="lg" />
+            </motion.div>
+          </div>
+
+          {/* Pawan — right */}
+          <div className="absolute z-30" style={{ right: "2%", top: "8%" }}>
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 1.1 }}
+            >
+              <BubbleCard member={TEAM[2]} size="md" />
+            </motion.div>
           </div>
 
         </div>
 
-        {/* 3. Story section */}
+        {/* Mobile stacked */}
+        <div className="md:hidden flex flex-col items-center gap-8 mb-12">
+          <motion.img
+            src="/team-3.svg"
+            alt="WillowVibe team"
+            className="w-56 h-56 object-contain"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.7 }}
+          />
+          <div className="flex flex-wrap justify-center gap-6">
+            {TEAM.map((member) => (
+              <BubbleCard key={member.id} member={member} size="md" />
+            ))}
+          </div>
+        </div>
+
+        {/* 3. Story */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -226,33 +338,33 @@ export default function AboutPage() {
           className="max-w-3xl mx-auto text-center mb-12 md:mb-20"
         >
           <p className="text-gray-300 leading-relaxed text-sm md:text-lg font-light">
-            We are a family-founded team of engineers, testers, and consultants. We started WillowVibe because we saw businesses drowning in messy, unreliable data. As a tight-knit founding team, we handle the technical heavy lifting — from data pipelines and cloud infrastructure to PLM systems and business intelligence — so you can focus on your business with absolute peace of mind.
+            We are a family-founded team of engineers, testers, and consultants. We started WillowVibe because we saw businesses drowning in messy, unreliable data. As a tight-knit founding team we handle the technical heavy lifting — from data pipelines and cloud infrastructure to PLM systems and business intelligence — so you can focus on your business with absolute peace of mind.
           </p>
         </motion.div>
 
         {/* 4. Stats */}
-        <div className="relative py-8 md:py-14 mb-12">
-          <div className="grid grid-cols-3 gap-3 md:gap-6 w-full z-10 relative">
-            {[["99.99%","Uptime SLA"],["50+","Enterprise Clients"],["10PB+","Data Processed"]].map(([v,l]) => (
-              <motion.div
-                key={l}
-                initial={{ opacity: 0, scale: 0.95 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5 }}
-                className="p-3 md:p-6 text-center rounded-xl bg-neutral-900/80 border border-neutral-700 hover:border-cyan-400/50 transition-colors group"
-              >
-                <div className="text-xl md:text-4xl font-extrabold text-white mb-1 group-hover:text-cyan-400 transition-all font-mono">{v}</div>
-                <div className="text-[10px] md:text-xs tracking-wide text-gray-400 uppercase font-semibold leading-tight">{l}</div>
-              </motion.div>
-            ))}
-          </div>
+        <div className="grid grid-cols-3 gap-3 md:gap-6 w-full mb-12 md:mb-20">
+          {[["99.99%","Uptime SLA"],["50+","Enterprise Clients"],["10PB+","Data Processed"]].map(([v,l]) => (
+            <motion.div
+              key={l}
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="p-3 md:p-6 text-center rounded-xl bg-neutral-900/80 border border-neutral-700 hover:border-cyan-400/50 transition-colors group"
+            >
+              <div className="text-xl md:text-4xl font-extrabold text-white mb-1 group-hover:text-cyan-400 transition-all font-mono">{v}</div>
+              <div className="text-[10px] md:text-xs tracking-wide text-gray-400 uppercase font-semibold leading-tight">{l}</div>
+            </motion.div>
+          ))}
         </div>
 
         {/* 5. Operating Principles */}
         <div className="mb-12 md:mb-20">
           <div className="text-center mb-6 md:mb-10">
-            <h2 className="text-xl md:text-3xl font-bold mb-3 bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">Operating Principles</h2>
+            <h2 className="text-xl md:text-3xl font-bold mb-3 bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">
+              Operating Principles
+            </h2>
             <div className="h-0.5 w-16 bg-cyan-400 mx-auto" />
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -267,7 +379,7 @@ export default function AboutPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: idx * 0.15 }}
-                className="p-6 rounded-xl bg-white/5 border border-white/10 hover:border-cyan-400/50 transition-all group"
+                className="p-6 rounded-xl bg-white/5 border border-white/10 hover:border-cyan-400/50 transition-all"
               >
                 <h3 className="text-lg font-bold mb-2 text-white">{val.title}</h3>
                 <p className="text-gray-300 text-sm leading-relaxed font-light">{val.desc}</p>
