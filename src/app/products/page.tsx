@@ -1,6 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Github, ArrowRight, Lock, CheckCircle, Star } from "lucide-react";
 import Link from "next/link";
 
@@ -118,11 +119,16 @@ const PRODUCTS = [
 ];
 
 export default function ProductsPage() {
+  const [activeTab, setActiveTab] = useState(0);
+  const product = PRODUCTS[activeTab];
+  const isRight = product.illustrationSide === "right";
+
   return (
     <div className="flex flex-col items-center min-h-screen bg-black text-white overflow-x-hidden">
-      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-20">
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-16">
 
-        <div className="text-center mb-12 md:mb-20 relative">
+        {/* Header */}
+        <div className="text-center mb-8 md:mb-12 relative">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-cyan-400/5 rounded-full blur-[80px] -z-10 pointer-events-none animate-pulse" />
           <motion.h1
             initial={{ opacity: 0, y: -20 }}
@@ -144,7 +150,7 @@ export default function ProductsPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.3 }}
-            className="flex items-center justify-center gap-6 mt-6"
+            className="flex items-center justify-center gap-6 mt-4"
           >
             <div className="flex items-center gap-2 text-xs text-gray-400">
               <div className="w-2 h-2 rounded-full bg-emerald-500" />
@@ -157,128 +163,153 @@ export default function ProductsPage() {
           </motion.div>
         </div>
 
-        <div className="flex flex-col gap-0">
-          {PRODUCTS.map((product, idx) => {
-            const isRight = product.illustrationSide === "right";
-            return (
-              <motion.div
-                key={product.id}
-                initial={{ opacity: 0, y: 60 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-80px" }}
-                transition={{ duration: 0.7, delay: 0.1 }}
-                className={`relative w-full flex flex-col ${isRight ? "lg:flex-row" : "lg:flex-row-reverse"} items-center gap-6 md:gap-10 py-8 md:py-12 border-b border-white/5`}
-              >
-                <div className={`absolute inset-0 bg-gradient-to-br ${product.accent} opacity-40 -z-10 rounded-3xl`} />
-
-                <div className="flex-1 flex flex-col items-start gap-5">
-                  <div className="flex items-center gap-3 flex-wrap">
-                    <span className={`inline-flex items-center gap-1.5 text-xs font-mono px-3 py-1 rounded-full border ${product.tagColor}`}>
-                      {product.category}
-                    </span>
-                    <span className="inline-flex items-center gap-1.5 text-xs font-mono px-3 py-1 rounded-full bg-white/5 border border-white/10 text-gray-400">
-                      {product.badge}
-                    </span>
-                    <span className="inline-flex items-center gap-1.5 text-xs font-mono px-3 py-1 rounded-full bg-black border border-white/10 text-gray-300">
-                      <div className={`w-1.5 h-1.5 rounded-full ${product.statusColor} ${product.status === "In Development" ? "animate-pulse" : ""}`} />
-                      {product.status}
-                    </span>
-                  </div>
-
-                  <h2 className={`text-2xl md:text-3xl font-extrabold tracking-tight bg-gradient-to-r ${product.titleGradient} bg-clip-text text-transparent`}>
-                    {product.name}
-                  </h2>
-
-                  <p className="text-gray-200 text-sm md:text-base font-medium leading-relaxed">
-                    {product.tagline}
-                  </p>
-
-                  <p className="text-gray-400 text-xs md:text-sm leading-relaxed">
-                    {product.description}
-                  </p>
-
-                  <ul className="flex flex-col gap-2 w-full">
-                    {product.highlights.map((h, i) => (
-                      <li key={i} className="flex items-start gap-2 text-sm text-gray-300">
-                        <CheckCircle className="w-4 h-4 mt-0.5 flex-shrink-0 text-emerald-400" />
-                        {h}
-                      </li>
-                    ))}
-                  </ul>
-
-                  <div className="flex flex-wrap gap-2">
-                    {product.tags.map((tag) => (
-                      <span key={tag} className={`text-xs font-mono px-2.5 py-1 rounded-lg border ${product.tagColor}`}>
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-
-                  <div className="flex flex-wrap gap-3 mt-2">
-                    {product.github ? (
-                      <>
-                        <a
-                          href={product.github ?? ""}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm ${product.ctaColor} hover:scale-105 transition-all shadow-lg`}
-                        >
-                          Get Started <ArrowRight size={14} />
-                        </a>
-
-                        <a
-                          href={product.github ?? ""}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-white/20 text-gray-300 hover:text-white hover:border-white/40 text-sm transition-all font-mono"
-                        >
-                          <Github size={14} /> View on GitHub
-                        </a>
-                      </>
-                    ) : (
-                      <>
-                        <Link
-                          href="/contact"
-                          className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm ${product.ctaColor} hover:scale-105 transition-all shadow-lg`}
-                        >
-                          Enquire About This <ArrowRight size={14} />
-                        </Link>
-                        <span className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-white/10 text-gray-500 text-sm font-mono cursor-not-allowed">
-                          <Lock size={13} /> Private Project
-                        </span>
-                      </>
-                    )}
-                  </div>
-                </div>
-
+        {/* Tab bar */}
+        <div className="flex flex-wrap justify-center gap-2 md:gap-3 mb-8 md:mb-12">
+          {PRODUCTS.map((p, idx) => (
+            <button
+              key={p.id}
+              onClick={() => setActiveTab(idx)}
+              className={`relative flex items-center gap-2 px-4 py-2.5 md:px-6 md:py-3 rounded-xl text-xs md:text-sm font-semibold transition-all duration-300 border ${
+                activeTab === idx
+                  ? `bg-gradient-to-r ${p.accent} ${p.border} text-white shadow-lg scale-105`
+                  : "bg-white/5 border-white/10 text-gray-400 hover:text-white hover:bg-white/10"
+              }`}
+            >
+              <div className={`w-1.5 h-1.5 rounded-full ${p.statusColor} ${p.status === "In Development" ? "animate-pulse" : ""}`} />
+              {p.name}
+              {activeTab === idx && (
                 <motion.div
-                  initial={{ opacity: 0, x: isRight ? 40 : -40 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.8, delay: 0.2 }}
-                  className="flex-shrink-0 w-full lg:w-[320px] xl:w-[360px] flex items-center justify-center"
-                >
-                  <div className={`relative w-full flex items-center justify-center p-6 md:p-8 rounded-3xl bg-gradient-to-br ${product.accent} border ${product.border} ${product.glow}`}>
-                    <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:24px_24px] rounded-3xl" />
-                    <img
-                      src={product.illustration}
-                      alt={product.name}
-                      className="relative z-10 w-44 h-44 md:w-56 md:h-56 object-contain"
-                    />
-                  </div>
-                </motion.div>
-
-              </motion.div>
-            );
-          })}
+                  layoutId="activeTab"
+                  className="absolute inset-0 rounded-xl border border-white/20 -z-10"
+                />
+              )}
+            </button>
+          ))}
         </div>
 
+        {/* Active product display */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeTab}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.4 }}
+            className={`relative w-full flex flex-col ${isRight ? "lg:flex-row" : "lg:flex-row-reverse"} items-center gap-6 md:gap-10 p-6 md:p-10 rounded-3xl border ${product.border} ${product.glow}`}
+          >
+            {/* Background */}
+            <div className={`absolute inset-0 bg-gradient-to-br ${product.accent} opacity-40 -z-10 rounded-3xl`} />
+            <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:24px_24px] rounded-3xl -z-10" />
+
+            {/* Content */}
+            <div className="flex-1 flex flex-col items-start gap-4">
+
+              {/* Badges */}
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className={`inline-flex items-center gap-1.5 text-xs font-mono px-3 py-1 rounded-full border ${product.tagColor}`}>
+                  {product.category}
+                </span>
+                <span className="inline-flex items-center gap-1.5 text-xs font-mono px-3 py-1 rounded-full bg-white/5 border border-white/10 text-gray-400">
+                  {product.badge}
+                </span>
+                <span className="inline-flex items-center gap-1.5 text-xs font-mono px-3 py-1 rounded-full bg-black border border-white/10 text-gray-300">
+                  <div className={`w-1.5 h-1.5 rounded-full ${product.statusColor} ${product.status === "In Development" ? "animate-pulse" : ""}`} />
+                  {product.status}
+                </span>
+              </div>
+
+              {/* Title */}
+              <h2 className={`text-2xl md:text-4xl font-extrabold tracking-tight bg-gradient-to-r ${product.titleGradient} bg-clip-text text-transparent`}>
+                {product.name}
+              </h2>
+
+              {/* Tagline */}
+              <p className="text-gray-200 text-sm md:text-base font-medium leading-relaxed">
+                {product.tagline}
+              </p>
+
+              {/* Description */}
+              <p className="text-gray-400 text-xs md:text-sm leading-relaxed">
+                {product.description}
+              </p>
+
+              {/* Highlights — max 4 shown */}
+              <ul className="flex flex-col gap-1.5 w-full">
+                {product.highlights.slice(0, 4).map((h, i) => (
+                  <li key={i} className="flex items-start gap-2 text-xs md:text-sm text-gray-300">
+                    <CheckCircle className="w-3.5 h-3.5 mt-0.5 flex-shrink-0 text-emerald-400" />
+                    {h}
+                  </li>
+                ))}
+              </ul>
+
+              {/* Tags */}
+              <div className="flex flex-wrap gap-1.5">
+                {product.tags.map((tag) => (
+                  <span key={tag} className={`text-[10px] font-mono px-2 py-0.5 rounded-lg border ${product.tagColor}`}>
+                    {tag}
+                  </span>
+                ))}
+              </div>
+
+              {/* CTAs */}
+              <div className="flex flex-wrap gap-3 mt-1">
+                {product.github ? (
+                  <>
+                    <a
+                      href={product.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm ${product.ctaColor} hover:scale-105 transition-all shadow-lg`}
+                    >
+                      Get Started <ArrowRight size={14} />
+                    </a>
+                    <a href={product.github ?? ""} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-white/20 text-gray-300 hover:text-white hover:border-white/40 text-sm transition-all font-mono">
+                      <Github size={14} /> View on GitHub
+                    </a>
+                  </>
+                ) : (
+                  <>
+                    <Link
+                      href="/contact"
+                      className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm ${product.ctaColor} hover:scale-105 transition-all shadow-lg`}
+                    >
+                      Enquire About This <ArrowRight size={14} />
+                    </Link>
+                    <span className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-white/10 text-gray-500 text-sm font-mono cursor-not-allowed">
+                      <Lock size={13} /> Private Project
+                    </span>
+                  </>
+                )}
+              </div>
+            </div>
+
+            {/* Illustration */}
+            <motion.div
+              initial={{ opacity: 0, x: isRight ? 40 : -40 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="flex-shrink-0 w-full lg:w-[320px] xl:w-[360px] flex items-center justify-center"
+            >
+              <div className={`relative w-full flex items-center justify-center p-6 md:p-8 rounded-3xl bg-gradient-to-br ${product.accent} border ${product.border}`}>
+                <img
+                  src={product.illustration}
+                  alt={product.name}
+                  className="relative z-10 w-44 h-44 md:w-56 md:h-56 object-contain"
+                />
+              </div>
+            </motion.div>
+
+          </motion.div>
+        </AnimatePresence>
+
+        {/* Bottom CTA */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="mt-16 md:mt-24 text-center"
+          className="mt-12 md:mt-16 text-center"
         >
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-gray-400 mb-6 text-xs font-mono">
             <Star size={12} /> More products being engineered
