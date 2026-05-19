@@ -335,7 +335,7 @@ export default function AboutPage() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="max-w-3xl mx-auto text-center mb-12 md:mb-20"
+          className="max-w-3xl mx-auto text-center mt-16 md:mt-24 mb-12 md:mb-20"
         >
           <p className="text-gray-300 leading-relaxed text-sm md:text-lg font-light">
             We are a family-founded team of engineers, testers, and consultants. We started WillowVibe because we saw businesses drowning in messy, unreliable data. As a tight-knit founding team we handle the technical heavy lifting — from data pipelines and cloud infrastructure to PLM systems and business intelligence — so you can focus on your business with absolute peace of mind.
