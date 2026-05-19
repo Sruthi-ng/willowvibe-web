@@ -275,7 +275,7 @@ export default function AboutPage() {
           </div>
 
           {/* Harish bubble — closer to left figure */}
-          <div className="absolute z-30" style={{ left: "8%", top: "22%" }}>
+          <div className="absolute z-30" style={{ left: "16%", top: "22%" }}>
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -299,7 +299,7 @@ export default function AboutPage() {
           </div>
 
           {/* Pawan bubble — closer to right figure */}
-          <div className="absolute z-30" style={{ right: "8%", top: "22%" }}>
+          <div className="absolute z-30" style={{ right: "16%", top: "22%" }}>
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               whileInView={{ opacity: 1, x: 0 }}
