@@ -244,6 +244,100 @@ export default function ProductsPage() {
         </motion.div>
 
       </div>
+
+      <AnimatePresence>
+        {selected && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center px-4 py-8">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setSelected(null)}
+              className="absolute inset-0 bg-black/80 backdrop-blur-md"
+            />
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.95, opacity: 0, y: 20 }}
+              transition={{ type: "spring", bounce: 0, duration: 0.4 }}
+              className={`relative w-full max-w-3xl max-h-[85vh] overflow-y-auto bg-neutral-900 border ${selected.border} ${selected.glow} rounded-3xl shadow-2xl z-10`}
+            >
+              <button
+                onClick={() => setSelected(null)}
+                className="absolute top-4 right-4 z-20 p-2 rounded-full bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white transition-colors"
+              >
+                <X size={20} />
+              </button>
+              <div className={`flex flex-col md:flex-row items-center gap-6 p-6 md:p-10 bg-gradient-to-br ${selected.accent} rounded-t-3xl border-b border-white/5`}>
+                <img
+                  src={selected.illustration}
+                  alt={selected.name}
+                  className="w-32 h-32 md:w-44 md:h-44 object-contain flex-shrink-0"
+                />
+                <div className="flex flex-col gap-3 text-center md:text-left">
+                  <div className="flex items-center gap-2 flex-wrap justify-center md:justify-start">
+                    <span className={`text-xs font-mono px-3 py-1 rounded-full border ${selected.tagColor}`}>
+                      {selected.category}
+                    </span>
+                    <span className="inline-flex items-center gap-1.5 text-xs font-mono px-3 py-1 rounded-full bg-black border border-white/10 text-gray-300">
+                      <div className={`w-1.5 h-1.5 rounded-full ${selected.statusColor} ${selected.status === "In Development" ? "animate-pulse" : ""}`} />
+                      {selected.status}
+                    </span>
+                  </div>
+                  <h2 className={`text-2xl md:text-4xl font-extrabold tracking-tight bg-gradient-to-r ${selected.titleGradient} bg-clip-text text-transparent`}>
+                    {selected.name}
+                  </h2>
+                  <p className="text-gray-200 text-sm md:text-base font-medium leading-relaxed">
+                    {selected.tagline}
+                  </p>
+                </div>
+              </div>
+              <div className="p-6 md:p-10 flex flex-col gap-5">
+                <p className="text-gray-300 text-sm leading-relaxed">
+                  {selected.description}
+                </p>
+                <ul className="flex flex-col gap-2">
+                  {selected.highlights.map((h, i) => (
+                    <li key={i} className="flex items-start gap-2 text-sm text-gray-300">
+                      <CheckCircle className="w-4 h-4 mt-0.5 flex-shrink-0 text-emerald-400" />
+                      {h}
+                    </li>
+                  ))}
+                </ul>
+                <div className="flex flex-wrap gap-2">
+                  {selected.tags.map((tag) => (
+                    <span key={tag} className={`text-xs font-mono px-2.5 py-1 rounded-lg border ${selected.tagColor}`}>
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+                <div className="flex flex-wrap gap-3 pt-2 border-t border-white/10">
+                  {selected.github ? (
+                    <>
+                      <a href={selected.github} target="_blank" rel="noopener noreferrer" className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm ${selected.ctaColor} hover:scale-105 transition-all shadow-lg`}>
+                        Get Started <ArrowRight size={14} />
+                      </a>
+                      <a href={selected.github ?? ""} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-white/20 text-gray-300 hover:text-white hover:border-white/40 text-sm transition-all font-mono">
+                        <Github size={14} /> View on GitHub
+                      </a>
+                    </>
+                  ) : (
+                    <>
+                      <Link href="/contact" onClick={() => setSelected(null)} className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm ${selected.ctaColor} hover:scale-105 transition-all shadow-lg`}>
+                        Enquire About This <ArrowRight size={14} />
+                      </Link>
+                      <span className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-white/10 text-gray-500 text-sm font-mono cursor-not-allowed">
+                        <Lock size={13} /> Private Project
+                      </span>
+                    </>
+                  )}
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
     </div>
   );
 }
