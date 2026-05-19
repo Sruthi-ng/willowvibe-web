@@ -132,7 +132,7 @@ export default function ProductsPage() {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="text-3xl md:text-6xl font-extrabold tracking-tight mb-4 bg-gradient-to-r from-cyan-400 via-purple-400 to-amber-400 bg-clip-text text-transparent"
+            className="text-4xl md:text-5xl font-extrabold tracking-tight"
           >
             Our Products
           </motion.h1>
@@ -170,7 +170,8 @@ export default function ProductsPage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: idx * 0.1 }}
-              className={`group relative flex flex-col rounded-2xl bg-neutral-900 border ${product.border} ${product.glow} transition-all duration-500 overflow-hidden hover:-translate-y-2`}
+              onClick={() => setSelected(product)}
+              className={`group relative flex flex-col rounded-2xl bg-neutral-900 border ${product.border} ${product.glow} transition-all duration-500 overflow-hidden hover:-translate-y-2 cursor-pointer`}
             >
               {/* Status badge */}
               <div className="absolute top-3 right-3 z-10 flex items-center gap-1.5 px-2 py-1 rounded-full bg-black/60 border border-white/10 text-[10px] font-mono text-gray-300">
