@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
-import { Database, Server, Cloud, Cpu, Bot, Settings, RefreshCw, ClipboardCheck, Quote, ArrowRight, ChevronLeft, ChevronRight, ServerCog, Component, ShieldCheck, Box, Network, FolderOpen, Folder, FileCode2, FileJson, ChevronDown } from "lucide-react";
+import { Database, Server, Cloud, Cpu, Settings, RefreshCw, ClipboardCheck, Quote, ArrowRight, ChevronLeft, ChevronRight, ServerCog, Component, ShieldCheck, Box, Network, FolderOpen, Folder, FileCode2, FileJson, ChevronDown } from "lucide-react";
 import Link from "next/link";
 import { motion, AnimatePresence, useAnimationFrame, useMotionValue } from "framer-motion";
 import { BeforeAfterSlider } from "@/components/BeforeAfterSlider";
@@ -23,16 +23,6 @@ const TESTIMONIALS = [
   },
 ];
 
-// ── Floating Chat Widget ──
-const FloatingChatWidget = () => (
-  <div className="fixed bottom-6 right-6 z-50 flex items-center gap-3 px-5 py-3 bg-neutral-900/90 backdrop-blur-md border border-cyan-500/50 shadow-[0_0_15px_rgba(34,211,238,0.3)] rounded-full cursor-pointer hover:scale-105 transition-transform overflow-hidden">
-    <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]" />
-    <Bot className="w-6 h-6 text-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)] relative z-10" />
-    <span className="text-cyan-400 font-bold font-mono text-sm tracking-widest uppercase relative z-10">Ask Us</span>
-    <motion.div className="absolute inset-0 border-t border-cyan-400/80 rounded-full z-20 pointer-events-none"
-      animate={{ y: [0, "100%", 0] }} transition={{ duration: 2, repeat: Infinity, ease: "linear" }} />
-  </div>
-);
 
 function CoreCapabilitiesIDE() {
   const PILLARS = [
@@ -346,7 +336,6 @@ export default function Home() {
         </div>
       </section>
 
-      <FloatingChatWidget />
     </div>
   );
 }
