@@ -4,41 +4,11 @@ import { useState, useRef, useEffect } from "react";
 import { MessageCircle, X, Send, ArrowRight } from "lucide-react";
 import Link from "next/link";
 
-type Message = { from: "bot" | "user"; text: string; link?: { label: string; href: string } };
-
-const SYSTEM_PROMPT = `You are the WillowVibe Data Synapse AI assistant. You are helpful, professional, and concise. You represent WillowVibe on their website.
-
-About WillowVibe:
-- WillowVibe Data Synapse is a family-founded data engineering company
-- Founded by Harish Nagari Gurumoorthy (Founder, Full Stack & Data Engineer, Python specialist)
-- Co-founded by Sruthi Nagari Gurumoorthy (Co-Founder, Engineering, Marketing & Operations)
-- PLM Advisor: Pawan Kumar (Systems Integration & PLM specialist)
-
-Services offered:
-1. Enterprise PLM & CAD — PLM platform architecture, BOM management, change control, CAD development
-2. Data Engineering & Integration — Data pipeline development, cloud engineering, data migration
-3. Data Trust & Analytics — Data quality, governance, observability, AI infrastructure, business intelligence
-
-Products:
-1. ObservaKit — Free open-source data observability tool, self-hosted, replaces expensive tools like Monte Carlo
-2. PipelineProbe — Free open-source pipeline audit tool, one command, generates health report with 0-100 score
-3. Doctor App — Client project, patient management app for independent doctors doing home and clinic visits
-4. Cosmic ID — Client project, life analytics platform combining Vedic, Chinese and Western astrology
-
-Tech stack they work with: AWS, Snowflake, Databricks, Kafka, dbt, Airflow, Teamcenter, 3DEXPERIENCE, CATIA V5, SolidWorks, PostgreSQL, BigQuery, Redshift, Azure, GCP
-
-Contact: contact@willowvibe.com
-Website: www.willowvibe.com
-LinkedIn: /company/willowvibe
-GitHub: github.com/willowvibe
-
-Response rules:
-- Keep answers short and helpful — 2 to 4 sentences maximum
-- If someone asks about pricing always say it is project-based and suggest contacting the team
-- If someone asks to book or schedule always direct them to contact page
-- Never make up information that is not in this prompt
-- Always be warm and professional
-- If a question is completely unrelated to WillowVibe or data engineering politely redirect`;
+type Message = {
+  from: "bot" | "user";
+  text: string;
+  link?: { label: string; href: string };
+};
 
 const WELCOME: Message = {
   from: "bot",
@@ -71,23 +41,16 @@ export function ChatBot() {
 
     try {
       const conversationHistory = messages
-        .filter(m => m.from === "user" || m.from === "bot")
-        .map(m => ({
+        .filter((m) => m.from === "user" || m.from === "bot")
+        .map((m) => ({
           role: m.from === "user" ? "user" : "assistant",
           content: m.text,
         }));
 
-      const response = await fetch("https://api.anthropic.com/v1/messages", {
+      const response = await fetch("/api/chat", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-api-key": process.env.NEXT_PUBLIC_ANTHROPIC_API_KEY ?? "",
-          "anthropic-version": "2023-06-01",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          model: "claude-haiku-4-5-20251001",
-          max_tokens: 300,
-          system: SYSTEM_PROMPT,
           messages: [
             ...conversationHistory,
             { role: "user", content: text },
@@ -96,17 +59,21 @@ export function ChatBot() {
       });
 
       const data = await response.json();
-      const reply = data?.content?.[0]?.text ?? "I am having trouble connecting right now. Please email us at contact@willowvibe.com";
+      const reply =
+        data?.reply ??
+        "I am having trouble connecting right now. Please email us at contact@willowvibe.com";
 
       const botMsg: Message = { from: "bot", text: reply };
       setMessages((prev) => [...prev, botMsg]);
       if (!open) setUnread((n) => n + 1);
     } catch {
-      const errorMsg: Message = {
-        from: "bot",
-        text: "I am having trouble connecting right now. Please email us at contact@willowvibe.com",
-      };
-      setMessages((prev) => [...prev, errorMsg]);
+      setMessages((prev) => [
+        ...prev,
+        {
+          from: "bot",
+          text: "I am having trouble connecting right now. Please email us at contact@willowvibe.com",
+        },
+      ]);
     } finally {
       setLoading(false);
     }
@@ -127,22 +94,28 @@ export function ChatBot() {
             className="bg-neutral-900 border border-white/10 rounded-2xl shadow-2xl flex flex-col overflow-hidden"
             style={{ height: "420px" }}
           >
-            {/* Header */}
             <div className="flex items-center justify-between px-4 py-3 bg-neutral-800 border-b border-white/10">
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
                 <span className="text-sm font-semibold text-white">WillowVibe AI</span>
-                <span className="text-[10px] font-mono text-gray-500 border border-white/10 px-1.5 py-0.5 rounded-full">powered by Claude</span>
+                <span className="text-[10px] font-mono text-gray-500 border border-white/10 px-1.5 py-0.5 rounded-full">
+                  powered by Claude
+                </span>
               </div>
-              <button onClick={() => setOpen(false)} className="text-gray-500 hover:text-white transition-colors">
+              <button
+                onClick={() => setOpen(false)}
+                className="text-gray-500 hover:text-white transition-colors"
+              >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
-            {/* Messages */}
             <div className="flex-1 overflow-y-auto p-4 space-y-3">
               {messages.map((msg, i) => (
-                <div key={i} className={`flex ${msg.from === "user" ? "justify-end" : "justify-start"}`}>
+                <div
+                  key={i}
+                  className={`flex ${msg.from === "user" ? "justify-end" : "justify-start"}`}
+                >
                   <div
                     className={`max-w-[85%] rounded-xl px-3 py-2 text-sm leading-relaxed ${
                       msg.from === "user"
@@ -163,11 +136,14 @@ export function ChatBot() {
                   </div>
                 </div>
               ))}
+
               {loading && (
                 <div className="flex justify-start">
                   <div className="bg-neutral-800 border border-white/5 rounded-xl px-4 py-3">
                     <div className="flex gap-1.5 items-center">
-                      <span className="text-xs text-gray-400 font-mono">thinking...</span>
+                      <div className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-bounce" style={{ animationDelay: "0ms" }} />
+                      <div className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-bounce" style={{ animationDelay: "150ms" }} />
+                      <div className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-bounce" style={{ animationDelay: "300ms" }} />
                     </div>
                   </div>
                 </div>
@@ -175,7 +151,6 @@ export function ChatBot() {
               <div ref={bottomRef} />
             </div>
 
-            {/* Input */}
             <div className="px-3 py-3 border-t border-white/10 flex gap-2">
               <input
                 value={input}
@@ -197,7 +172,6 @@ export function ChatBot() {
         </div>
       )}
 
-      {/* Floating button */}
       <button
         onClick={() => setOpen((p) => !p)}
         className="fixed bottom-5 right-4 md:right-6 z-50 w-[52px] h-[52px] rounded-full bg-cyan-400 text-black shadow-[0_0_20px_rgba(34,211,238,0.4)] flex items-center justify-center hover:scale-110 transition-all"
